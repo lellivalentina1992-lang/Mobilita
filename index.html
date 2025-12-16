@@ -402,9 +402,22 @@ body.api-setup-active::before {
   box-shadow: 0 4px 15px rgba(0,0,0,.3);
   z-index: 1000;
   transition: transform .2s;
+  border: none; /* Per button */
+  padding: 0; /* Per button */
 }
-.guide-icon:hover {
+.guide-icon:hover, .guide-icon:focus {
   transform: scale(1.1);
+  outline: 3px solid #28a745;
+  outline-offset: 2px;
+}
+
+.settings-icon {
+  border: none; /* Per button */
+  padding: 0; /* Per button */
+}
+.settings-icon:focus {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
 }
 
 .guide-modal .modal-content {
@@ -421,14 +434,14 @@ body.api-setup-active::before {
   border-radius: 8px;
 }
 
-.guide-section h3 {
+.guide-section h2 {
   color: #28a745;
   margin-top: 0;
   margin-bottom: 15px;
   font-size: 1.3em;
 }
 
-.guide-section h4 {
+.guide-section h3 {
   color: #495057;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -612,7 +625,7 @@ body.api-setup-active::before {
       </div>
 
       <div class="card" id="orientationResultCard" style="display:none; margin-top: 10px; background: linear-gradient(135deg, #e3f2fd, #f3e5f5); border-left: 5px solid #667eea;">
-        <h3 style="margin: 0 0 15px 0; color: #667eea;">🧭 Orientamento Edificio</h3>
+        <h3 style="margin: 0 0 15px 0; color: #667eea;">🧭 Orientamento Edificio</h2>
         
         <div style="margin-bottom: 15px;">
           <button class="btn" onclick="runCivicAnalysisCascade()" aria-label="🔄 Ricalcola Orientamento" style="font-size: 1.05em; padding: 14px 20px;">
@@ -757,8 +770,7 @@ body.api-setup-active::before {
         <button id="navPrevButton" class="btn" onclick="navPrevStep()" aria-label="Vai al passo precedente. Scorciatoia: Control più freccia sinistra">⬅️ Passo Precedente</button>
         <button id="navNextButton" class="btn" onclick="navNextStep()" aria-label="Vai al passo successivo. Scorciatoia: Control più freccia destra">Passo Successivo ➡️</button>
       </div>
-    </div>
-
+    </section>
     <!-- ============================================================ -->
     <!-- SEZIONE 7: CONFRONTO CIVICI (SCIENTIFICO) - FASE 1+2+3 -->
     <!-- ============================================================ -->
@@ -769,7 +781,7 @@ body.api-setup-active::before {
       </div>
       
       <div class="card" style="background: #fff8e1; border-left: 4px solid #ff9800;">
-        <h3 style="color: #e65100; margin: 0 0 15px 0;">🔬 Analisi Multi-Metodo</h3>
+        <h3 style="color: #e65100; margin: 0 0 15px 0;">🔬 Analisi Multi-Metodo</h2>
         <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
           Questo strumento combina <strong>3 metodi scientifici</strong>:
         </p>
@@ -855,10 +867,10 @@ body.api-setup-active::before {
   </main>
   </div>
 
-<div class="settings-icon" id="settingsIcon" title="Gestisci API Key">⚙️</div>
+<button class="settings-icon" id="settingsIcon" aria-label="Gestisci API Key" title="Gestisci API Key">⚙️</button>
 
 <!-- Pulsante Guida -->
-<div class="guide-icon" id="guideIcon" title="Guida completa all'uso dell'app">📖</div>
+<button class="guide-icon" id="guideIcon" aria-label="Apri guida completa all'uso dell'app" title="Guida completa all'uso dell'app">📖</button>
 
 <div id="apiKeyModal" class="modal">
   <div class="modal-content">
@@ -1104,7 +1116,7 @@ body.api-setup-active::before {
         if (!addrA || !addrB) {
             const html = `
                 <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px;">
-                    <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Input Mancante</h4>
+                    <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Input Mancante</h3>
                     <p style="margin: 0;">Inserisci <strong>entrambi gli indirizzi</strong> per avviare il confronto.</p>
                 </div>
             `;
@@ -1128,7 +1140,7 @@ body.api-setup-active::before {
             console.error('Errore durante il confronto:', error);
             const html = `
                 <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px;">
-                    <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Errore Tecnico</h4>
+                    <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Errore Tecnico</h3>
                     <p style="margin: 0;">Si è verificato un errore durante l'analisi: ${error.message}</p>
                     <p style="margin: 10px 0 0 0; font-size: 0.9em; color: #666;">
                         Verifica che gli indirizzi siano corretti e riprova.
@@ -1278,8 +1290,29 @@ body.api-setup-active::before {
     }
 
     function closeGuideModal() {
-      document.getElementById('guideModal').classList.remove('show');
+      const modal = document.getElementById('guideModal');
+      modal.classList.remove('show');
+      // Ritorna il focus al pulsante che ha aperto la guida
+      const guideBtn = document.getElementById('guideIcon');
+      if (guideBtn) guideBtn.focus();
     }
+
+    // Chiudi modali con tasto ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const guideModal = document.getElementById('guideModal');
+        const apiModal = document.getElementById('apiKeyModal');
+        const modal = document.getElementById('modal');
+        
+        if (guideModal && guideModal.classList.contains('show')) {
+          closeGuideModal();
+        } else if (apiModal && apiModal.classList.contains('show')) {
+          apiModal.classList.remove('show');
+        } else if (modal && modal.classList.contains('show')) {
+          closeModal();
+        }
+      }
+    });
 
     async function copyText(text) {
       if (!navigator.clipboard) {
@@ -2085,7 +2118,7 @@ body.api-setup-active::before {
       const modalBody = document.getElementById('modalBody');
       modalBody.innerHTML = `
         <div style="padding: 15px;">
-          <h3 style="color: #dc3545; margin-bottom: 15px;">⚠️ Street View Non Disponibile</h3>
+          <h3 style="color: #dc3545; margin-bottom: 15px;">⚠️ Street View Non Disponibile</h2>
           <p><strong>Indirizzo cercato:</strong><br>${address}</p>
           <p style="margin-top: 15px;">
             Non è disponibile Street View entro 200 metri da questo punto.<br>
@@ -2118,7 +2151,7 @@ body.api-setup-active::before {
       const modalBody = document.getElementById('modalBody');
       modalBody.innerHTML = `
         <div style="padding: 15px;">
-          <h3 style="color: #ffc107; margin-bottom: 15px;">⚠️ Street View Trovato Ma Distante</h3>
+          <h3 style="color: #ffc107; margin-bottom: 15px;">⚠️ Street View Trovato Ma Distante</h2>
           <p><strong>Indirizzo cercato:</strong><br>${address}</p>
           <p style="margin-top: 15px;">
             Street View più vicino trovato a <strong>${distance.toFixed(0)} metri</strong> di distanza.<br>
@@ -3858,7 +3891,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         if (!precisionData.found) {
             const html = `
                 <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px; margin: 15px 0;">
-                    <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Indirizzo Non Trovato</h4>
+                    <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Indirizzo Non Trovato</h3>
                     <p style="margin: 0;">Impossibile geocodificare l'indirizzo. Verifica che sia corretto.</p>
                 </div>
             `;
@@ -3870,7 +3903,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             <div style="border-left: 5px solid ${precisionData.color}; padding: 15px; background: #fff; border-radius: 8px; margin: 15px 0;">
                 <h4 style="color: ${precisionData.color}; margin: 0 0 10px 0;">
                     ${precisionData.emoji} ${precisionData.title}
-                </h4>
+                </h3>
                 
                 <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 12px;">
                     <strong>📍 Indirizzo:</strong> ${precisionData.address}
@@ -3934,7 +3967,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         if (!precisionA.found || !precisionB.found) {
             const html = `
                 <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px;">
-                    <h4 style="color: #dc3545;">❌ Errore Geocodifica</h4>
+                    <h4 style="color: #dc3545;">❌ Errore Geocodifica</h3>
                     <p>${!precisionA.found ? `Impossibile trovare: ${addressA}` : ''}</p>
                     <p>${!precisionB.found ? `Impossibile trovare: ${addressB}` : ''}</p>
                 </div>
@@ -3950,7 +3983,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         if (streetA !== streetB) {
             const html = `
                 <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px;">
-                    <h4 style="color: #dc3545;">❌ Vie Diverse</h4>
+                    <h4 style="color: #dc3545;">❌ Vie Diverse</h3>
                     <p>Gli indirizzi sono su vie diverse:</p>
                     <ul>
                         <li><strong>A:</strong> ${precisionA.address}</li>
@@ -4281,7 +4314,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             <div style="border-left: 5px solid ${finalColor}; padding: 20px; background: #fff; border-radius: 8px;">
                 <h3 style="color: ${finalColor}; margin: 0 0 15px 0;">
                     ${finalEmoji} ${finalTitle}
-                </h3>
+                </h2>
                 
                 <!-- Riepilogo Indirizzi -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
@@ -5004,7 +5037,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         
         const html = `
             <div style="border: 3px solid #ff9800; background: #fff3cd; padding: 20px; border-radius: 12px; margin: 15px 0;">
-                <h3 style="color: #856404; margin: 0 0 15px 0;">${info.icon} ${info.title}</h3>
+                <h3 style="color: #856404; margin: 0 0 15px 0;">${info.icon} ${info.title}</h2>
                 
                 <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
                     <strong style="color: #dc3545;">⚠️ Affidabilità Attesa: ${info.reliability}</strong>
@@ -5077,7 +5110,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                         <div style="background: #fff3cd; border: 2px solid #ff9800; padding: 15px; border-radius: 8px; margin: 15px 0;">
                             <h4 style="color: #856404; margin: 0 0 10px 0;">
                                 ${precisionData.emoji} Precisione Indirizzo: ${precisionData.title}
-                            </h4>
+                            </h3>
                             <div style="background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px;">
                                 <strong>Affidabilità: ${precisionData.score}/100</strong>
                                 <div style="width: 100%; height: 12px; background: #e0e0e0; border-radius: 6px; margin: 8px 0; overflow: hidden;">
@@ -5249,7 +5282,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                 // FALLIMENTO TOTALE
                  const htmlError = `
                     <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px;">
-                        <h4 style="margin:0 0 10px 0; color: #dc3545;">❌ Analisi Impossibile</h4>
+                        <h4 style="margin:0 0 10px 0; color: #dc3545;">❌ Analisi Impossibile</h3>
                         <p>Non riesco a calcolare un orientamento affidabile.</p>
                         <ul style="margin-top:10px; font-size:0.9em; color:#666;">
                            <li>Il punto esatto è troppo ambiguo o non mappato.</li>
@@ -5518,7 +5551,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             <div style="border-left: 5px solid ${boxColor}; padding: 15px; background: #fff; border-radius: 8px;">
                 <h4 style="margin:0 0 10px 0; color: ${titleColor};">
                     ${reliabilityMsg} <span style="font-size:0.8em; opacity:0.8">(${reliabilityLevel})</span>
-                </h4>
+                </h3>
                 <div style="background: #f8f9fb; padding: 10px; border-radius: 6px; margin-bottom: 10px; font-size: 0.95em;">
                     <strong>Distanza punto osservazione:</strong> ${distance.toFixed(1)} metri<br>
                     <em>${explanation}</em>
@@ -6640,6 +6673,17 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
     m.classList.add('show');
   });
 
+  // Event listener per aprire la guida
+  document.getElementById('guideIcon').addEventListener('click', () => {
+    const modal = document.getElementById('guideModal');
+    modal.classList.add('show');
+    // Imposta focus sul titolo per screen reader
+    const title = document.getElementById('guideModalTitle');
+    if (title) {
+      setTimeout(() => title.focus(), 100);
+    }
+  });
+
   document.getElementById('closeModalBtn').addEventListener('click', () => {
     document.getElementById('apiKeyModal').classList.remove('show');
   });
@@ -6669,6 +6713,11 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
     if (e.target.id === 'apiKeyModal') document.getElementById('apiKeyModal').classList.remove('show');
   });
 
+  // Chiudi guida cliccando fuori
+  document.getElementById('guideModal').addEventListener('click', e => {
+    if (e.target.id === 'guideModal') closeGuideModal();
+  });
+
   document.getElementById('apiKeyInput').addEventListener('keypress', e => {
     if (e.key === 'Enter') document.getElementById('saveKeyBtn').click();
   });
@@ -6696,10 +6745,10 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
 </div>
 
 <!-- Modal Guida Completa -->
-<div id="guideModal" class="modal guide-modal">
-  <div class="modal-content">
-    <div class="modal-header">📖 Guida Completa - App Mobilità e Orientamento</div>
-    <div style="padding: 30px;">
+<div id="guideModal" class="modal guide-modal" role="dialog" aria-labelledby="guideModalTitle" aria-modal="true">
+  <div class="modal-content" role="document">
+    <div class="modal-header" id="guideModalTitle" tabindex="0">📖 Guida Completa - App Mobilità e Orientamento</div>
+    <div id="modalBody" style="padding: 30px;">
       
       <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 30px;">
         Questa applicazione è stata progettata per aiutarti nell'esplorazione urbana e nell'orientamento, 
@@ -6708,8 +6757,8 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
       </p>
 
       <!-- ============ PANORAMICA SEZIONI ============ -->
-      <div class="guide-section" style="background: #e8f5e9; border-left: 5px solid #4caf50;">
-        <h3>📑 Panoramica delle Sezioni</h3>
+      <section class="guide-section" style="background: #e8f5e9; border-left: 5px solid #4caf50;" aria-labelledby="panoramica-heading">
+        <h2 id="panoramica-heading">📑 Panoramica delle Sezioni</h2>
         <p style="margin-bottom: 15px;">L'app è organizzata in sezioni numerate. Alcune sezioni sono sempre visibili, altre appaiono dinamicamente quando servono:</p>
         
         <div style="margin-left: 20px; line-height: 2;">
@@ -6733,20 +6782,20 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         <div class="guide-tip" style="margin-top: 15px;">
           <strong>💡 Nota:</strong> Non cercare la Sezione 4 all'inizio - è nascosta finché non hai risultati da mostrare. Questa è una scelta di design per mantenere l'interfaccia pulita!
         </div>
-      </div>
+      </section>
 
       <!-- ============ SETUP INIZIALE ============ -->
-      <div class="guide-section">
-        <h3>🔧 1. Setup Iniziale - Configurazione API Key Google Maps</h3>
+      <section class="guide-section" aria-labelledby="setup-heading">
+        <h2 id="setup-heading">🔧 1. Setup Iniziale - Configurazione API Key Google Maps</h2>
         
-        <h4>Perché serve una API Key?</h4>
+        <h3>Perché serve una API Key?</h3>
         <p>
           L'app utilizza i servizi Google Maps (mappe, Street View, percorsi, ricerca luoghi) che richiedono 
           una chiave API personale. La tua chiave verrà salvata <strong>solo nel tuo browser</strong> 
           (localStorage) e <strong>mai condivisa</strong>.
         </p>
 
-        <h4>Come ottenere la API Key (5-10 minuti):</h4>
+        <h3>Come ottenere la API Key (5-10 minuti):</h3>
         <div class="guide-step">
           <strong>Passo 1:</strong> Vai su 
           <a href="https://console.cloud.google.com/google/maps-apis" target="_blank" rel="noopener">
@@ -6804,19 +6853,18 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           Se cambi browser o dispositivo, dovrai reinserirla. Puoi gestirla cliccando 
           sull'icona ⚙️ in basso a destra.
         </div>
-      </div>
-
+      </section>
       <!-- ============ SEZIONE 1 ============ -->
-      <div class="guide-section">
-        <h3>📍 2. Sezione 1: Punto di Partenza</h3>
+      <section class="guide-section" aria-labelledby="2-sezione-1-punto-di-partenza-heading">
+        <h2 id="2-sezione-1-punto-di-partenza-heading">📍 2. Sezione 1: Punto di Partenza</h2>
         
-        <h4>Cosa fa:</h4>
+        <h3>Cosa fa:</h3>
         <p>
           Imposta la tua posizione di partenza, fondamentale per tutte le altre funzioni 
           (percorsi, ricerca nelle vicinanze, orientamento).
         </p>
 
-        <h4>Come usarla:</h4>
+        <h3>Come usarla:</h3>
         
         <div class="guide-step">
           <strong>Inserisci indirizzo:</strong>
@@ -6834,7 +6882,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           per risultati più precisi. Es: "Corso Vittorio Emanuele II 12, Torino" invece di solo "Corso Vittorio".
         </div>
 
-        <h4>Cosa succede dopo:</h4>
+        <h3>Cosa succede dopo:</h3>
         <ul>
           <li>✅ La mappa si centra sulla posizione</li>
           <li>✅ Street View mostra il punto più vicino disponibile</li>
@@ -6852,16 +6900,15 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           (30-100m). Valori più alti trovano più punti ma possono essere meno precisi. 
           Consigliato: 50-70m.
         </div>
-      </div>
-
+      </section>
       <!-- ============ SEZIONE 2 ============ -->
-      <div class="guide-section">
-        <h3>🗺️ 3. Sezione 2: Mappa e Street View</h3>
+      <section class="guide-section" aria-labelledby="3-sezione-2-mappa-e-street-view-heading">
+        <h2 id="3-sezione-2-mappa-e-street-view-heading">🗺️ 3. Sezione 2: Mappa e Street View</h2>
         
-        <h4>Cosa fa:</h4>
+        <h3>Cosa fa:</h3>
         <p>Visualizza la posizione su mappa interattiva e Street View panoramico.</p>
 
-        <h4>Controlli Mappa:</h4>
+        <h3>Controlli Mappa:</h3>
         <ul>
           <li><strong>Zoom:</strong> Rotellina mouse o pulsanti +/-</li>
           <li><strong>Sposta:</strong> Trascina con il mouse</li>
@@ -6869,7 +6916,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <li><strong>Marker blu:</strong> Punto Street View trovato</li>
         </ul>
 
-        <h4>Controlli Street View:</h4>
+        <h3>Controlli Street View:</h3>
         <ul>
           <li><strong>Ruota vista:</strong> Trascina lateralmente</li>
           <li><strong>Guarda su/giù:</strong> Trascina verticalmente</li>
@@ -6881,19 +6928,18 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <strong>💡 A cosa serve:</strong> Street View ti permette di "vedere" virtualmente 
           il luogo prima di andarci, verificare l'aspetto degli edifici, vedere i punti di riferimento.
         </div>
-      </div>
-
+      </section>
       <!-- ============ SEZIONE 3 ============ -->
-      <div class="guide-section">
-        <h3>🔎 4. Sezione 3: Cerca nelle Vicinanze</h3>
+      <section class="guide-section" aria-labelledby="4-sezione-3-cerca-nelle-vicinanze-heading">
+        <h2 id="4-sezione-3-cerca-nelle-vicinanze-heading">🔎 4. Sezione 3: Cerca nelle Vicinanze</h2>
         
-        <h4>Cosa fa:</h4>
+        <h3>Cosa fa:</h3>
         <p>
           Trova luoghi d'interesse (negozi, servizi, ristoranti) vicino alla tua posizione. 
           Include oltre 100 categorie diverse!
         </p>
 
-        <h4>Come usarla:</h4>
+        <h3>Come usarla:</h3>
         
         <div class="guide-step">
           <strong>Passo 1:</strong> Seleziona una categoria dal menu a tendina:
@@ -6916,7 +6962,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <strong>Passo 3:</strong> Clicca "🔍 Cerca"
         </div>
 
-        <h4>Risultati mostrati (Sezione 4):</h4>
+        <h3>Risultati mostrati (Sezione 4):</h3>
         <div class="guide-note" style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin: 12px 0; border-radius: 6px;">
           <strong>📌 Nota:</strong> La "Sezione 4: Risultati della Ricerca" appare automaticamente 
           solo quando esegui una ricerca dalla Sezione 3. Non la vedrai subito nella pagina perché 
@@ -6933,19 +6979,18 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <strong>💡 Suggerimento:</strong> I risultati sono ordinati per distanza (più vicini prima). 
           Clicca su un marker per vedere i dettagli del luogo!
         </div>
-      </div>
-
+      </section>
       <!-- ============ SEZIONE 5 ============ -->
-      <div class="guide-section">
-        <h3>🎯 5. Sezione 5: Percorso Personalizzato</h3>
+      <section class="guide-section" aria-labelledby="5-sezione-5-percorso-personalizzato-heading">
+        <h2 id="5-sezione-5-percorso-personalizzato-heading">🎯 5. Sezione 5: Percorso Personalizzato</h2>
         
-        <h4>Cosa fa:</h4>
+        <h3>Cosa fa:</h3>
         <p>
           Calcola il percorso dalla tua posizione (Sezione 1) a una destinazione che scegli, 
           con diverse modalità di trasporto.
         </p>
 
-        <h4>Come usarla:</h4>
+        <h3>Come usarla:</h3>
         
         <div class="guide-step">
           <strong>Passo 1:</strong> Inserisci la destinazione:
@@ -6970,7 +7015,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <strong>Passo 3:</strong> Clicca "🧭 Calcola Percorso"
         </div>
 
-        <h4>Risultati mostrati:</h4>
+        <h3>Risultati mostrati:</h3>
         <ul>
           <li>📏 <strong>Distanza</strong> totale</li>
           <li>⏱️ <strong>Tempo stimato</strong></li>
@@ -6978,13 +7023,13 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <li>📝 <strong>Istruzioni passo-passo</strong> (svolte, direzioni)</li>
         </ul>
 
-        <h4>Azioni disponibili:</h4>
+        <h3>Azioni disponibili:</h3>
         <ul>
           <li><strong>🗺️ Apri in Google Maps:</strong> Apre Google Maps con navigazione attiva</li>
           <li><strong>🔊 Leggi Istruzioni:</strong> Sintesi vocale delle istruzioni (accessibilità)</li>
         </ul>
 
-        <h4>🚍 Trasporto Pubblico con Moovit:</h4>
+        <h3>🚍 Trasporto Pubblico con Moovit:</h3>
         
         <p style="margin-top: 15px;">
           Quando selezioni "Trasporto Pubblico", appare un'opzione aggiuntiva per usare Moovit:
@@ -7031,19 +7076,18 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           Non usare lo stesso link per città diverse! Esempio Roma: 
           <span class="guide-kbd">https://moovitapp.com/index/it-it/trasporto_pubblico-roma_e_lazio-61</span>
         </div>
-      </div>
-
+      </section>
       <!-- ============ SEZIONE 6 ============ -->
-      <div class="guide-section">
-        <h3>⚖️ 6. Sezione 6: Confronto Civici (Avanzato)</h3>
+      <section class="guide-section" aria-labelledby="6-sezione-6-confronto-civici-avanzato-heading">
+        <h2 id="6-sezione-6-confronto-civici-avanzato-heading">⚖️ 6. Sezione 6: Confronto Civici (Avanzato)</h2>
         
-        <h4>Cosa fa:</h4>
+        <h3>Cosa fa:</h3>
         <p>
           Confronta scientificamente due numeri civici sulla <strong>stessa via</strong> per 
           determinare se sono sullo stesso marciapiede o su lati opposti della strada.
         </p>
 
-        <h4>Quando usarla:</h4>
+        <h3>Quando usarla:</h3>
         <ul>
           <li><strong>Scenario A:</strong> Sei al civico 20 (con Street View) e devi andare al 24 
           (senza Street View). Vuoi sapere se devi attraversare.</li>
@@ -7052,7 +7096,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           di una via.</li>
         </ul>
 
-        <h4>Come usarla:</h4>
+        <h3>Come usarla:</h3>
         
         <div class="guide-step">
           <strong>Passo 1:</strong> Inserisci Civico A (riferimento):
@@ -7076,7 +7120,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <strong>Passo 3:</strong> Clicca "📐 Calcola Posizione"
         </div>
 
-        <h4>I 3 metodi scientifici usati:</h4>
+        <h3>I 3 metodi scientifici usati:</h3>
         
         <div class="guide-step">
           <strong>1. Check Precisione (Google):</strong>
@@ -7106,7 +7150,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           </ul>
         </div>
 
-        <h4>Risultato finale:</h4>
+        <h3>Risultato finale:</h3>
         <ul>
           <li><strong>Score 0-100:</strong> Confidenza del risultato</li>
           <li><strong>Verdetto:</strong> "Stesso lato" o "Lati opposti"</li>
@@ -7132,20 +7176,19 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             <li>In caso di piazze o vie molto larghe, la precisione può calare</li>
           </ul>
         </div>
-      </div>
-
+      </section>
       <!-- ============ FUNZIONI AGGIUNTIVE ============ -->
-      <div class="guide-section">
-        <h3>🔧 7. Funzioni Aggiuntive</h3>
+      <section class="guide-section" aria-labelledby="7-funzioni-aggiuntive-heading">
+        <h2 id="7-funzioni-aggiuntive-heading">🔧 7. Funzioni Aggiuntive</h2>
         
-        <h4>🔄 Ricalcola Orientamento:</h4>
+        <h3>🔄 Ricalcola Orientamento:</h3>
         <p>
           Se il calcolo automatico dell'orientamento (Sezione 1) sembra strano o vuoi 
           riprovare, clicca questo pulsante per ricalcolare usando il sistema intelligente 
           a 4 tentativi.
         </p>
 
-        <h4>⚙️ Gestisci API Key:</h4>
+        <h3>⚙️ Gestisci API Key:</h3>
         <p>
           Icona in basso a destra. Permette di:
         </p>
@@ -7155,13 +7198,13 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <li>Rimuoverla (dovrai reinserirla al prossimo uso)</li>
         </ul>
 
-        <h4>🧭 Esplora Incroci (OSM):</h4>
+        <h3>🧭 Esplora Incroci (OSM):</h3>
         <p>
           Nella Sezione 5, trova gli incroci stradali nelle vicinanze usando dati OpenStreetMap. 
           Utile per orientarsi identificando incroci noti.
         </p>
 
-        <h4>🗺️ Esplora POI (OSM):</h4>
+        <h3>🗺️ Esplora POI (OSM):</h3>
         <p>
           Nella Sezione 5, trova punti di interesse (negozi, monumenti, servizi) usando 
           OpenStreetMap come fonte alternativa a Google Places.
@@ -7171,13 +7214,12 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <strong>💡 OpenStreetMap vs Google:</strong> OSM è una mappa collaborativa open source. 
           A volte ha dati diversi o più aggiornati di Google Maps, quindi vale la pena provarla!
         </div>
-      </div>
-
+      </section>
       <!-- ============ ACCESSIBILITÀ ============ -->
-      <div class="guide-section">
-        <h3>♿ 8. Accessibilità</h3>
+      <section class="guide-section" aria-labelledby="8-accessibilità-heading">
+        <h2 id="8-accessibilità-heading">♿ 8. Accessibilità</h2>
         
-        <h4>L'app è progettata per essere accessibile:</h4>
+        <h3>L'app è progettata per essere accessibile:</h3>
         
         <ul>
           <li><strong>Screen reader:</strong> Tutti i controlli hanno etichette ARIA appropriate</li>
@@ -7187,47 +7229,46 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <li><strong>Skip links:</strong> In alto per saltare a sezioni specifiche</li>
         </ul>
 
-        <h4>Scorciatoie tastiera:</h4>
+        <h3>Scorciatoie tastiera:</h3>
         <ul>
           <li><span class="guide-kbd">Enter</span> nei campi di input: Esegue ricerca</li>
           <li><span class="guide-kbd">Tab</span>: Naviga tra i controlli</li>
           <li><span class="guide-kbd">Esc</span>: Chiude i modal aperti</li>
         </ul>
-      </div>
-
+      </section>
       <!-- ============ RISOLUZIONE PROBLEMI ============ -->
-      <div class="guide-section">
-        <h3>🔧 9. Risoluzione Problemi</h3>
+      <section class="guide-section" aria-labelledby="9-risoluzione-problemi-heading">
+        <h2 id="9-risoluzione-problemi-heading">🔧 9. Risoluzione Problemi</h2>
         
-        <h4>❌ "Errore caricamento Maps":</h4>
+        <h3>❌ "Errore caricamento Maps":</h3>
         <ul>
           <li>Verifica che la API Key sia corretta (inizia con AIzaSy)</li>
           <li>Controlla di aver abilitato tutte le API necessarie in Google Cloud</li>
           <li>Verifica di avere connessione internet</li>
         </ul>
 
-        <h4>❌ "Street View non disponibile":</h4>
+        <h3>❌ "Street View non disponibile":</h3>
         <ul>
           <li>Non tutti i luoghi hanno copertura Street View</li>
           <li>Prova ad aumentare il raggio di ricerca (slider Expert Mode)</li>
           <li>L'app cerca automaticamente il punto Street View più vicino</li>
         </ul>
 
-        <h4>❌ "OSM non fornisce geometria strada":</h4>
+        <h3>❌ "OSM non fornisce geometria strada":</h3>
         <ul>
           <li>OpenStreetMap potrebbe non avere dati per quella specifica strada</li>
           <li>Prova con un indirizzo leggermente diverso o più generico</li>
           <li>Funziona meglio con strade principali</li>
         </ul>
 
-        <h4>❌ Autocomplete non suggerisce indirizzi:</h4>
+        <h3>❌ Autocomplete non suggerisce indirizzi:</h3>
         <ul>
           <li>Aspetta 1-2 secondi dopo aver iniziato a scrivere</li>
           <li>Assicurati di aver abilitato Places API</li>
           <li>Scrivi almeno 3-4 caratteri</li>
         </ul>
 
-        <h4>❌ "Errore 429" (Troppi richieste):</h4>
+        <h3>❌ "Errore 429" (Troppi richieste):</h3>
         <ul>
           <li>Hai superato le quote gratuite mensili</li>
           <li>Aspetta qualche minuto tra le richieste</li>
@@ -7242,19 +7283,18 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             <li>Aprire la console (<span class="guide-kbd">F12</span>) per vedere errori dettagliati</li>
           </ol>
         </div>
-      </div>
-
+      </section>
       <!-- ============ PRIVACY E SICUREZZA ============ -->
-      <div class="guide-section">
-        <h3>🔒 10. Privacy e Sicurezza</h3>
+      <section class="guide-section" aria-labelledby="10-privacy-e-sicurezza-heading">
+        <h2 id="10-privacy-e-sicurezza-heading">🔒 10. Privacy e Sicurezza</h2>
         
-        <h4>Dati salvati localmente (nel tuo browser):</h4>
+        <h3>Dati salvati localmente (nel tuo browser):</h3>
         <ul>
           <li><strong>API Key Google Maps:</strong> Salvata in localStorage</li>
           <li><strong>Zone Moovit:</strong> Link e nomi zone salvati in localStorage</li>
         </ul>
 
-        <h4>Cosa NON viene mai condiviso:</h4>
+        <h3>Cosa NON viene mai condiviso:</h3>
         <ul>
           <li>❌ La tua API Key NON viene mai inviata a server esterni (solo a Google)</li>
           <li>❌ Le tue ricerche NON vengono registrate</li>
@@ -7262,7 +7302,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <li>❌ Nessun dato personale viene raccolto</li>
         </ul>
 
-        <h4>Servizi esterni utilizzati:</h4>
+        <h3>Servizi esterni utilizzati:</h3>
         <ul>
           <li><strong>Google Maps API:</strong> Per mappe, percorsi, luoghi</li>
           <li><strong>OpenStreetMap/Overpass API:</strong> Per geometrie strade e POI</li>
@@ -7273,13 +7313,12 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <strong>⚠️ Importante:</strong> L'app è completamente client-side (gira solo nel tuo browser). 
           Non abbiamo server che raccolgono dati. Tutto rimane sul TUO dispositivo!
         </div>
-      </div>
-
+      </section>
       <!-- ============ CREDITS ============ -->
-      <div class="guide-section">
-        <h3>📝 11. Crediti e Tecnologie</h3>
+      <section class="guide-section" aria-labelledby="11-crediti-e-tecnologie-heading">
+        <h2 id="11-crediti-e-tecnologie-heading">📝 11. Crediti e Tecnologie</h2>
         
-        <h4>Servizi utilizzati:</h4>
+        <h3>Servizi utilizzati:</h3>
         <ul>
           <li><strong>Google Maps Platform:</strong> Mappe, Street View, Directions, Places, Geocoding</li>
           <li><strong>OpenStreetMap:</strong> Geometrie strade, POI, incroci</li>
