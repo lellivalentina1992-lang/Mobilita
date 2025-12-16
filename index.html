@@ -7010,6 +7010,34 @@ window.addEventListener('DOMContentLoaded', () => {
         passo-passo nell'uso di tutte le funzionalità.
       </p>
 
+      <!-- ============ PANORAMICA SEZIONI ============ -->
+      <div class="guide-section" style="background: #e8f5e9; border-left: 5px solid #4caf50;">
+        <h3>📑 Panoramica delle Sezioni</h3>
+        <p style="margin-bottom: 15px;">L'app è organizzata in sezioni numerate. Alcune sezioni sono sempre visibili, altre appaiono dinamicamente quando servono:</p>
+        
+        <div style="margin-left: 20px; line-height: 2;">
+          <strong>✅ Sezioni sempre visibili:</strong>
+          <ul style="margin-top: 8px;">
+            <li><strong>Sezione 1:</strong> Punto di Partenza - Imposta da dove inizi</li>
+            <li><strong>Sezione 2:</strong> Mappa e Street View - Visualizza l'area</li>
+            <li><strong>Sezione 3:</strong> Cerca nelle Vicinanze - Trova luoghi d'interesse</li>
+            <li><strong>Sezione 5:</strong> Percorso Personalizzato - Calcola percorsi</li>
+            <li><strong>Sezione 6:</strong> Confronto Civici - Analisi scientifica marciapiedi</li>
+          </ul>
+        </div>
+
+        <div style="margin-left: 20px; margin-top: 15px; line-height: 2;">
+          <strong>🔄 Sezioni dinamiche (appaiono quando servono):</strong>
+          <ul style="margin-top: 8px;">
+            <li><strong>Sezione 4:</strong> Risultati della Ricerca - Appare solo dopo una ricerca dalla Sezione 3. Se non la vedi, è normale! Comparirà quando esegui una ricerca di luoghi.</li>
+          </ul>
+        </div>
+
+        <div class="guide-tip" style="margin-top: 15px;">
+          <strong>💡 Nota:</strong> Non cercare la Sezione 4 all'inizio - è nascosta finché non hai risultati da mostrare. Questa è una scelta di design per mantenere l'interfaccia pulita!
+        </div>
+      </div>
+
       <!-- ============ SETUP INIZIALE ============ -->
       <div class="guide-section">
         <h3>🔧 1. Setup Iniziale - Configurazione API Key Google Maps</h3>
@@ -7192,6 +7220,11 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <h4>Risultati mostrati (Sezione 4):</h4>
+        <div class="guide-note" style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin: 12px 0; border-radius: 6px;">
+          <strong>📌 Nota:</strong> La "Sezione 4: Risultati della Ricerca" appare automaticamente 
+          solo quando esegui una ricerca dalla Sezione 3. Non la vedrai subito nella pagina perché 
+          è nascosta finché non ci sono risultati da mostrare. È normale!
+        </div>
         <ul>
           <li><strong>Nome</strong> del luogo</li>
           <li><strong>Distanza</strong> dalla tua posizione</li>
