@@ -3595,57 +3595,6 @@ Chiudi sempre chiedendo:
         document.getElementById('copyBox').select();
       } catch (e) { notify('❌ Errore: ' + e.message, 'error'); }
     }
-    
-      try {
-        if (!currentLocation) throw new Error('Imposta un punto di partenza nella Sezione 1.');
-        const addr = document.getElementById('addressInput').value || 'Punto selezionato';
-        const coords = `${currentLocation.lat.toFixed(6)}, ${currentLocation.lng.toFixed(6)}`;
-        
-        const prompt = `Trova tutte le fermate del trasporto pubblico vicine a:
-📍 Indirizzo: ${addr}
-📐 Coordinate: ${coords}
-
-1. Coordinate
-• Ricava latitudine e longitudine precise dell'indirizzo (Google Maps o OpenStreetMap).
-
-2. Ricerca fermate (entro 500 m)
-• Trova fermate di qualunque tipo: autobus, tram, metro, treni regionali, funicolari, traghetti, navette urbane, ecc.
-• Usa come fonti:
-  – OpenStreetMap (public_transport=platform, stop_position, stop_area, highway=bus_stop)
-  – feed GTFS disponibili (qualsiasi operatore del mondo)
-  – dataset ufficiali locali (se presenti)
-  – Moovit solo per confermare eventuale pagina della fermata
-
-3. Output richiesto per ogni fermata
-• Nome
-• Tipo (bus, metro, tram, ecc.)
-• Linee servite
-• Coordinate
-• Distanza precisa in metri
-• Link Moovit (se disponibile)
-
-4. Ordinamento
-• Ordina dalla fermata più vicina alla più lontana.
-
-5. Espansione del raggio
-• Se entro 500 m non trovi nulla, aumenta a 700 m.
-
-6. Importantissimo
-• NON calcolare percorsi; Moovit Web non supporta la ricerca per coordinate.
-• Usa l'incrocio di OSM + GTFS + dataset locali per trovare le fermate reali.
-• NON inventare dati: usa solo fonti verificabili.`;
-
-        const ok = await copyText(prompt);
-        openModal('🚏 Prompt: Fermate Vicine', `
-          <p style="margin-bottom:10px">${ok ? '✅ Prompt copiato negli appunti!' : '📋 Copia il prompt qui sotto:'}</p>
-          <textarea id="copyBox" style="width:100%;height:320px;font-family:monospace;font-size:13px;padding:10px;border-radius:8px;border:2px solid #667eea" readonly>${prompt}</textarea>
-          <div class="modal-buttons">
-            <button class="btn btn-ghost" onclick="document.getElementById('copyBox').select();document.execCommand('copy');notify('✅ Copiato!','success')">📋 Copia</button>
-            <button class="btn" onclick="closeModal()">Chiudi</button>
-          </div>`);
-        document.getElementById('copyBox').select();
-      } catch (e) { notify('❌ Errore: ' + e.message, 'error'); }
-    }
 
     // PROMPT 2: Social (ricerca su Facebook/Instagram)
     async function prepareSocialPrompt() {
