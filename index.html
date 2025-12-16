@@ -678,12 +678,10 @@ body.api-setup-active::before {
             <div id="tools-group" style="display:flex;flex-direction:column;gap:8px">
               <button class="btn" onclick="searchPlaces()">🔎 Cerca Luoghi (Google)</button>
               <button class="btn btn-secondary" onclick="fetchWeather()">☀️ Meteo Ora</button>
-              <button class="btn btn-secondary" onclick="fetchTransitlandStops()">🚌 Fermate Reali (Proxy)</button>
               <button class="btn btn-secondary" onclick="listOSMIntersections()">🧭 Incroci (Proxy)</button>
               <button class="btn btn-secondary" onclick="listOSMPlacesAll()">🗺️ POI OSM (Proxy)</button>
               <button class="btn btn-ghost" onclick="prepareSocialPrompt()">💬 Ricerca Social (Prompt)</button>
-              <button class="btn btn-ghost" onclick="prepareStopsNearbyPrompt()">🚏 Fermate Vicine (Prompt)</button>
-              <button class="btn btn-ghost" onclick="prepareTransportAnalysisPrompt()">🚌 Analisi Trasporto (Prompt)</button>
+              <button class="btn btn-ghost" onclick="prepareTransitPrompt()">🚏 Ricerca Trasporti (Prompt)</button>
               </div>
           </div>
         </div>
@@ -747,7 +745,6 @@ body.api-setup-active::before {
       <div class="nav-explore-tools" role="group" aria-label="Strumenti esplorazione durante navigazione">
         <button class="btn btn-secondary" onclick="exploreStep('google')">📡 Esplora Servizi (Google)</button>
         <button class="btn btn-secondary" onclick="exploreStep('osm')">🧭 Esplora Incroci (OSM)</button>
-        <!-- Pulsante Transitland rimosso (richiede proxy) -->
         <button class="btn btn-secondary" onclick="exploreStep('osm_poi')">🗺️ Esplora POI (OSM)</button>
         <button id="navFindAddressBtn" class="btn btn-ghost" onclick="findAddressForCurrentStep()">📍 Trova Indirizzo Passo</button>
         <button id="navReturnButton" class="btn btn-green" onclick="calculateReturnTrip()" style="display:none; width: 100%; margin-top: 10px;">
@@ -933,32 +930,6 @@ body.api-setup-active::before {
     //    - addLowReliabilityWarning() per disclaimer standard
     //
     // -------------------------------------------------------------------------------
-    // 
-    // 🔄 MODIFICHE  (Transitland Fix):
-    //
-    // 1. SEPARAZIONE INDIRIZZO/FERMATA
-    //    - Le fermate Transitland ora usano coordinate DIRETTE (non più geocoding Google)
-    //    - Questo elimina confusione con piazze, civici, ecc.
-    //
-    // 2. CALCOLO DISTANZA SEMPRE VISIBILE
-    //    - Ogni fermata mostra SEMPRE la distanza dalla posizione corrente
-    //    - Non più "Distanza: —" ma valori reali calcolati
-    //
-    // 3. LINEE CHE PASSANO ALLA FERMATA
-    //    - Ogni fermata mostra le linee (40, 60, H, ecc.)
-    //    - Con  funziona davvero!
-    //
-    // 4. ETICHETTA DIREZIONE COMPRENSIBILE
-    //    - Ogni fermata mostra "lato N/S/E/O della strada" o "direzione X"
-    //    - Facilita la distinzione tra fermate sulla stessa via
-    //
-    // 5. FERMATA COME PUNTO DI PARTENZA
-    //    - Quando selezioni una fermata come partenza, usa le sue coordinate esatte
-    //    - Street View, orientamento, tutto centrato sulla fermata (non su geocoding)
-    //
-    // ===============================================================================
-    
-    // ---------------
     // VARIABILI GLOBALI
     // ---------------
     
@@ -2473,20 +2444,15 @@ body.api-setup-active::before {
       let mode = 'WALKING'; // Default
       switch (value) {
         case 'set_start':
-          // 🆕 MODIFICA 5: Quando selezioni una fermata, quella diventa il nuovo punto di partenza
-          // Usa le coordinate ESATTE della fermata (da Transitland, NON da Google Geocoding)
+          // Quando selezioni un luogo, quello diventa il nuovo punto di partenza
+          // Usa le coordinate ESATTE del luogo
           if (place.coords) {
             setPosition(place.coords, place.name);
             const coordText = `(Coord: ${place.coords.lat.toFixed(5)}, ${place.coords.lng.toFixed(5)})`;
             
-            // Per fermate Transitland, mostra anche le linee
-            if (place.source === 'transitland' && place.routes && place.routes.length > 0) {
-              document.getElementById('addressInput').value = `${place.name} ${coordText} - Linee: ${place.routes.join(', ')}`;
-              notify(`✅ Fermata impostata come partenza! Linee: ${place.routes.join(', ')}`, 'success');
-            } else {
-              document.getElementById('addressInput').value = `${place.name} ${coordText}`;
-              notify('✅ Punto di partenza aggiornato con coordinate esatte!', 'success');
-            }
+            document.getElementById('addressInput').value = `${place.name} ${coordText}`;
+            notify('✅ Punto di partenza aggiornato con coordinate esatte!', 'success');
+            
             document.getElementById('topHeader').scrollIntoView({behavior: 'smooth'});
           } else {
             notify('❌ Coordinate non disponibili per questo luogo.', 'error');
@@ -3292,10 +3258,6 @@ body.api-setup-active::before {
           title = 'Esplora Incroci (OSM)';
           notify(`🧭 Esploro incroci...`, 'info');
           places = await fetchOSMIntersectionsForStep(startPoint, radius);
-        } else if (source === 'transitland') {
-          title = 'Esplora Fermate (Transitland)';
-          notify(`🚌 Esploro fermate...`, 'info');
-          places = await fetchTransitlandStopsForStep(startPoint, radius);
         } else if (source === 'osm_poi') {
           title = 'Esplora POI (OSM)';
           notify(`🗺️ Esploro POI...`, 'info');
@@ -3383,14 +3345,7 @@ body.api-setup-active::before {
       return intersections.sort((a, b) => (a.distance ?? Infinity) - (b.distance ?? Infinity));
     }
 
-    async function fetchTransitlandStopsForStep(location, radius) {
-      // ⚠️ FUNZIONE DISABILITATA - Transitland API richiede proxy server (no CORS)
-      // Per riabilitarla, configura un server proxy personale che faccia da intermediario
-      console.warn('⚠️ Fermate Transitland non disponibili - richiede proxy server');
-      return []; // Restituisce array vuoto
-    }
-
-        async function fetchOSMPlacesForStep(location, radius) {
+    async function fetchOSMPlacesForStep(location, radius) {
       const poiTypes = "amenity|shop|tourism|leisure|office|public_transport|historic|sport";
       const query = `[out:json];node(around:${radius},${location.lat},${location.lng})[~"^(${poiTypes})$"~"."];out body;`;
       try {
@@ -3442,7 +3397,7 @@ body.api-setup-active::before {
             cardinal = 'Qui';
           }
         }
-        const icon = p.source === 'google' ? '📡' : (p.source === 'osm_intersection' ? '🧭' : (p.source === 'transitland' ? '🚌' : '🗺️'));
+        const icon = p.source === 'google' ? '📡' : (p.source === 'osm_intersection' ? '🧭' : '🗺️');
         
         // Costruiamo le azioni disponibili per il popup
         let actionButtons = '';
@@ -3463,26 +3418,11 @@ body.api-setup-active::before {
 
     // Funzione helper per il modale di esplorazione
     function setStartPointFromModal(lat, lng, name) {
-        // 🆕 Usa coordinate esatte per fermate Transitland
         setPosition({lat, lng}, name);
         document.getElementById('addressInput').value = `${name} (Coord: ${lat.toFixed(5)}, ${lng.toFixed(5)})`;
         notify('✅ Punto di partenza aggiornato con coordinate esatte!', 'success');
         closeModal();
         document.getElementById('topHeader').scrollIntoView({behavior: 'smooth'});
-    }
-
-    // Proxy-related functions
-    async function fetchTransitlandStops() {
-      if (!currentLocation) return notify('⚠️ Imposta un punto di partenza', 'error');
-      displayUnifiedResults([], "Ricerca Fermate Reali in corso...");
-      try {
-        const stops = await fetchTransitlandStopsForStep(currentLocation, document.getElementById('radiusInput').value);
-        displayUnifiedResults(stops, stops.length > 0 ? "Fermate Reali Trovate" : "Nessuna Fermata Trovata");
-        if (stops.length === 0) notify('Nessuna fermata Transitland trovata.', 'info');
-      } catch (e) {
-        displayUnifiedResults([], "Errore Ricerca Fermate");
-        notify('❌ ' + e.message, 'error');
-      }
     }
 
     async function listOSMIntersections() {
@@ -3516,12 +3456,54 @@ body.api-setup-active::before {
       const out = document.getElementById('weatherResults');
       out.style.display = 'block';
       out.textContent = '⏳ Caricamento meteo...';
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}&current_weather=true`;
+      
+      // Richiesta ampliata con più parametri affidabili
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh&timezone=auto`;
+      
       try {
         const resp = await fetch(url);
         if (!resp.ok) throw new Error(`Errore Meteo: ${resp.status}`);
         const data = await resp.json();
-        out.innerHTML = `<strong>Meteo Attuale:</strong> ${data.current_weather.temperature}°C — <strong>Vento:</strong> ${data.current_weather.windspeed} km/h`;
+        
+        const current = data.current;
+        
+        // Interpretazione codice meteo WMO (World Meteorological Organization)
+        const weatherCodes = {
+          0: '☀️ Sereno',
+          1: '🌤️ Poco nuvoloso', 2: '⛅ Parzialmente nuvoloso', 3: '☁️ Nuvoloso',
+          45: '🌫️ Nebbia', 48: '🌫️ Nebbia con brina',
+          51: '🌦️ Pioviggine leggera', 53: '🌦️ Pioviggine moderata', 55: '🌧️ Pioviggine densa',
+          61: '🌧️ Pioggia leggera', 63: '🌧️ Pioggia moderata', 65: '🌧️ Pioggia forte',
+          71: '🌨️ Neve leggera', 73: '🌨️ Neve moderata', 75: '🌨️ Neve forte',
+          80: '🌦️ Rovesci leggeri', 81: '⛈️ Rovesci moderati', 82: '⛈️ Rovesci violenti',
+          95: '⛈️ Temporale', 96: '⛈️ Temporale con grandine leggera', 99: '⛈️ Temporale con grandine forte'
+        };
+        
+        const condition = weatherCodes[current.weather_code] || '🌡️ Meteo';
+        
+        // Direzione vento (punti cardinali)
+        const getWindDirection = (degrees) => {
+          const directions = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'];
+          const index = Math.round(degrees / 45) % 8;
+          return directions[index];
+        };
+        
+        const windDir = getWindDirection(current.wind_direction_10m);
+        
+        // Output formattato e accessibile
+        let weatherHtml = `<div style="line-height: 1.8;">
+          <strong>${condition}</strong><br>
+          🌡️ <strong>Temperatura:</strong> ${current.temperature_2m}°C (percepita: ${current.apparent_temperature}°C)<br>
+          💧 <strong>Umidità:</strong> ${current.relative_humidity_2m}%<br>
+          💨 <strong>Vento:</strong> ${current.wind_speed_10m} km/h da ${windDir}`;
+        
+        if (current.precipitation > 0) {
+          weatherHtml += `<br>🌧️ <strong>Precipitazioni:</strong> ${current.precipitation} mm`;
+        }
+        
+        weatherHtml += `</div>`;
+        
+        out.innerHTML = weatherHtml;
       } catch (e) {
         out.textContent = '❌ Errore di rete Meteo: ' + e.message;
       }
@@ -3529,8 +3511,91 @@ body.api-setup-active::before {
 
     // AI Prompt functions
     
-    // PROMPT 1: Fermate Vicine (ricerca fermate entro 500m)
-    async function prepareStopsNearbyPrompt() {
+    // PROMPT UNIFICATO: Ricerca Trasporti Pubblici (combina fermate vicine + analisi approfondita)
+    async function prepareTransitPrompt() {
+      try {
+        if (!currentLocation) throw new Error('Imposta un punto di partenza nella Sezione 1.');
+        const addr = document.getElementById('addressInput').value || 'Punto selezionato';
+        const coords = `${currentLocation.lat.toFixed(6)}, ${currentLocation.lng.toFixed(6)}`;
+        const city = cityGuess || '';
+        
+        const prompt = `Ricerca Trasporti Pubblici
+
+Agisci come analista esperto del trasporto pubblico globale.
+
+📍 INPUT:
+Indirizzo: ${addr}
+Coordinate: ${coords}
+${city ? `Città: ${city}` : ''}
+
+📍 INTERPRETAZIONE DELL'INPUT:
+• Indirizzo preciso (via con civico) → cerca fermate entro 500 m (estendibili a 700-800 m se necessario)
+• Solo città/comune → considera l'intera area urbana
+• Se mancano dettagli → chiedi chiarimenti
+
+🔹 FASE 1 – RICERCA FERMATE NELL'AREA
+
+Trova tutte le fermate usando:
+• OpenStreetMap (public_transport=*, highway=bus_stop)
+• Feed GTFS pubblici (qualunque operatore mondiale)
+• Dataset open data locali
+• Piattaforme digitali (Google Maps, Moovit)
+
+Per ogni fermata includi (in formato testuale chiaro):
+• Nome della fermata
+• Tipo di servizio (bus, tram, metro, treno, traghetto, ecc.)
+• Linee che fermano lì
+• Coordinate GPS
+• Distanza dall'indirizzo in metri
+• Link Moovit (se disponibile)
+
+Ordina le fermate dalla più vicina alla più lontana.
+
+🔹 FASE 2 – ANALISI OPERATORI (solo se l'utente lo richiede o se serve contesto)
+
+Se necessario o richiesto esplicitamente, analizza gli operatori su 4 livelli:
+
+1️⃣ Livello istituzionale
+• Operatori autorizzati da registri ufficiali nazionali/regionali
+
+2️⃣ Livello digitale
+• Operatori con feed GTFS integrati in Google Maps, Moovit, Transit, Citymapper
+
+3️⃣ Livello open-data
+• Operatori presenti solo su OSM o dataset non ufficiali
+
+4️⃣ Livello empirico
+• Verifica orari PDF, siti aziendali, articoli locali, Street View (cartelli, paline)
+
+🔹 OUTPUT FINALE:
+
+**Formato testuale chiaro e strutturato** (NO tabelle, accessibile per screen reader)
+
+Elenca:
+• Fermate trovate (con dettagli)
+• Operatori principali (se richiesto)
+• Note su linee/fermate non mappate o "fantasma"
+
+Chiudi sempre chiedendo:
+"Vuoi aumentare il raggio di ricerca, approfondire una fermata specifica, o analizzare gli operatori attivi?"
+
+⚠️ IMPORTANTE:
+• NON inventare dati: usa solo fonti verificabili
+• NON calcolare percorsi (Moovit Web non supporta coordinate)
+• Usa sempre formato testuale leggibile, mai tabelle`;
+
+        const ok = await copyText(prompt);
+        openModal('🚏 Prompt: Ricerca Trasporti Pubblici', `
+          <p style="margin-bottom:10px">${ok ? '✅ Prompt copiato negli appunti!' : '📋 Copia il prompt qui sotto:'}</p>
+          <textarea id="copyBox" style="width:100%;height:400px;font-family:monospace;font-size:13px;padding:10px;border-radius:8px;border:2px solid #667eea" readonly>${prompt}</textarea>
+          <div class="modal-buttons">
+            <button class="btn btn-ghost" onclick="document.getElementById('copyBox').select();document.execCommand('copy');notify('✅ Copiato!','success')">📋 Copia</button>
+            <button class="btn" onclick="closeModal()">Chiudi</button>
+          </div>`);
+        document.getElementById('copyBox').select();
+      } catch (e) { notify('❌ Errore: ' + e.message, 'error'); }
+    }
+    
       try {
         if (!currentLocation) throw new Error('Imposta un punto di partenza nella Sezione 1.');
         const addr = document.getElementById('addressInput').value || 'Punto selezionato';
@@ -3581,88 +3646,26 @@ body.api-setup-active::before {
         document.getElementById('copyBox').select();
       } catch (e) { notify('❌ Errore: ' + e.message, 'error'); }
     }
-    
-    // PROMPT 2: Analisi Trasporto Pubblico (analisi completa operatori)
-    async function prepareTransportAnalysisPrompt() {
-      try {
-        if (!currentLocation) throw new Error('Imposta un punto di partenza nella Sezione 1.');
-        const addr = document.getElementById('addressInput').value || 'Punto selezionato';
-        const coords = `${currentLocation.lat.toFixed(6)}, ${currentLocation.lng.toFixed(6)}`;
-        const city = cityGuess || '';
-        
-        const prompt = `Analisi Trasporto Pubblico
 
-Agisci come un analista globale dei dati del trasporto pubblico.
-L'obiettivo è identificare tutte le fermate e tutti gli operatori di trasporto pubblico (bus, tram, metro, treni suburbani, traghetti, funicolari) attivi o storicamente presenti in un'area.
-
-📍 INPUT:
-Indirizzo: ${addr}
-Coordinate: ${coords}
-${city ? `Città: ${city}` : ''}
-
-📍 Interpretazione dell'input
-• Se fornisco una via con indirizzo preciso → analizza entro 400 m, estendibili fino a 800 m.
-• Se fornisco solo una città o un comune → considera l'intera area urbana.
-• Se non specifico la località → chiedi: "Per favore indica un indirizzo o una città."
-
-🔹 FASE 1 – RICERCA FERMATE
-• Trova tutte le fermate nell'area tramite:
-  – OpenStreetMap (public_transport=*)
-  – feed GTFS (qualsiasi operatore mondiale)
-  – dataset open data locali
-  – piattaforme digitali (Google Maps, Moovit, Transitland, MobilityDatabase)
-• Se è un indirizzo preciso → ordina le fermate per distanza.
-• Se è una città → raggruppale per quartiere/zona.
-
-Per ogni fermata includi:
-– nome
-– tipi di servizio (bus, metro, tram, ecc.)
-– linee servite
-– fonte del dato (GTFS, OSM, Google, Moovit, PDF locale)
-– NON inventare dati: usa solo dati verificabili.
-
-🔹 FASE 2 – ANALISI DEGLI OPERATORI (4 LIVELLI)
-
-1️⃣ Livello istituzionale
-• Identifica gli operatori autorizzati tramite registri ufficiali (nazionali o regionali del paese considerato).
-
-2️⃣ Livello digitale
-• Verifica quali operatori hanno feed GTFS pubblici e sono integrati in app come Google, Moovit, Transit, Citymapper.
-
-3️⃣ Livello open-data (OSM + dataset locali)
-• Controlla se esistono linee o operatori presenti solo su OSM o su open data non ufficiali.
-
-4️⃣ Livello empirico
-• Analizza orari PDF, siti aziendali, articoli locali, e verifica su Street View la presenza fisica di cartelli, paline e fermate.
-
-🔹 OUTPUT FINALE (testo narrativo, chiaro e strutturato)
-• Elenca operatori istituzionali
-• Elenca operatori digitalmente integrati
-• Elenca operatori presenti solo su fonti open o empiriche
-• Indica eventuali linee/fermate "fantasma" o non mappate correttamente
-
-Chiudi sempre chiedendo:
-«Vuoi aumentare il raggio di ricerca o approfondire una fermata o un operatore?»`;
-
-        const ok = await copyText(prompt);
-        openModal('🚌 Prompt: Analisi Trasporto Pubblico', `
-          <p style="margin-bottom:10px">${ok ? '✅ Prompt copiato negli appunti!' : '📋 Copia il prompt qui sotto:'}</p>
-          <textarea id="copyBox" style="width:100%;height:350px;font-family:monospace;font-size:13px;padding:10px;border-radius:8px;border:2px solid #667eea" readonly>${prompt}</textarea>
-          <div class="modal-buttons">
-            <button class="btn btn-ghost" onclick="document.getElementById('copyBox').select();document.execCommand('copy');notify('✅ Copiato!','success')">📋 Copia</button>
-            <button class="btn" onclick="closeModal()">Chiudi</button>
-          </div>`);
-        document.getElementById('copyBox').select();
-      } catch (e) { notify('❌ Errore: ' + e.message, 'error'); }
-    }
-
-    // PROMPT 3: Social (ricerca su Facebook/Instagram) - INVARIATO
+    // PROMPT 2: Social (ricerca su Facebook/Instagram)
     async function prepareSocialPrompt() {
       try {
         if (!currentLocation) throw new Error('Imposta un punto.');
         const addr = document.getElementById('addressInput').value;
         if (!addr) throw new Error('Indirizzo non trovato.');
-        const prompt = `Trova Pagine e Post su Facebook/Instagram per attività locali (es. ristorante, bar) nelle immediate vicinanze di "${addr}". FORMAT: Tabella con Nome, Piattaforma, URL, indirizzo, segnali di novità (es. "apertura"). Vuoi estendere la ricerca (indica i metri) o vuoi info/indicazioni per un luogo specifico (indica il nome)?`;
+        const prompt = `Trova Pagine e Post su Facebook/Instagram per attività locali (es. ristorante, bar) nelle immediate vicinanze di "${addr}".
+
+OUTPUT RICHIESTO (formato testuale):
+Per ogni attività trovata, elenca in modo chiaro:
+• Nome dell'attività
+• Piattaforma (Facebook/Instagram)
+• Link diretto alla pagina
+• Indirizzo fisico (se disponibile)
+• Segnali di novità (es. "nuova apertura", "recentemente aperto", post recenti)
+
+Ordina dalla più vicina alla più lontana.
+
+Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info/indicazioni per un'attività specifica (indica il nome)?"`;
         const ok = await copyText(prompt);
         openModal('💬 Prompt: Ricerca Social', `
           <p style="margin-bottom:10px">${ok ? '✅ Prompt copiato negli appunti!' : '📋 Copia il prompt qui sotto:'}</p>
@@ -6545,8 +6548,10 @@ Chiudi sempre chiedendo:
         const modal = document.getElementById('modal');
         const navView = document.getElementById('navigationView');
         if (modal?.classList.contains('show')) {
+          e.preventDefault(); // Previene comportamenti di default incluso lo scroll
           closeModal();
         } else if (navView?.style.display === 'flex') {
+          e.preventDefault(); // Previene comportamenti di default incluso lo scroll
           exitNavigation();
         }
       }
