@@ -7454,10 +7454,13 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
     if (e.target.id === 'apiKeyModal') document.getElementById('apiKeyModal').classList.remove('show');
   });
 
-  // Chiudi guida cliccando fuori
-  document.getElementById('guideModal').addEventListener('click', e => {
-    if (e.target.id === 'guideModal') closeGuideModal();
-  });
+  // Chiudi guida cliccando fuori (con controllo esistenza elemento)
+  const guideModalElement = document.getElementById('guideModal');
+  if (guideModalElement) {
+    guideModalElement.addEventListener('click', e => {
+      if (e.target.id === 'guideModal') closeGuideModal();
+    });
+  }
 
   document.getElementById('apiKeyInput').addEventListener('keypress', e => {
     if (e.key === 'Enter') document.getElementById('saveKeyBtn').click();
