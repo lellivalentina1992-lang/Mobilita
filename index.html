@@ -611,6 +611,39 @@ body.api-setup-active::before {
   outline-offset: 2px;
 }
 
+.report-icon {
+  position: fixed;
+  bottom: 160px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,.3);
+  z-index: 1000;
+  transition: transform .2s;
+  border: none;
+  padding: 0;
+}
+.report-icon:hover, .report-icon:focus {
+  transform: scale(1.1);
+  outline: 3px solid #ff6b6b;
+  outline-offset: 2px;
+}
+.report-icon.has-errors {
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 4px 15px rgba(0,0,0,.3); }
+  50% { box-shadow: 0 4px 25px rgba(255,107,107,.8); }
+}
+
 .settings-icon {
   border: none; /* Per button */
   padding: 0; /* Per button */
@@ -1082,6 +1115,9 @@ body.api-setup-active::before {
 <!-- Pulsante Guida -->
 <button class="guide-icon" id="guideIcon" aria-label="Apri guida completa all'uso dell'app" title="Guida completa all'uso dell'app">📖</button>
 
+<!-- Pulsante Report Diagnostico -->
+<button class="report-icon" id="reportIcon" aria-label="Visualizza report diagnostico e log errori" title="Report Diagnostico" onclick="AppLogger.showReport()">📊</button>
+
 <div id="apiKeyModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">🔑 Gestione API Key</div>
@@ -1189,6 +1225,238 @@ body.api-setup-active::before {
     function debugLog(...args) {
       if (DEBUG) console.log(...args);
     }
+
+    // ========================
+    // 🆕 SISTEMA DI LOGGING AVANZATO
+    // ========================
+    
+    const AppLogger = {
+      logs: [],
+      errors: [],
+      warnings: [],
+      info: [],
+      startTime: Date.now(),
+      
+      // Aggiunge log
+      log(type, category, message, data = null) {
+        const entry = {
+          timestamp: Date.now() - this.startTime,
+          time: new Date().toISOString(),
+          type: type,
+          category: category,
+          message: message,
+          data: data
+        };
+        
+        this.logs.push(entry);
+        
+        switch(type) {
+          case 'error':
+            this.errors.push(entry);
+            console.error(`[${category}]`, message, data || '');
+            this.updateReportButton();
+            break;
+          case 'warn':
+            this.warnings.push(entry);
+            console.warn(`[${category}]`, message, data || '');
+            this.updateReportButton();
+            break;
+          case 'info':
+            this.info.push(entry);
+            console.info(`[${category}]`, message, data || '');
+            break;
+          default:
+            console.log(`[${category}]`, message, data || '');
+        }
+      },
+      
+      // Aggiorna badge pulsante report
+      updateReportButton() {
+        const btn = document.getElementById('reportIcon');
+        if (!btn) return;
+        
+        if (this.errors.length > 0) {
+          btn.classList.add('has-errors');
+          btn.setAttribute('aria-label', `Report Diagnostico - ${this.errors.length} errori rilevati`);
+          btn.title = `Report Diagnostico - ${this.errors.length} errori`;
+        } else if (this.warnings.length > 0) {
+          btn.setAttribute('aria-label', `Report Diagnostico - ${this.warnings.length} avvisi`);
+          btn.title = `Report Diagnostico - ${this.warnings.length} avvisi`;
+        }
+      },
+      
+      // Metodi shorthand
+      error(category, message, data) { this.log('error', category, message, data); },
+      warn(category, message, data) { this.log('warn', category, message, data); },
+      logInfo(category, message, data) { this.log('info', category, message, data); },
+      debug(category, message, data) { this.log('debug', category, message, data); },
+      
+      // Genera report testuale
+      generateReport() {
+        const elapsed = ((Date.now() - this.startTime) / 1000).toFixed(2);
+        
+        let report = '═══════════════════════════════════════════════════════════\n';
+        report += '  REPORT DIAGNOSTICO - APP MOBILITÀ E ORIENTAMENTO\n';
+        report += '═══════════════════════════════════════════════════════════\n\n';
+        report += `📅 Data: ${new Date().toLocaleString('it-IT')}\n`;
+        report += `⏱️  Tempo esecuzione: ${elapsed} secondi\n`;
+        report += `📊 Totale eventi: ${this.logs.length}\n`;
+        report += `   • Errori: ${this.errors.length}\n`;
+        report += `   • Avvisi: ${this.warnings.length}\n`;
+        report += `   • Info: ${this.info.length}\n\n`;
+        
+        // Browser info
+        report += '🌐 INFORMAZIONI BROWSER\n';
+        report += '─────────────────────────────────────────────────────────\n';
+        report += `User Agent: ${navigator.userAgent}\n`;
+        report += `Lingua: ${navigator.language}\n`;
+        report += `Piattaforma: ${navigator.platform}\n`;
+        report += `Online: ${navigator.onLine ? 'Sì' : 'No'}\n`;
+        report += `Cookie abilitati: ${navigator.cookieEnabled ? 'Sì' : 'No'}\n\n`;
+        
+        // Feature detection
+        report += '🔧 FUNZIONALITÀ DISPONIBILI\n';
+        report += '─────────────────────────────────────────────────────────\n';
+        report += `✓ Geolocation API: ${navigator.geolocation ? 'Sì' : 'No'}\n`;
+        report += `✓ Local Storage: ${typeof(Storage) !== 'undefined' ? 'Sì' : 'No'}\n`;
+        report += `✓ Service Worker: ${'serviceWorker' in navigator ? 'Sì' : 'No'}\n`;
+        report += `✓ Notification API: ${'Notification' in window ? 'Sì' : 'No'}\n`;
+        report += `✓ Vibration API: ${navigator.vibrate ? 'Sì' : 'No'}\n`;
+        report += `✓ Media Session: ${'mediaSession' in navigator ? 'Sì' : 'No'}\n`;
+        report += `✓ Speech Synthesis: ${'speechSynthesis' in window ? 'Sì' : 'No'}\n\n`;
+        
+        // Errori
+        if (this.errors.length > 0) {
+          report += '❌ ERRORI RISCONTRATI\n';
+          report += '─────────────────────────────────────────────────────────\n';
+          this.errors.forEach((err, i) => {
+            report += `${i + 1}. [${err.category}] ${err.message}\n`;
+            report += `   Tempo: +${(err.timestamp / 1000).toFixed(2)}s\n`;
+            if (err.data) {
+              report += `   Dettagli: ${JSON.stringify(err.data, null, 2)}\n`;
+            }
+            report += '\n';
+          });
+        }
+        
+        // Avvisi
+        if (this.warnings.length > 0) {
+          report += '⚠️  AVVISI\n';
+          report += '─────────────────────────────────────────────────────────\n';
+          this.warnings.forEach((warn, i) => {
+            report += `${i + 1}. [${warn.category}] ${warn.message}\n`;
+            report += `   Tempo: +${(warn.timestamp / 1000).toFixed(2)}s\n`;
+            if (warn.data) {
+              report += `   Dettagli: ${JSON.stringify(warn.data, null, 2)}\n`;
+            }
+            report += '\n';
+          });
+        }
+        
+        // Info principali
+        if (this.info.length > 0) {
+          report += 'ℹ️  EVENTI PRINCIPALI\n';
+          report += '─────────────────────────────────────────────────────────\n';
+          this.info.slice(0, 20).forEach((info, i) => {
+            report += `${i + 1}. [${info.category}] ${info.message}\n`;
+            report += `   Tempo: +${(info.timestamp / 1000).toFixed(2)}s\n`;
+          });
+          if (this.info.length > 20) {
+            report += `\n... e altri ${this.info.length - 20} eventi\n`;
+          }
+          report += '\n';
+        }
+        
+        // Timeline completa (ultimi 50 eventi)
+        report += '📋 TIMELINE EVENTI (ultimi 50)\n';
+        report += '─────────────────────────────────────────────────────────\n';
+        this.logs.slice(-50).forEach((log, i) => {
+          const icon = log.type === 'error' ? '❌' : log.type === 'warn' ? '⚠️' : log.type === 'info' ? 'ℹ️' : '📝';
+          report += `${icon} [+${(log.timestamp / 1000).toFixed(2)}s] [${log.category}] ${log.message}\n`;
+        });
+        
+        report += '\n═══════════════════════════════════════════════════════════\n';
+        report += 'Fine del report\n';
+        report += '═══════════════════════════════════════════════════════════\n';
+        
+        return report;
+      },
+      
+      // Scarica report come file
+      downloadReport() {
+        const report = this.generateReport();
+        const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `mobilita-report-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        notify('📥 Report scaricato!', 'success');
+        AppLogger.logInfo('REPORT', 'Report diagnostico scaricato');
+      },
+      
+      // Mostra report in modal
+      showReport() {
+        const report = this.generateReport();
+        const html = `
+          <div style="padding: 20px;">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📊 Report Diagnostico</h2>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+              <p><strong>Errori:</strong> ${this.errors.length}</p>
+              <p><strong>Avvisi:</strong> ${this.warnings.length}</p>
+              <p><strong>Totale eventi:</strong> ${this.logs.length}</p>
+            </div>
+            <pre style="background: #fff; padding: 15px; border: 1px solid #dee2e6; border-radius: 8px; max-height: 400px; overflow-y: auto; font-size: 12px; line-height: 1.4;">${report}</pre>
+            <div class="modal-buttons" style="margin-top: 20px;">
+              <button class="btn btn-ghost" onclick="closeModal()">Chiudi</button>
+              <button class="btn" onclick="AppLogger.downloadReport()">📥 Scarica Report</button>
+              <button class="btn btn-secondary" onclick="navigator.clipboard.writeText(AppLogger.generateReport()).then(() => notify('✅ Report copiato!', 'success'))">📋 Copia</button>
+            </div>
+          </div>
+        `;
+        
+        openModal('Report Diagnostico', html);
+      },
+      
+      // Pulisci log
+      clear() {
+        this.logs = [];
+        this.errors = [];
+        this.warnings = [];
+        this.info = [];
+        this.startTime = Date.now();
+        console.clear();
+        AppLogger.logInfo('SYSTEM', 'Log puliti');
+      }
+    };
+    
+    // Intercetta errori globali
+    window.addEventListener('error', function(e) {
+      AppLogger.error('GLOBAL', 'Errore non gestito: ' + e.message, {
+        filename: e.filename,
+        lineno: e.lineno,
+        colno: e.colno,
+        error: e.error ? e.error.stack : null
+      });
+    });
+    
+    // Intercetta promise rejection
+    window.addEventListener('unhandledrejection', function(e) {
+      AppLogger.error('PROMISE', 'Promise rejection non gestita', {
+        reason: e.reason,
+        promise: e.promise
+      });
+    });
+    
+    // Esponi globalmente
+    window.AppLogger = AppLogger;
+    
+    // Log iniziale
+    AppLogger.logInfo('SYSTEM', 'App Mobilità e Orientamento inizializzata');
 
     // ========================
     // UTILITY RETE
@@ -1421,24 +1689,34 @@ body.api-setup-active::before {
     // ---------------
     
     function initMap() {
+      AppLogger.logInfo('INIT', 'Inizializzazione Google Maps...');
+      
       // Verifica caricamento librerie Google Maps
       if (typeof google === 'undefined' || !google.maps) {
-        notify('❌ Errore: Google Maps non caricato correttamente', 'error');
+        const msg = 'Google Maps non caricato correttamente';
+        AppLogger.error('INIT', msg);
+        notify('❌ Errore: ' + msg, 'error');
         announceToScreenReader('Errore nel caricamento di Google Maps', 'assertive');
         return;
       }
       
       if (!google.maps.geometry || !google.maps.geometry.spherical) {
-        notify('❌ Errore: Libreria Geometry non caricata', 'error');
+        const msg = 'Libreria Geometry non caricata';
+        AppLogger.error('INIT', msg);
+        notify('❌ Errore: ' + msg, 'error');
         announceToScreenReader('Errore: libreria Geometry mancante', 'assertive');
         return;
       }
       
       if (!google.maps.places || !google.maps.places.PlacesService) {
-        notify('❌ Errore: Libreria Places non caricata', 'error');
+        const msg = 'Libreria Places non caricata';
+        AppLogger.error('INIT', msg);
+        notify('❌ Errore: ' + msg, 'error');
         announceToScreenReader('Errore: libreria Places mancante', 'assertive');
         return;
       }
+      
+      AppLogger.logInfo('INIT', 'Tutte le librerie Google Maps caricate correttamente');
       
       const defaultPos = {lat: 41.9028, lng: 12.4964};
       map = new google.maps.Map(document.getElementById('map'), {center: defaultPos, zoom: 15});
@@ -8100,10 +8378,19 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
    * Avvia il tracking GPS continuo
    */
   async function startTracking() {
+    AppLogger.logInfo('OTM', 'Avvio tracking GPS...');
+    
     if (!navigator.geolocation) {
+      AppLogger.error('OTM', 'Geolocalizzazione non supportata dal browser');
       notify('❌ Geolocalizzazione non supportata', 'error');
       return;
     }
+    
+    AppLogger.debug('OTM', 'Destinazione impostata', {
+      lat: otmDestination?.lat,
+      lng: otmDestination?.lng,
+      label: otmDestination?.label
+    });
     
     // Reset variabili annuncio e vibrazioni
     otmLastAnnouncedDistance = null;
@@ -8389,18 +8676,27 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
    */
   function onPositionError(error) {
     let message = '';
+    let errorDetails = {
+      code: error.code,
+      message: error.message
+    };
+    
     switch(error.code) {
       case error.PERMISSION_DENIED:
         message = '❌ Permesso GPS negato';
+        AppLogger.error('GPS', 'Permesso GPS negato dall\'utente', errorDetails);
         break;
       case error.POSITION_UNAVAILABLE:
         message = '⚠️ Posizione non disponibile';
+        AppLogger.warn('GPS', 'Posizione GPS non disponibile', errorDetails);
         break;
       case error.TIMEOUT:
         message = '⏱️ Timeout GPS';
+        AppLogger.warn('GPS', 'Timeout nella richiesta GPS', errorDetails);
         break;
       default:
         message = '❌ Errore GPS sconosciuto';
+        AppLogger.error('GPS', 'Errore GPS sconosciuto', errorDetails);
     }
     
     notify(message, 'error');
