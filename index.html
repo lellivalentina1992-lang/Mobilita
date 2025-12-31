@@ -1208,7 +1208,7 @@ body.api-setup-active::before {
     
     // ... (CATEGORIE E LABEL OMESSE) ...
     const CATEGORIES =['accounting','administrative_area_level_1','administrative_area_level_2','administrative_area_level_3','administrative_area_level_4','administrative_area_level_5','airport','amusement_park','aquarium','art_gallery','atm','bakery','bank','bar','beauty_salon','bicycle_store','book_store','bowling_alley','bus_station','cafe','campground','car_dealer','car_rental','car_repair','car_wash','casino','cemetery','church','city_hall','clothing_store','colloquial_area','convenience_store','country','courthouse','dentist','department_store','doctor','drugstore','electrician','electronics_store','embassy','establishment','finance','fire_station','floor','florist','food','funeral_home','furniture_store','gas_station','general_contractor','geocode','grocery_or_supermarket','gym','hair_care','hardware_store','health','hindu_temple','home_goods_store','hospital','insurance_agency','intersection','jewelry_store','laundry','lawyer','library','light_rail_station','liquor_store','local_government_office','locality','locksmith','lodging','meal_delivery','meal_takeaway','mosque','movie_rental','movie_theater','moving_company','museum','natural_feature','neighborhood','night_club','painter','park','parking','pet_store','pharmacy','physiotherapist','place_of_worship','plumber','point_of_interest','police','political','post_box','post_office','postal_code','postal_code_prefix','postal_code_suffix','postal_town','premise','primary_school','real_estate_agency','restaurant','roofing_contractor','room','route','rv_park','school','secondary_school','shoe_store','shopping_mall','spa','stadium','storage','store','street_address','street_number','sublocality','sublocality_level_1','sublocality_level_2','sublocality_level_3','sublocality_level_4','sublocality_level_5','subpremise','subway_station','supermarket','synagogue','taxi_stand','tourist_attraction','town_square','train_station','transit_station','travel_agency','university','veterinary_care','zoo'];
-    const LABELS = {'accounting':'Commercialista','administrative_area_level_1':'Regione','administrative_area_level_2':'Provincia','administrative_area_level_3':'Comune','administrative_area_level_4':'Circoscrizione','administrative_area_level_5':'Quartiere','airport':'Aeroporto','amusement_park':'Parco divertimenti','aquarium':'Acquario','art_gallery':'Galleria d\'arte','atm':'Bancomat','bakery':'Panetteria/Pasticceria','bank':'Banca','bar':'Bar','beauty_salon':'Salone di bellezza','bicycle_store':'Negozio di biciclette','book_store':'Libreria','bowling_alley':'Bowling','bus_station':'Stazione autobus','cafe':'Caffè','campground':'Campeggio','car_dealer':'Concessionario auto','car_rental':'Noleggio auto','car_repair':'Autofficina','car_wash':'Autolavaggio','casino':'Casinò','cemetery':'Cimitero','church':'Chiesa','city_hall':'Municipio','clothing_store':'Negozio di abbigliamento','colloquial_area':'Area informale','convenience_store':'Mini market','country':'Nazione','courthouse':'Tribunale','dentist':'Dentista','department_store':'Grandi magazzini','doctor':'Medico','drugstore':'Drugstore','electrician':'Elettricista','electronics_store':'Negozio di elettronica','embassy':'Ambasciata','establishment':'Attività commerciale','finance':'Finanza','fire_station':'Vigili del fuoco','floor':'Piano (edificio)','florist':'Fioraio','food':'Cibo','funeral_home':'Impresa funebre','furniture_store':'Negozio di mobili','gas_station':'Distributore di benzina','general_contractor':'Impresa edile','geocode':'Geocodifica','grocery_or_supermarket':'Alimentari o Supermercato','gym':'Palestra','hair_care':'Parrucchiere','hardware_store':'Ferramenta','health':'Salute','hindu_temple':'Tempio indù','home_goods_store':'Negozio di articoli per la casa','hospital':'Ospedale','insurance_agency':'Agenzia assicurativa','intersection':'Incrocio','jewelry_store':'Gioielleria','laundry':'Lavanderia','lawyer':'Avvocato','library':'Biblioteca','light_rail_station':'Stazione metro leggera','liquor_store':'Negozio di liquori','local_government_office':'Ufficio governativo locale','locality':'Località (Città)','locksmith':'Fabbro','lodging':'Alloggio','meal_delivery':'Consegna pasti','meal_takeaway':'Cibo d\'asporto','mosque':'Moschea','movie_rental':'Noleggio film','movie_theater':'Cinema','moving_company':'Ditta di traslochi','museum':'Museo','natural_feature':'Elemento naturale','neighborhood':'Quartiere','night_club':'Night club','painter':'Imbianchino','park':'Parco','parking':'Parcheggio','pet_store':'Negozio di animali','pharmacy':'Farmacia','physiotherapist':'Fisioterapista','place_of_worship':'Luogo di culto','plumber':'Idraulista','point_of_interest':'Punto di interesse','police':'Polizia','political':'Sede politica','post_box':'Casella postale','post_office':'Ufficio postale','postal_code':'Codice postale','postal_code_prefix':'Prefisso codice postale','postal_code_suffix':'Suffisso codice postale','postal_town':'Città postale','premise':'Sede/Stabile','primary_school':'Scuola elementare','real_estate_agency':'Agenzia immobiliare','restaurant':'Ristorante','roofing_contractor':'Copritetto','room':'Stanza','route':'Strada (percorso)','rv_park':'Area camper','school':'Scuola','secondary_school':'Scuola media/superiore','shoe_store':'Negozio di scarpe','shopping_mall':'Centro commerciale','spa':'Spa','stadium':'Stadio','storage':'Deposito','store':'Negozio','street_address':'Indirizzo stradale','street_number':'Numero civico','sublocality':'Sottolocalità','sublocality_level_1':'Sottolocalità L1','sublocality_level_2':'Sottolocalità L2','sublocality_level_3':'Sottolocalità L3','sublocality_level_4':'Sottolocalità L4','sublocality_level_5':'Sottolocalità L5','subpremise':'Sub-sede','subway_station':'Stazione metro','supermarket':'Supermercato','synagogue':'Sinoga','taxi_stand':'Stazione taxi','tourist_attraction':'Attrazione turistica','town_square':'Piazza cittadina','train_station':'Stazione ferroviaria','transit_station':'Stazione mezzi pubblici','travel_agency':'Agenzia di viaggi','university':'Università','veterinary_care':'Veterinario','zoo':'Zoo'};
+    const LABELS = {'accounting':'Commercialista','administrative_area_level_1':'Regione','administrative_area_level_2':'Provincia','administrative_area_level_3':'Comune','administrative_area_level_4':'Circoscrizione','administrative_area_level_5':'Quartiere','airport':'Aeroporto','amusement_park':'Parco divertimenti','aquarium':'Acquario','art_gallery':'Galleria d\'arte','atm':'Bancomat','bakery':'Panetteria/Pasticceria','bank':'Banca','bar':'Bar','beauty_salon':'Salone di bellezza','bicycle_store':'Negozio di biciclette','book_store':'Libreria','bowling_alley':'Bowling','bus_station':'Stazione autobus','cafe':'Caffè','campground':'Campeggio','car_dealer':'Concessionario auto','car_rental':'Noleggio auto','car_repair':'Autofficina','car_wash':'Autolavaggio','casino':'Casinò','cemetery':'Cimitero','church':'Chiesa','city_hall':'Municipio','clothing_store':'Negozio di abbigliamento','colloquial_area':'Area informale','convenience_store':'Mini market','country':'Nazione','courthouse':'Tribunale','dentist':'Dentista','department_store':'Grandi magazzini','doctor':'Medico','drugstore':'Drugstore','electrician':'Elettricista','electronics_store':'Negozio di elettronica','embassy':'Ambasciata','establishment':'Attività commerciale','finance':'Finanza','fire_station':'Vigili del fuoco','floor':'Piano (edificio)','florist':'Fioraio','food':'Cibo','funeral_home':'Impresa funebre','furniture_store':'Negozio di mobili','gas_station':'Distributore di benzina','general_contractor':'Impresa edile','geocode':'Geocodifica','grocery_or_supermarket':'Alimentari o Supermercato','gym':'Palestra','hair_care':'Parrucchiere','hardware_store':'Ferramenta','health':'Salute','hindu_temple':'Tempio indù','home_goods_store':'Negozio di articoli per la casa','hospital':'Ospedale','insurance_agency':'Agenzia assicurativa','intersection':'Incrocio','jewelry_store':'Gioielleria','laundry':'Lavanderia','lawyer':'Avvocato','library':'Biblioteca','light_rail_station':'Stazione metro leggera','liquor_store':'Negozio di liquori','local_government_office':'Ufficio governativo locale','locality':'Località (Città)','locksmith':'Fabbro','lodging':'Alloggio','meal_delivery':'Consegna pasti','meal_takeaway':'Cibo d\'asporto','mosque':'Moschea','movie_rental':'Noleggio film','movie_theater':'Cinema','moving_company':'Ditta di traslochi','museum':'Museo','natural_feature':'Elemento naturale','neighborhood':'Quartiere','night_club':'Night club','painter':'Imbianchino','park':'Parco','parking':'Parcheggio','pet_store':'Negozio di animali','pharmacy':'Farmacia','physiotherapist':'Fisioterapista','place_of_worship':'Luogo di culto','plumber':'Idraulista','point_of_interest':'Punto di interesse','police':'Polizia','political':'Sede politica','post_box':'Casella postale','post_office':'Ufficio postale','postal_code':'Codice postale','postal_code_prefix':'Prefisso codice postale','postal_code_suffix':'Suffisso codice postale','postal_town':'Città postale','premise':'Sede/Stabile','primary_school':'Scuola elementare','real_estate_agency':'Agenzia immobiliare','restaurant':'Ristorante','roofing_contractor':'Copritetto','room':'Stanza','route':'Strada (percorso)','rv_park':'Area camper','school':'Scuola','secondary_school':'Scuola media/superiore','shoe_store':'Negozio di scarpe','shopping_mall':'Centro commerciale','spa':'Spa','stadium':'Stadio','storage':'Deposito','store':'Negozio','street_address':'Indirizzo stradale','street_number':'Numero civico','sublocality':'Sottolocalità','sublocality_level_1':'Sottolocalità L1','sublocality_level_2':'Sottolocalità L2','sublocality_level_3':'Sottolocalità L3','sublocality_level_4':'Sottolocalità L4','sublocality_level_5':'Sottolocalità L5','subpremise':'Sub-sede','subway_station':'Stazione metro','supermarket':'Supermercato','synagogue':'Sinoga','taxi_stand':'Stazione taxi','tourist_attraction':'Attrazione turistica','town_square':'Piazza cittadina','train_station':'Stazione ferroviaria','transit_station':'🚉 Trasporti Pubblici','travel_agency':'Agenzia di viaggi','university':'Università','veterinary_care':'Veterinario','zoo':'Zoo'};
     const DAILY_DEFAULT = ['atm','bank','bar','cafe','restaurant','supermarket','pharmacy','hospital','bus_station','subway_station','train_station','transit_station','post_office','store','bakery'];
     
     let geocoder, service, directionsService, autocomplete, map, streetView;
@@ -7524,6 +7524,18 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
   }
   
   /**
+   * Aggiorna il contenuto OTM e scrolla all'inizio
+   */
+  function updateOtmContent(htmlContent) {
+    document.getElementById('otmContent').innerHTML = htmlContent;
+    // Scroll to top automatico per vedere sempre l'inizio
+    const overlay = document.getElementById('onTheMoveOverlay');
+    if (overlay) {
+      overlay.scrollTop = 0;
+    }
+  }
+  
+  /**
    * Controlla se c'è una destinazione salvata recente (< 24h)
    */
   function checkSavedDestination() {
@@ -7572,7 +7584,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         </div>
       </div>
     `;
-    document.getElementById('otmContent').innerHTML = content;
+    updateOtmContent(content);
     
     // Focus sul primo pulsante
     setTimeout(() => {
@@ -7642,7 +7654,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         </div>
       </div>
     `;
-    document.getElementById('otmContent').innerHTML = content;
+    updateOtmContent(content);
     announce('Step 1: Hai già un indirizzo di destinazione?');
     
     // Focus sul primo pulsante
@@ -7676,12 +7688,29 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         </div>
       </div>
     `;
-    document.getElementById('otmContent').innerHTML = content;
+    updateOtmContent(content);
     announce('Step 2: Inserisci indirizzo di destinazione');
     
-    // Focus sull'input
+    // Focus sull'input e inizializza autocomplete
     setTimeout(() => {
       const input = document.getElementById('otmDirectDest');
+      
+      // Inizializza autocomplete Google Maps
+      if (typeof google !== 'undefined' && google.maps && google.maps.places) {
+        const autocomplete = new google.maps.places.Autocomplete(input, {
+          fields: ['formatted_address', 'geometry', 'name']
+        });
+        
+        // Quando viene selezionato un luogo dall'autocomplete
+        autocomplete.addListener('place_changed', () => {
+          const place = autocomplete.getPlace();
+          if (place.geometry && place.geometry.location) {
+            // Popola l'input con l'indirizzo formattato
+            input.value = place.formatted_address || place.name;
+          }
+        });
+      }
+      
       input.focus();
       // Enter per cercare
       input.addEventListener('keypress', e => {
@@ -7768,7 +7797,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         </div>
       </div>
     `;
-    document.getElementById('otmContent').innerHTML = content;
+    updateOtmContent(content);
     announce('Destinazione trovata: ' + otmDestination.label);
     
     setTimeout(() => {
@@ -7804,11 +7833,28 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         </div>
       </div>
     `;
-    document.getElementById('otmContent').innerHTML = content;
+    updateOtmContent(content);
     announce('Step 2A: Inserisci luogo di riferimento');
     
     setTimeout(() => {
       const input = document.getElementById('otmReference');
+      
+      // Inizializza autocomplete Google Maps
+      if (typeof google !== 'undefined' && google.maps && google.maps.places) {
+        const autocomplete = new google.maps.places.Autocomplete(input, {
+          fields: ['formatted_address', 'geometry', 'name']
+        });
+        
+        // Quando viene selezionato un luogo dall'autocomplete
+        autocomplete.addListener('place_changed', () => {
+          const place = autocomplete.getPlace();
+          if (place.geometry && place.geometry.location) {
+            // Popola l'input con l'indirizzo formattato
+            input.value = place.formatted_address || place.name;
+          }
+        });
+      }
+      
       input.focus();
       input.addEventListener('keypress', e => {
         if (e.key === 'Enter') findReference();
@@ -7877,6 +7923,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
       { type: 'supermarket', label: '🛒 Supermercato' },
       { type: 'pharmacy', label: '💊 Farmacia' },
       { type: 'hospital', label: '🏥 Ospedale' },
+      { type: 'transit_station', label: '🚉 Trasporti Pubblici' },
       { type: 'bus_station', label: '🚌 Fermata Bus' },
       { type: 'subway_station', label: '🚇 Metro' },
       { type: 'train_station', label: '🚂 Stazione Treno' },
@@ -7942,7 +7989,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         </div>
       </div>
     `;
-    document.getElementById('otmContent').innerHTML = content;
+    updateOtmContent(content);
     announce('Step 2B: Scegli le categorie da cercare. Tieni premuto per ricerca rapida');
     
     // Focus sul primo toggle
@@ -8184,14 +8231,15 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         </div>
       </div>
     `;
-    document.getElementById('otmContent').innerHTML = content;
+    updateOtmContent(content);
     announce(`Trovati ${results.length} risultati`);
     
     // Salva risultati per selectPOI
     window.otmCurrentResults = results;
     
     setTimeout(() => {
-      document.querySelector('.otm-results .btn').focus();
+      const firstResult = document.querySelector('.otm-result-item');
+      if (firstResult) firstResult.focus();
     }, 100);
   }
   
@@ -8403,7 +8451,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         </div>
       </div>
     `;
-    document.getElementById('otmContent').innerHTML = content;
+    updateOtmContent(content);
     announce('Tracking avviato');
     
     // Carica impostazioni
@@ -8565,7 +8613,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
     // Stop temporaneo tracking per modificare impostazioni
     stopTracking();
     
-    document.getElementById('otmContent').innerHTML = content;
+    updateOtmContent(content);
     announce('Impostazioni vibrazioni');
     
     setTimeout(() => {
