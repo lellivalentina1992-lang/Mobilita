@@ -736,7 +736,20 @@ body.api-setup-active::before {
 <div id="apiKeySetup">
   <h2>🔑 Configurazione API Key Google Maps</h2>
   
-  <div class="info-box">
+  <!-- CAMPO INPUT IN CIMA -->
+  <label for="apiKeyInput" style="font-weight:600;display:block;margin-top:20px;margin-bottom:10px;">Inserisci la tua API Key:</label>
+  <input type="password" id="apiKeyInput" placeholder="AIzaSy..." autocomplete="off" style="margin-bottom:10px;">
+  <span class="show-key-toggle" id="toggleKeyBtn">👁️ Mostra/Nascondi</span>
+  
+  <div class="button-group">
+    <button class="btn btn-green" id="saveKeyBtn">💾 Salva e Avvia App</button>
+    <button class="btn btn-secondary" id="testKeyBtn">🧪 Testa Validità</button>
+  </div>
+  
+  <div id="apiKeyStatus" style="margin-top:20px;text-align:center"></div>
+  
+  <!-- SPIEGAZIONI SOTTO -->
+  <div class="info-box" style="margin-top:30px;">
     <strong>ℹ️ Privacy</strong><br>
     La tua chiave API sarà salvata <strong>solo nel tuo browser</strong> (localStorage).
   </div>
@@ -748,21 +761,10 @@ body.api-setup-active::before {
       <li>Crea un progetto</li>
       <li>Abilita: Maps JavaScript API, Places API, Directions API, Geocoding API</li>
       <li>Vai su "Credenziali" → "Crea credenziali" → "Chiave API"</li>
-      <li>Copia la chiave qui sotto</li>
+      <li>Copia la chiave qui sopra ⬆️</li>
     </ol>
     <small>💰 quote gratuite mensili (vedi dettagli sopra).</small>
   </div>
-  
-  <label for="apiKeyInput" style="font-weight:600;display:block;margin-top:20px">Inserisci la tua API Key:</label>
-  <input type="password" id="apiKeyInput" placeholder="AIzaSy..." autocomplete="off">
-  <span class="show-key-toggle" id="toggleKeyBtn">👁️ Mostra/Nascondi</span>
-  
-  <div class="button-group">
-    <button class="btn btn-green" id="saveKeyBtn">💾 Salva e Avvia App</button>
-    <button class="btn btn-secondary" id="testKeyBtn">🧪 Testa Validità</button>
-  </div>
-  
-  <div id="apiKeyStatus" style="margin-top:20px;text-align:center"></div>
 </div>
 
 <!-- Skip Links per navigazione rapida -->
