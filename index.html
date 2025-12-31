@@ -233,6 +233,12 @@ body.api-setup-active::before {
       justify-content: space-between;
       align-items: center;
       gap: 15px;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      border-radius: 8px;
+      margin-bottom: 5px;
+    }
+    .otm-result-item:hover {
+      background-color: #f8f9fa;
     }
     .otm-result-item:last-child { border-bottom: none; }
     .otm-result-info {
@@ -785,7 +791,7 @@ body.api-setup-active::before {
 
       <!-- 🆕 PULSANTE USA IN MOVIMENTO -->
       <div style="background: linear-gradient(135deg, #28a745, #20c997); padding: 20px; margin: 20px auto; max-width: 1400px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,.15); text-align: center;">
-        <button onclick="openOnTheMove()" class="btn btn-green" style="font-size: 1.3em; padding: 18px 40px; background: #fff; color: #28a745; border: 3px solid #28a745; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,.2);" aria-label="Apri modalità Usa in movimento per tracciare distanza in tempo reale">
+        <button id="openOnTheMoveBtn" class="btn btn-green" style="font-size: 1.3em; padding: 18px 40px; background: #fff; color: #28a745; border: 3px solid #28a745; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,.2);" aria-label="Apri modalità Usa in movimento per tracciare distanza in tempo reale">
           🚶 Usa in Movimento
         </button>
         <p style="color: #fff; margin-top: 12px; font-size: 1.05em; font-weight: 500;">
@@ -868,7 +874,7 @@ body.api-setup-active::before {
       </div>
 
       <div class="card" id="orientationResultCard" style="display:none; margin-top: 10px; background: linear-gradient(135deg, #e3f2fd, #f3e5f5); border-left: 5px solid #667eea;">
-        <h3 style="margin: 0 0 15px 0; color: #667eea;">🧭 Orientamento Edificio</h2>
+        <h3 style="margin: 0 0 15px 0; color: #667eea;">🧭 Orientamento Edificio</h3>
         
         <div style="margin-bottom: 15px;">
           <button class="btn" onclick="runCivicAnalysisCascade()" aria-label="🔄 Ricalcola Orientamento" style="font-size: 1.05em; padding: 14px 20px;">
@@ -960,12 +966,16 @@ body.api-setup-active::before {
         <div class="search-box">
           <input type="text" id="customDest" placeholder="Es: Piazza del Duomo, Roma">
           
-          <select id="customRouteMode" onchange="toggleMoovitButton()">
+          <select id="customRouteMode" 
+                  aria-label="Modalità di trasporto. Usa le frecce per navigare le opzioni, premi INVIO per confermare, ESC per chiudere"
+                  onkeydown="handleCustomRouteModeKeydown(event)">
             <option value="WALKING">🚶 A piedi</option>
             <option value="TRANSIT">🚌 Mezzi Pubblici</option>
             <option value="BICYCLING">🚴 In Bici</option>
             <option value="DRIVING">🚗 In Auto</option>
           </select>
+          
+          <button class="btn btn-secondary" onclick="resetCustomRouteMode()" style="padding: 8px 12px;">❌ Annulla</button>
 
           <button class="btn btn-green" onclick="calculateCustomRoute()">Calcola Percorso</button>
           
@@ -1013,7 +1023,7 @@ body.api-setup-active::before {
         <button id="navPrevButton" class="btn" onclick="navPrevStep()" aria-label="Vai al passo precedente. Scorciatoia: Control più freccia sinistra">⬅️ Passo Precedente</button>
         <button id="navNextButton" class="btn" onclick="navNextStep()" aria-label="Vai al passo successivo. Scorciatoia: Control più freccia destra">Passo Successivo ➡️</button>
       </div>
-    </section>
+    </div>
     <!-- ============================================================ -->
     <!-- SEZIONE 7: CONFRONTO CIVICI (SCIENTIFICO) - FASE 1+2+3 -->
     <!-- ============================================================ -->
@@ -1024,7 +1034,7 @@ body.api-setup-active::before {
       </div>
       
       <div class="card" style="background: #fff8e1; border-left: 4px solid #ff9800;">
-        <h3 style="color: #e65100; margin: 0 0 15px 0;">🔬 Analisi Multi-Metodo</h2>
+        <h3 style="color: #e65100; margin: 0 0 15px 0;">🔬 Analisi Multi-Metodo</h3>
         <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
           Questo strumento combina <strong>3 metodi scientifici</strong>:
         </p>
@@ -1594,7 +1604,7 @@ body.api-setup-active::before {
         if (!addrA || !addrB) {
             const html = `
                 <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px;">
-                    <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Input Mancante</h3>
+                    <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Input Mancante</h4>
                     <p style="margin: 0;">Inserisci <strong>entrambi gli indirizzi</strong> per avviare il confronto.</p>
                 </div>
             `;
@@ -1618,7 +1628,7 @@ body.api-setup-active::before {
             console.error('Errore durante il confronto:', error);
             const html = `
                 <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px;">
-                    <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Errore Tecnico</h3>
+                    <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Errore Tecnico</h4>
                     <p style="margin: 0;">Si è verificato un errore durante l'analisi: ${error.message}</p>
                     <p style="margin: 10px 0 0 0; font-size: 0.9em; color: #666;">
                         Verifica che gli indirizzi siano corretti e riprova.
@@ -2664,7 +2674,7 @@ body.api-setup-active::before {
       const modalBody = document.getElementById('modalBody');
       modalBody.innerHTML = `
         <div style="padding: 15px;">
-          <h3 style="color: #dc3545; margin-bottom: 15px;">⚠️ Street View Non Disponibile</h2>
+          <h3 style="color: #dc3545; margin-bottom: 15px;">⚠️ Street View Non Disponibile</h3>
           <p><strong>Indirizzo cercato:</strong><br>${address}</p>
           <p style="margin-top: 15px;">
             Non è disponibile Street View entro 200 metri da questo punto.<br>
@@ -2697,7 +2707,7 @@ body.api-setup-active::before {
       const modalBody = document.getElementById('modalBody');
       modalBody.innerHTML = `
         <div style="padding: 15px;">
-          <h3 style="color: #ffc107; margin-bottom: 15px;">⚠️ Street View Trovato Ma Distante</h2>
+          <h3 style="color: #ffc107; margin-bottom: 15px;">⚠️ Street View Trovato Ma Distante</h3>
           <p><strong>Indirizzo cercato:</strong><br>${address}</p>
           <p style="margin-top: 15px;">
             Street View più vicino trovato a <strong>${distance.toFixed(0)} metri</strong> di distanza.<br>
@@ -2946,8 +2956,8 @@ body.api-setup-active::before {
       document.querySelector('#resultsSection h2').textContent = `📋 Sezione 4: ${title} (${places.length})`;
       currentlyDisplayedPlaces = places;
       c.innerHTML = (places?.length > 0) ? places.map((p, i) => {
-        let optionsHtml = `<option value="">-- Scegli azione --</option>
-                           <option value="walk">🚶 A piedi</option>
+        // RIMOSSO "-- Scegli azione --" - si parte direttamente da 🚶 A piedi
+        let optionsHtml = `<option value="walk">🚶 A piedi</option>
                            <option value="transit">🚌 Mezzi</option>
                            <option value="bicycle">🚴 In Bici</option>
                            <option value="drive">🚗 In Auto</option>`;
@@ -2962,13 +2972,17 @@ body.api-setup-active::before {
             optionsHtml += `<option value="open_maps_coords">🗺️ Apri su Google Maps</option>`;
           }
         }
+        // CAMBIATO: rimosso onchange, aggiunto id e onkeydown
         return `<div class="place-card">
           <strong>${p.name}</strong><br>
           <small>${p.details}</small>
           <div class="place-actions">
-            <select onchange="handleRouteAction(${i}, this.value)" aria-label="Azioni per ${p.name}">
+            <select id="actionSelect_${i}" 
+                    aria-label="Azioni per ${p.name}. Usa le frecce per navigare le opzioni, premi INVIO per confermare, ESC per chiudere"
+                    onkeydown="handleActionKeydown(event, ${i})">
               ${optionsHtml}
             </select>
+            <button class="btn btn-secondary" onclick="resetActionSelect(${i})" style="margin-left: 10px; padding: 8px 12px;">❌ Annulla</button>
           </div>
         </div>`;
       }).join('') : '<div class="place-card">Nessun risultato.</div>';
@@ -3018,7 +3032,8 @@ body.api-setup-active::before {
 
     function handleRouteAction(idx, value) {
       const place = currentlyDisplayedPlaces[idx];
-      const selectElement = event.target;
+      const selectElement = document.getElementById(`actionSelect_${idx}`);
+      
       if (!value || !place) {
         if (selectElement) selectElement.selectedIndex = 0;
         return;
@@ -3086,6 +3101,52 @@ body.api-setup-active::before {
       }
       if (selectElement) selectElement.selectedIndex = 0;
     }
+    
+    /**
+     * Gestisce navigazione tastiera nel menu azioni
+     * FRECCE = naviga opzioni, INVIO = conferma, ESC = chiudi
+     */
+    function handleActionKeydown(event, idx) {
+      const select = event.target;
+      
+      // INVIO = conferma azione selezionata
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const value = select.value;
+        
+        if (value) {
+          // Annuncia cosa sta per fare
+          const selectedText = select.options[select.selectedIndex].text;
+          announce(`Azione confermata: ${selectedText}`);
+          
+          // Esegui l'azione
+          handleRouteAction(idx, value);
+        }
+        return;
+      }
+      
+      // ESC = chiudi/resetta
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        resetActionSelect(idx);
+        announce('Menu azioni chiuso');
+        return;
+      }
+      
+      // Frecce SU/GIÙ = solo navigazione (comportamento nativo del select)
+      // Non facciamo nulla, lasciamo che il browser gestisca
+    }
+    
+    /**
+     * Resetta il menu azioni alla prima opzione
+     */
+    function resetActionSelect(idx) {
+      const select = document.getElementById(`actionSelect_${idx}`);
+      if (select) {
+        select.selectedIndex = 0;
+        select.focus();
+      }
+    }
 
     function getPlaceDetails(placeId, placeName) {
       if (!service) return;
@@ -3108,6 +3169,52 @@ body.api-setup-active::before {
       const mode = document.getElementById('customRouteMode').value;
       if (!dest) return notify('⚠️ Inserisci una destinazione', 'error');
       calculateAndShowRoute(dest, mode);
+    }
+    
+    /**
+     * Gestisce navigazione tastiera nel menu modalità trasporto
+     * FRECCE = naviga opzioni, INVIO = conferma, ESC = chiudi
+     */
+    function handleCustomRouteModeKeydown(event) {
+      const select = event.target;
+      
+      // INVIO = conferma modalità e aggiorna pulsante Moovit
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const selectedText = select.options[select.selectedIndex].text;
+        announce(`Modalità selezionata: ${selectedText}`);
+        
+        // Aggiorna visibilità pulsante Moovit
+        toggleMoovitButton();
+        return;
+      }
+      
+      // ESC = resetta alla prima opzione
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        resetCustomRouteMode();
+        announce('Menu modalità chiuso');
+        return;
+      }
+      
+      // Frecce SU/GIÙ = solo navigazione (comportamento nativo)
+      // Aggiorna Moovit quando si naviga
+      if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+        // Usa setTimeout per aspettare che il valore cambi
+        setTimeout(() => toggleMoovitButton(), 10);
+      }
+    }
+    
+    /**
+     * Resetta il menu modalità trasporto alla prima opzione (A piedi)
+     */
+    function resetCustomRouteMode() {
+      const select = document.getElementById('customRouteMode');
+      if (select) {
+        select.selectedIndex = 0;
+        toggleMoovitButton();
+        select.focus();
+      }
     }
 
     // ==========================================
@@ -4511,7 +4618,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         if (!precisionData.found) {
             const html = `
                 <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px; margin: 15px 0;">
-                    <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Indirizzo Non Trovato</h3>
+                    <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Indirizzo Non Trovato</h4>
                     <p style="margin: 0;">Impossibile geocodificare l'indirizzo. Verifica che sia corretto.</p>
                 </div>
             `;
@@ -4523,7 +4630,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             <div style="border-left: 5px solid ${precisionData.color}; padding: 15px; background: #fff; border-radius: 8px; margin: 15px 0;">
                 <h4 style="color: ${precisionData.color}; margin: 0 0 10px 0;">
                     ${precisionData.emoji} ${precisionData.title}
-                </h3>
+                </h4>
                 
                 <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 12px;">
                     <strong>📍 Indirizzo:</strong> ${precisionData.address}
@@ -4587,7 +4694,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         if (!precisionA.found || !precisionB.found) {
             const html = `
                 <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px;">
-                    <h4 style="color: #dc3545;">❌ Errore Geocodifica</h3>
+                    <h4 style="color: #dc3545;">❌ Errore Geocodifica</h4>
                     <p>${!precisionA.found ? `Impossibile trovare: ${addressA}` : ''}</p>
                     <p>${!precisionB.found ? `Impossibile trovare: ${addressB}` : ''}</p>
                 </div>
@@ -4603,7 +4710,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         if (streetA !== streetB) {
             const html = `
                 <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px;">
-                    <h4 style="color: #dc3545;">❌ Vie Diverse</h3>
+                    <h4 style="color: #dc3545;">❌ Vie Diverse</h4>
                     <p>Gli indirizzi sono su vie diverse:</p>
                     <ul>
                         <li><strong>A:</strong> ${precisionA.address}</li>
@@ -4934,7 +5041,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             <div style="border-left: 5px solid ${finalColor}; padding: 20px; background: #fff; border-radius: 8px;">
                 <h3 style="color: ${finalColor}; margin: 0 0 15px 0;">
                     ${finalEmoji} ${finalTitle}
-                </h2>
+                </h3>
                 
                 <!-- Riepilogo Indirizzi -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
@@ -5657,7 +5764,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         
         const html = `
             <div style="border: 3px solid #ff9800; background: #fff3cd; padding: 20px; border-radius: 12px; margin: 15px 0;">
-                <h3 style="color: #856404; margin: 0 0 15px 0;">${info.icon} ${info.title}</h2>
+                <h3 style="color: #856404; margin: 0 0 15px 0;">${info.icon} ${info.title}</h3>
                 
                 <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
                     <strong style="color: #dc3545;">⚠️ Affidabilità Attesa: ${info.reliability}</strong>
@@ -5730,7 +5837,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                         <div style="background: #fff3cd; border: 2px solid #ff9800; padding: 15px; border-radius: 8px; margin: 15px 0;">
                             <h4 style="color: #856404; margin: 0 0 10px 0;">
                                 ${precisionData.emoji} Precisione Indirizzo: ${precisionData.title}
-                            </h3>
+                            </h4>
                             <div style="background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px;">
                                 <strong>Affidabilità: ${precisionData.score}/100</strong>
                                 <div style="width: 100%; height: 12px; background: #e0e0e0; border-radius: 6px; margin: 8px 0; overflow: hidden;">
@@ -5902,7 +6009,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                 // FALLIMENTO TOTALE
                  const htmlError = `
                     <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px;">
-                        <h4 style="margin:0 0 10px 0; color: #dc3545;">❌ Analisi Impossibile</h3>
+                        <h4 style="margin:0 0 10px 0; color: #dc3545;">❌ Analisi Impossibile</h4>
                         <p>Non riesco a calcolare un orientamento affidabile.</p>
                         <ul style="margin-top:10px; font-size:0.9em; color:#666;">
                            <li>Il punto esatto è troppo ambiguo o non mappato.</li>
@@ -6171,7 +6278,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             <div style="border-left: 5px solid ${boxColor}; padding: 15px; background: #fff; border-radius: 8px;">
                 <h4 style="margin:0 0 10px 0; color: ${titleColor};">
                     ${reliabilityMsg} <span style="font-size:0.8em; opacity:0.8">(${reliabilityLevel})</span>
-                </h3>
+                </h4>
                 <div style="background: #f8f9fb; padding: 10px; border-radius: 6px; margin-bottom: 10px; font-size: 0.95em;">
                     <strong>Distanza punto osservazione:</strong> ${distance.toFixed(1)} metri<br>
                     <em>${explanation}</em>
@@ -7178,7 +7285,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
     });
     
     // Listener per il cambio di direzione desiderata
-    document.getElementById('desired-direction').addEventListener('change', calculateAndShowTurnInstruction);
+    document.getElementById('desired-direction')?.addEventListener('change', calculateAndShowTurnInstruction);
     
     // Listener per Enter negli input
     document.getElementById('addressInput')?.addEventListener('keypress', e => {
@@ -7303,6 +7410,18 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
       setTimeout(() => title.focus(), 100);
     }
   });
+
+  // Pulsante "Usa in Movimento"
+  const otmBtn = document.getElementById('openOnTheMoveBtn');
+  if (otmBtn) {
+    otmBtn.addEventListener('click', () => {
+      AppLogger.logInfo('OTM', 'Pulsante "Usa in Movimento" cliccato');
+      openOnTheMove();
+    });
+    AppLogger.logInfo('INIT', 'Pulsante "Usa in Movimento" collegato');
+  } else {
+    AppLogger.warn('INIT', 'Pulsante "Usa in Movimento" non trovato nel DOM');
+  }
 
   document.getElementById('closeModalBtn').addEventListener('click', () => {
     document.getElementById('apiKeyModal').classList.remove('show');
@@ -7969,7 +8088,19 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
    */
   function showPOIResults(results) {
     const resultsHtml = results.map((p, idx) => `
-      <div class="otm-result-item">
+      <div class="otm-result-item" 
+           data-poi-index="${idx}"
+           onclick="selectPOI(${idx})"
+           onmousedown="handlePOILongPressStart(event, ${idx})"
+           onmouseup="handlePOILongPressEnd(event)"
+           onmouseleave="handlePOILongPressEnd(event)"
+           ontouchstart="handlePOILongPressStart(event, ${idx})"
+           ontouchend="handlePOILongPressEnd(event)"
+           ontouchcancel="handlePOILongPressEnd(event)"
+           style="cursor: pointer; user-select: none;"
+           role="button"
+           tabindex="0"
+           aria-label="Doppio tap per tracking verso ${p.name}, tieni premuto per aprire Google Maps">
         <div class="otm-result-info">
           <strong>${p.name}</strong>
           <small>${p.vicinity || 'Indirizzo non disponibile'}</small>
@@ -7977,9 +8108,9 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             📏 ${formatDistance(p.distance)}
           </small>
         </div>
-        <button class="btn btn-green" onclick="selectPOI(${idx})" aria-label="Imposta ${p.name} come destinazione">
-          ✅ Imposta
-        </button>
+        <div style="color: #28a745; font-size: 1.5em;">
+          ➜
+        </div>
       </div>
     `).join('');
     
@@ -7989,6 +8120,14 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <h3>📍 Risultati POI (${results.length})</h3>
           <p style="color: #6c757d;">
             Vicino a: <strong>${otmReference.label}</strong>
+          </p>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #d4edda, #c3e6cb); border-left: 4px solid #28a745; padding: 12px 15px; border-radius: 8px; margin-bottom: 15px;">
+          <strong style="color: #155724;">💡 Come usare:</strong>
+          <p style="margin: 5px 0 0; font-size: 0.95em; color: #155724;">
+            • <strong>Doppio tap</strong> (o click) → 🚀 Avvia tracking<br>
+            • <strong>Tieni premuto</strong> 1 sec → 🗺️ Apri su Google Maps
           </p>
         </div>
         
@@ -8030,11 +8169,100 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
     // Salva in localStorage
     localStorage.setItem('otm_destination', JSON.stringify(otmDestination));
     
-    notify('✅ Destinazione impostata!', 'success');
-    announce('Destinazione impostata: ' + poi.name);
+    notify('🚀 Tracking avviato verso: ' + poi.name, 'success');
+    announce('Tracking avviato verso ' + poi.name);
     
+    // AVVIA TRACKING DIRETTO (salta schermata impostazioni)
     startTrackingScreen();
+    
+    AppLogger.logInfo('OTM', `Doppio tap: tracking avviato verso ${poi.name}`);
   }
+  
+  /**
+   * LONG-PRESS SUI POI: Apri su Google Maps
+   * Tieni premuto un POI per 800ms = apre su Google Maps (app o browser)
+   */
+  let longPressTimer = null;
+  let longPressTriggered = false;
+  
+  function handlePOILongPressStart(event, index) {
+    // Ignora click destro
+    if (event.button && event.button !== 0) return;
+    
+    // Reset stato
+    longPressTriggered = false;
+    
+    // Feedback visivo: aggiungi classe per animazione
+    const item = event.currentTarget;
+    item.style.backgroundColor = '#e3f2fd';
+    item.style.transform = 'scale(0.98)';
+    
+    // Avvia timer per long-press (800ms)
+    longPressTimer = setTimeout(() => {
+      longPressTriggered = true;
+      
+      // Vibrazione feedback (se disponibile)
+      if (navigator.vibrate) {
+        navigator.vibrate([50, 30, 50]); // Pattern di vibrazione
+      }
+      
+      // Feedback audio (annuncio)
+      announce('Apertura Google Maps');
+      
+      // Feedback visivo: flash blu
+      item.style.backgroundColor = '#cfe2ff';
+      item.style.transform = 'scale(1.02)';
+      
+      setTimeout(() => {
+        item.style.backgroundColor = '';
+        item.style.transform = '';
+      }, 200);
+      
+      // APRI SU GOOGLE MAPS
+      const poi = window.otmCurrentResults[index];
+      const lat = poi.geometry.location.lat();
+      const lng = poi.geometry.location.lng();
+      const name = encodeURIComponent(poi.name);
+      
+      // URL Google Maps (apre app se installata, altrimenti browser)
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}&query_place_id=${poi.place_id || ''}`;
+      
+      // Apri in nuova tab
+      window.open(mapsUrl, '_blank', 'noopener,noreferrer');
+      
+      notify('🗺️ Aperto su Google Maps: ' + poi.name, 'info');
+      
+      AppLogger.logInfo('OTM', `Long-press: aperto Google Maps per ${poi.name}`);
+      
+    }, 800); // 800ms per attivare long-press
+  }
+  
+  function handlePOILongPressEnd(event) {
+    // Cancella timer se non ancora scattato
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      longPressTimer = null;
+    }
+    
+    // Rimuovi feedback visivo
+    const item = event.currentTarget;
+    if (item) {
+      item.style.backgroundColor = '';
+      item.style.transform = '';
+    }
+    
+    // Se long-press è stato triggerato, previeni click normale
+    if (longPressTriggered) {
+      event.preventDefault();
+      event.stopPropagation();
+      longPressTriggered = false;
+    }
+  }
+  
+  /**
+   * Handler tastiera per accessibilità (supporto Enter/Space)
+   * Aggiunto automaticamente tramite onclick sull'elemento
+   */
   
   /**
    * SCHERMO TRACKING: Avvia il tracking della distanza
