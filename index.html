@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App Mobilità e Orientamento - Versione Distribuibile</title>
+  <title>App Mobilità e Orientamento</title>
   <style>
 /* GESTIONE API KEY */
 #apiKeySetup {
@@ -1126,7 +1126,7 @@ body.api-setup-active::before {
 <button class="guide-icon" id="guideIcon" aria-label="Apri guida completa all'uso dell'app" title="Guida completa all'uso dell'app">📖</button>
 
 <!-- Pulsante Report Diagnostico -->
-<button class="report-icon" id="reportIcon" aria-label="Visualizza report diagnostico e log errori" title="Report Diagnostico" onclick="AppLogger.showReport()">📊</button>
+<button class="report-icon" id="reportIcon" aria-label="Visualizza report diagnostico e log errori" title="Report Diagnostico" onclick="">📊</button>
 
 <div id="apiKeyModal" class="modal">
   <div class="modal-content">
@@ -1233,242 +1233,15 @@ body.api-setup-active::before {
     
     // Funzione helper per log condizionali
     function debugLog(...args) {
-      if (DEBUG) console.log(...args);
-    }
+      if (DEBUG)
+}
 
     // ========================
     // 🆕 SISTEMA DI LOGGING AVANZATO
     // ========================
-    
-    const AppLogger = {
-      logs: [],
-      errors: [],
-      warnings: [],
-      info: [],
-      startTime: Date.now(),
-      
-      // Aggiunge log
-      log(type, category, message, data = null) {
-        const entry = {
-          timestamp: Date.now() - this.startTime,
-          time: new Date().toISOString(),
-          type: type,
-          category: category,
-          message: message,
-          data: data
-        };
-        
-        this.logs.push(entry);
-        
-        switch(type) {
-          case 'error':
-            this.errors.push(entry);
-            console.error(`[${category}]`, message, data || '');
-            this.updateReportButton();
-            break;
-          case 'warn':
-            this.warnings.push(entry);
-            console.warn(`[${category}]`, message, data || '');
-            this.updateReportButton();
-            break;
-          case 'info':
-            this.info.push(entry);
-            console.info(`[${category}]`, message, data || '');
-            break;
-          default:
-            console.log(`[${category}]`, message, data || '');
-        }
-      },
-      
-      // Aggiorna badge pulsante report
-      updateReportButton() {
-        const btn = document.getElementById('reportIcon');
-        if (!btn) return;
-        
-        if (this.errors.length > 0) {
-          btn.classList.add('has-errors');
-          btn.setAttribute('aria-label', `Report Diagnostico - ${this.errors.length} errori rilevati`);
-          btn.title = `Report Diagnostico - ${this.errors.length} errori`;
-        } else if (this.warnings.length > 0) {
-          btn.setAttribute('aria-label', `Report Diagnostico - ${this.warnings.length} avvisi`);
-          btn.title = `Report Diagnostico - ${this.warnings.length} avvisi`;
-        }
-      },
-      
-      // Metodi shorthand
-      error(category, message, data) { this.log('error', category, message, data); },
-      warn(category, message, data) { this.log('warn', category, message, data); },
-      logInfo(category, message, data) { this.log('info', category, message, data); },
-      debug(category, message, data) { this.log('debug', category, message, data); },
-      
-      // Genera report testuale
-      generateReport() {
-        const elapsed = ((Date.now() - this.startTime) / 1000).toFixed(2);
-        
-        let report = '═══════════════════════════════════════════════════════════\n';
-        report += '  REPORT DIAGNOSTICO - APP MOBILITÀ E ORIENTAMENTO\n';
-        report += '═══════════════════════════════════════════════════════════\n\n';
-        report += `📅 Data: ${new Date().toLocaleString('it-IT')}\n`;
-        report += `⏱️  Tempo esecuzione: ${elapsed} secondi\n`;
-        report += `📊 Totale eventi: ${this.logs.length}\n`;
-        report += `   • Errori: ${this.errors.length}\n`;
-        report += `   • Avvisi: ${this.warnings.length}\n`;
-        report += `   • Info: ${this.info.length}\n\n`;
-        
-        // Browser info
-        report += '🌐 INFORMAZIONI BROWSER\n';
-        report += '─────────────────────────────────────────────────────────\n';
-        report += `User Agent: ${navigator.userAgent}\n`;
-        report += `Lingua: ${navigator.language}\n`;
-        report += `Piattaforma: ${navigator.platform}\n`;
-        report += `Online: ${navigator.onLine ? 'Sì' : 'No'}\n`;
-        report += `Cookie abilitati: ${navigator.cookieEnabled ? 'Sì' : 'No'}\n\n`;
-        
-        // Feature detection
-        report += '🔧 FUNZIONALITÀ DISPONIBILI\n';
-        report += '─────────────────────────────────────────────────────────\n';
-        report += `✓ Geolocation API: ${navigator.geolocation ? 'Sì' : 'No'}\n`;
-        report += `✓ Local Storage: ${typeof(Storage) !== 'undefined' ? 'Sì' : 'No'}\n`;
-        report += `✓ Service Worker: ${'serviceWorker' in navigator ? 'Sì' : 'No'}\n`;
-        report += `✓ Notification API: ${'Notification' in window ? 'Sì' : 'No'}\n`;
-        report += `✓ Vibration API: ${navigator.vibrate ? 'Sì' : 'No'}\n`;
-        report += `✓ Media Session: ${'mediaSession' in navigator ? 'Sì' : 'No'}\n`;
-        report += `✓ Speech Synthesis: ${'speechSynthesis' in window ? 'Sì' : 'No'}\n\n`;
-        
-        // Errori
-        if (this.errors.length > 0) {
-          report += '❌ ERRORI RISCONTRATI\n';
-          report += '─────────────────────────────────────────────────────────\n';
-          this.errors.forEach((err, i) => {
-            report += `${i + 1}. [${err.category}] ${err.message}\n`;
-            report += `   Tempo: +${(err.timestamp / 1000).toFixed(2)}s\n`;
-            if (err.data) {
-              report += `   Dettagli: ${JSON.stringify(err.data, null, 2)}\n`;
-            }
-            report += '\n';
-          });
-        }
-        
-        // Avvisi
-        if (this.warnings.length > 0) {
-          report += '⚠️  AVVISI\n';
-          report += '─────────────────────────────────────────────────────────\n';
-          this.warnings.forEach((warn, i) => {
-            report += `${i + 1}. [${warn.category}] ${warn.message}\n`;
-            report += `   Tempo: +${(warn.timestamp / 1000).toFixed(2)}s\n`;
-            if (warn.data) {
-              report += `   Dettagli: ${JSON.stringify(warn.data, null, 2)}\n`;
-            }
-            report += '\n';
-          });
-        }
-        
-        // Info principali
-        if (this.info.length > 0) {
-          report += 'ℹ️  EVENTI PRINCIPALI\n';
-          report += '─────────────────────────────────────────────────────────\n';
-          this.info.slice(0, 20).forEach((info, i) => {
-            report += `${i + 1}. [${info.category}] ${info.message}\n`;
-            report += `   Tempo: +${(info.timestamp / 1000).toFixed(2)}s\n`;
-          });
-          if (this.info.length > 20) {
-            report += `\n... e altri ${this.info.length - 20} eventi\n`;
-          }
-          report += '\n';
-        }
-        
-        // Timeline completa (ultimi 50 eventi)
-        report += '📋 TIMELINE EVENTI (ultimi 50)\n';
-        report += '─────────────────────────────────────────────────────────\n';
-        this.logs.slice(-50).forEach((log, i) => {
-          const icon = log.type === 'error' ? '❌' : log.type === 'warn' ? '⚠️' : log.type === 'info' ? 'ℹ️' : '📝';
-          report += `${icon} [+${(log.timestamp / 1000).toFixed(2)}s] [${log.category}] ${log.message}\n`;
-        });
-        
-        report += '\n═══════════════════════════════════════════════════════════\n';
-        report += 'Fine del report\n';
-        report += '═══════════════════════════════════════════════════════════\n';
-        
-        return report;
-      },
-      
-      // Scarica report come file
-      downloadReport() {
-        const report = this.generateReport();
-        const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `mobilita-report-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        notify('📥 Report scaricato!', 'success');
-        AppLogger.logInfo('REPORT', 'Report diagnostico scaricato');
-      },
-      
-      // Mostra report in modal
-      showReport() {
-        const report = this.generateReport();
-        const html = `
-          <div style="padding: 20px;">
-            <h2 style="color: #667eea; margin-bottom: 20px;">📊 Report Diagnostico</h2>
-            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-              <p><strong>Errori:</strong> ${this.errors.length}</p>
-              <p><strong>Avvisi:</strong> ${this.warnings.length}</p>
-              <p><strong>Totale eventi:</strong> ${this.logs.length}</p>
-            </div>
-            <pre style="background: #fff; padding: 15px; border: 1px solid #dee2e6; border-radius: 8px; max-height: 400px; overflow-y: auto; font-size: 12px; line-height: 1.4;">${report}</pre>
-            <div class="modal-buttons" style="margin-top: 20px;">
-              <button class="btn btn-ghost" onclick="closeModal()">Chiudi</button>
-              <button class="btn" onclick="AppLogger.downloadReport()">📥 Scarica Report</button>
-              <button class="btn btn-secondary" onclick="navigator.clipboard.writeText(AppLogger.generateReport()).then(() => notify('✅ Report copiato!', 'success'))">📋 Copia</button>
-            </div>
-          </div>
-        `;
-        
-        openModal('Report Diagnostico', html);
-      },
-      
-      // Pulisci log
-      clear() {
-        this.logs = [];
-        this.errors = [];
-        this.warnings = [];
-        this.info = [];
-        this.startTime = Date.now();
-        console.clear();
-        AppLogger.logInfo('SYSTEM', 'Log puliti');
-      }
-    };
-    
-    // Intercetta errori globali
-    window.addEventListener('error', function(e) {
-      AppLogger.error('GLOBAL', 'Errore non gestito: ' + e.message, {
-        filename: e.filename,
-        lineno: e.lineno,
-        colno: e.colno,
-        error: e.error ? e.error.stack : null
-      });
-    });
-    
-    // Intercetta promise rejection
-    window.addEventListener('unhandledrejection', function(e) {
-      AppLogger.error('PROMISE', 'Promise rejection non gestita', {
-        reason: e.reason,
-        promise: e.promise
-      });
-    });
-    
-    // Esponi globalmente
-    window.AppLogger = AppLogger;
-    
-    // Log iniziale
-    AppLogger.logInfo('SYSTEM', 'App Mobilità e Orientamento inizializzata');
 
-    // ========================
+    // Log iniziale
+// ========================
     // UTILITY RETE
     // ========================
     
@@ -1625,8 +1398,7 @@ body.api-setup-active::before {
             resDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             
         } catch (error) {
-            console.error('Errore durante il confronto:', error);
-            const html = `
+const html = `
                 <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px;">
                     <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Errore Tecnico</h4>
                     <p style="margin: 0;">Si è verificato un errore durante l'analisi: ${error.message}</p>
@@ -1699,36 +1471,28 @@ body.api-setup-active::before {
     // ---------------
     
     function initMap() {
-      AppLogger.logInfo('INIT', 'Inizializzazione Google Maps...');
-      
-      // Verifica caricamento librerie Google Maps
+// Verifica caricamento librerie Google Maps
       if (typeof google === 'undefined' || !google.maps) {
         const msg = 'Google Maps non caricato correttamente';
-        AppLogger.error('INIT', msg);
-        notify('❌ Errore: ' + msg, 'error');
+notify('❌ Errore: ' + msg, 'error');
         announceToScreenReader('Errore nel caricamento di Google Maps', 'assertive');
         return;
       }
       
       if (!google.maps.geometry || !google.maps.geometry.spherical) {
         const msg = 'Libreria Geometry non caricata';
-        AppLogger.error('INIT', msg);
-        notify('❌ Errore: ' + msg, 'error');
+notify('❌ Errore: ' + msg, 'error');
         announceToScreenReader('Errore: libreria Geometry mancante', 'assertive');
         return;
       }
       
       if (!google.maps.places || !google.maps.places.PlacesService) {
         const msg = 'Libreria Places non caricata';
-        AppLogger.error('INIT', msg);
-        notify('❌ Errore: ' + msg, 'error');
+notify('❌ Errore: ' + msg, 'error');
         announceToScreenReader('Errore: libreria Places mancante', 'assertive');
         return;
       }
-      
-      AppLogger.logInfo('INIT', 'Tutte le librerie Google Maps caricate correttamente');
-      
-      const defaultPos = {lat: 41.9028, lng: 12.4964};
+const defaultPos = {lat: 41.9028, lng: 12.4964};
       map = new google.maps.Map(document.getElementById('map'), {center: defaultPos, zoom: 15});
       streetView = new google.maps.StreetViewPanorama(document.getElementById('streetview'), {position: defaultPos, pov: {heading: 0, pitch: 0}});
       map.setStreetView(streetView);
@@ -1869,7 +1633,6 @@ body.api-setup-active::before {
     }
 
     function updateStatus(targetDiv, message, type = 'info', isHtml = false) {
-        console.log(`Stato (${targetDiv.id}):`, message);
          if (isHtml) {
             targetDiv.innerHTML = message;
         } else {
@@ -1884,7 +1647,6 @@ body.api-setup-active::before {
     // ---------------
     // FUNZIONALITÀ MOBILITÀ (Sez. 1-5)
     // ---------------
-    
 
       // 🆕 Funzione per aggiornare il location bias dell'autocomplete
       window.updateAutocompleteBias = function() {
@@ -1899,15 +1661,12 @@ body.api-setup-active::before {
               radius: 5000
             }).getBounds()
           );
-          console.log('✅ Autocomplete aggiornato con nuova posizione');
-        }
+}
       };
       
     function initAutocomplete() {
-      console.log('🔍 initAutocomplete chiamata');
-      console.log('📍 Controllo elementi DOM...');
-      
-      // Opzioni base autocomplete
+
+// Opzioni base autocomplete
       const acOptions = {
         fields: ['geometry', 'formatted_address', 'name', 'address_components'],
         types: ['geocode', 'establishment'],
@@ -1921,21 +1680,16 @@ body.api-setup-active::before {
           window.currentPosition.lng
         );
         acOptions.radius = 5000; // Raggio di 5km per dare priorità ai risultati vicini
-        console.log('📍 Autocomplete configurato con location bias:', window.currentPosition);
-      }
+}
 
       // Autocomplete Sezione 1
       const input = document.getElementById('addressInput');
-      console.log('📍 addressInput trovato:', input);
-      console.log('📍 addressInput visibile:', input ? (input.offsetParent !== null) : 'N/A');
       if (!input) {
-        console.error('❌ Input addressInput non trovato!');
-        return;
+return;
       }
       
       if (!window.google || !google.maps || !google.maps.places) {
-        console.error('❌ Google Maps Places non disponibile per autocomplete');
-        notify('⚠️ Autocomplete non disponibile', 'error');
+notify('⚠️ Autocomplete non disponibile', 'error');
         return;
       }
       
@@ -1946,11 +1700,9 @@ body.api-setup-active::before {
       
       try {
         autocomplete = new google.maps.places.Autocomplete(input, acOptions);
-        console.log('✅ Autocomplete creato:', autocomplete);
-        debugLog('✅ Autocomplete inizializzato correttamente');
+debugLog('✅ Autocomplete inizializzato correttamente');
       } catch (error) {
-        console.error('❌ Errore inizializzazione autocomplete:', error);
-        notify('⚠️ Errore autocomplete: ' + error.message, 'error');
+notify('⚠️ Errore autocomplete: ' + error.message, 'error');
         return;
       }
       
@@ -1987,8 +1739,7 @@ body.api-setup-active::before {
           notify('🧭 Calibrando orientamento...', 'info');
           calculateOrientationAutomatically(coords, address)
             .catch(error => {
-              console.warn("Orientamento automatico fallito:", error);
-            });
+});
         }
       });
 
@@ -2555,8 +2306,7 @@ body.api-setup-active::before {
           try {
             await calculateOrientationAutomatically(coords, formattedAddress);
           } catch (error) {
-            console.warn("Orientamento automatico fallito:", error);
-            // Non blocchiamo se l'orientamento fallisce
+// Non blocchiamo se l'orientamento fallisce
           }
           
         } else {
@@ -2669,8 +2419,7 @@ body.api-setup-active::before {
     // 🚨 MODALE: Street View Non Trovato
     function showStreetViewNotFoundModal(coords, address) {
       buildingDirectionFromStreet = null;
-      
-      
+
       const modalBody = document.getElementById('modalBody');
       modalBody.innerHTML = `
         <div style="padding: 15px;">
@@ -2781,8 +2530,7 @@ body.api-setup-active::before {
           try {
             await calculateOrientationAutomatically(coords, address);
           } catch (error) {
-            console.warn("Orientamento automatico fallito:", error);
-          }
+}
         });
       }, () => notify('❌ Impossibile ottenere la posizione', 'error'));
     }
@@ -3930,8 +3678,7 @@ body.api-setup-active::before {
                 `;
               }
             } catch (err) {
-              console.error('Errore analisi orientamento:', err);
-              // 🆕 Fallback: mostra almeno l'istruzione base
+// 🆕 Fallback: mostra almeno l'istruzione base
               section6Integration = `
                 <div style="margin-top:15px; padding:12px; background:#fff3cd; border-left:5px solid #ffc107; border-radius:4px; font-size:0.95em; color:#856404;">
                   ⚠️ Calcolo orientamento non disponibile. Usa i punti cardinali dalla sezione "Direzione Reale".
@@ -3949,8 +3696,7 @@ body.api-setup-active::before {
           try {
             await analyzeRoadCrossings(step, navInstructionEl);
           } catch (err) {
-            console.error('Errore Ray Casting:', err);
-          }
+}
         }
       } else { // Arrivo
         returnButton.style.display = 'block'; 
@@ -4404,8 +4150,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             const data = await response.json();
             return (data?.length > 0) ? { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) } : null;
         } catch (error) {
-            console.error("Fallimento chiamata Nominatim:", error);
-            throw error;
+throw error;
         }
     }
     
@@ -4458,8 +4203,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                         resolve(results[0]);
                     } else {
                         // Tentativo B (FALLBACK): Se il testo fallisce, usa le coordinate (più robusto)
-                        console.warn("Geocoding testuale fallito, uso coordinate fallback.");
-                        geocoder.geocode({ 'location': currentLocation }, (resLoc, stLoc) => {
+geocoder.geocode({ 'location': currentLocation }, (resLoc, stLoc) => {
                             if (stLoc === 'OK' && resLoc?.[0]) {
                                 resolve(resLoc[0]);
                             } else {
@@ -4488,8 +4232,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                      updateStatus(orientationStatusDiv, `Analisi in corso (Passo 3/3): Indirizzo non trovato su OSM. Procedo solo con Google...`, 'info');
                 }
             } catch (osmError) {
-                console.warn("Errore Nominatim:", osmError);
-                updateStatus(orientationStatusDiv, `Analisi in corso (Passo 3/3): Servizio OSM non disponibile. Procedo solo con Google...`, 'info');
+updateStatus(orientationStatusDiv, `Analisi in corso (Passo 3/3): Servizio OSM non disponibile. Procedo solo con Google...`, 'info');
             }
 
             // *** PASSO 3: Analisi Geometrica ***
@@ -4759,11 +4502,9 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                     
                     debugLog('✅ Calcolo geometrico completato:', geometricResult);
                 } else {
-                    console.warn('⚠️ Impossibile determinare segmento rilevante');
-                }
+}
             } else {
-                console.warn('⚠️ Geometria strada non disponibile da OSM');
-            }
+}
         }
         
         // ================================================================
@@ -4780,11 +4521,9 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             if (streetViewResult.available) {
                 debugLog('✅ Validazione Street View completata:', streetViewResult);
             } else {
-                console.warn('⚠️ Street View non disponibile:', streetViewResult.reason);
-            }
+}
         } catch (e) {
-            console.error('❌ Errore validazione Street View:', e);
-        }
+}
         
         // ================================================================
         // CONFRONTO METODI (Fase 3)
@@ -5132,22 +4871,16 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
      * Usa Overpass API (GRATIS!)
      */
     async function getStreetGeometryFromOSM(coords, streetName) {
-        console.log('🔍 Ricerca geometria per:', streetName);
-        
-        // Pulisci e crea varianti del nome strada
+// Pulisci e crea varianti del nome strada
         const variants = generateStreetNameVariants(streetName);
-        console.log('📝 Varianti nome:', variants);
-        
-        // TENTATIVO 1: Ricerca con nome strada (raggio 200m)
+// TENTATIVO 1: Ricerca con nome strada (raggio 200m)
         let osmData = await searchStreetByName(coords, variants, 200);
         
         if (osmData.success) {
-            console.log('✅ Trovata con ricerca per nome');
-            return osmData;
+return osmData;
         }
         
         // TENTATIVO 2: Ricerca solo per coordinate vicine (raggio 50m - molto conservativo)
-        console.log('⚠️ Nome non trovato, provo ricerca per coordinate (50m)...');
         osmData = await searchStreetByProximity(coords, 50);
         
         if (osmData.success) {
@@ -5161,15 +4894,11 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             
             // Verifica che ci sia almeno una corrispondenza parziale
             if (foundCore.includes(originalCore.split(' ')[0]) || originalCore.includes(foundCore.split(' ')[0])) {
-                console.log('✅ Trovata per coordinate e nome verificato:', osmData.name);
-                return osmData;
+return osmData;
             } else {
-                console.warn('⚠️ Strada trovata ma nome non corrisponde:', osmData.name, 'vs', streetName);
-            }
+}
         }
-        
-        console.warn('❌ Nessuna geometria trovata');
-        return { success: false, error: 'Strada non trovata in OpenStreetMap. Prova con un indirizzo più preciso o verifica il nome della via.' };
+return { success: false, error: 'Strada non trovata in OpenStreetMap. Prova con un indirizzo più preciso o verifica il nome della via.' };
     }
     
     // Genera varianti del nome strada per migliorare la ricerca
@@ -5266,7 +4995,6 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                 
                 if (closestStreet) {
                     const foundName = closestStreet.tags?.name || 'Sconosciuta';
-                    console.log(`✅ Geometria strada trovata: ${foundName} (${closestStreet.geometry.length} nodi, distanza: ${minDistance.toFixed(1)}m)`);
                     
                     return {
                         success: true,
@@ -5280,13 +5008,10 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                     };
                 }
             }
-            
-            console.warn('⚠️ Nessuna geometria strada trovata in OSM');
-            return { success: false, error: 'Strada non trovata' };
+return { success: false, error: 'Strada non trovata' };
             
         } catch (e) {
-            console.error('❌ Errore chiamata OSM:', e);
-            return { success: false, error: `Errore OSM: ${e.message}` };
+return { success: false, error: `Errore OSM: ${e.message}` };
         }
     }
 
@@ -5406,10 +5131,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         
         const crossA = lineVector.x * vectorToA.y - lineVector.y * vectorToA.x;
         const crossB = lineVector.x * vectorToB.y - lineVector.y * vectorToB.x;
-        
-        console.log(`📐 Cross Product A: ${crossA.toFixed(8)}`);
-        console.log(`📐 Cross Product B: ${crossB.toFixed(8)}`);
-        
+
         // Tolleranza per punti quasi sulla linea
         const tolerance = 0.000001;
         
@@ -5504,8 +5226,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             };
             
         } catch (e) {
-            console.warn('Street View check failed:', e);
-            return { available: false, reason: e.message };
+return { available: false, reason: e.message };
         }
     }
 
@@ -5829,7 +5550,6 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                 updateStatus(orientationStatusDiv, '❌ Impossibile verificare la precisione dell\'indirizzo', 'error');
             } else {
                 // Mostra info precisione
-                console.log(`📊 Precisione Geocoding: ${precisionData.type} (Score: ${precisionData.score}/100)`);
                 
                 // Se NON affidabile, mostra warning
                 if (!precisionData.reliable) {
@@ -5867,8 +5587,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             }
             
             if (locationInfo.isComplex) {
-                console.log(`⚠️ Luogo complesso rilevato: ${locationInfo.type} - ${locationInfo.name}`);
-                announceToScreenReader(`Attenzione: ${locationInfo.type} rilevato. Calcolo con cautela.`);
+announceToScreenReader(`Attenzione: ${locationInfo.type} rilevato. Calcolo con cautela.`);
                 
                 // Mostra warning dettagliato all'utente
                 showComplexLocationGuidance(locationInfo.type, locationInfo.name);
@@ -5912,17 +5631,13 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                     if (cleanInputName.length <= 2 || svDesc.includes(cleanInputName)) {
                          bestData = closeData;
                          analysisMode = "STANDARD";
-                         console.log(`✅ Fase 1 OK: Punto standard trovato a ${dist.toFixed(1)}m`);
                     } else {
-                        console.warn("Fase 1: Via diversa. Ignoro.");
-                    }
+}
                 } else {
-                    console.warn(`⚠️ Fase 1: Punto troppo vicino (${dist.toFixed(2)}m). Rischio instabilità. Passo a Geometria.`);
                     announceToScreenReader("Punto troppo vicino. Passo a modalità geometrica.");
                 }
             } catch (e) {
-                console.log("Fase 1: Nessun punto vicino trovato.");
-            }
+}
 
             // ---------------------------------------------------------
             // FASE 2: TENTATIVO GEOMETRICO DISTANTE (Se Fase 1 fallita o saltata)
@@ -5943,7 +5658,6 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                         // Dobbiamo assicurarci che il punto trovato sia DAVVERO lontano.
                         // Se Google ci ridà lo stesso punto a 2 metri, dobbiamo scartarlo e allargare il cerchio.
                         if (distFar < 10.0) {
-                            console.warn(`Fase 2 (Raggio ${r}): Punto trovato ma è ancora troppo vicino (${distFar.toFixed(1)}m). Scarto.`);
                             continue; // Salta al prossimo raggio
                         }
 
@@ -5954,14 +5668,12 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                         if (cleanInputName.length > 2 && 
                             !svDesc.includes(cleanInputName) && 
                             !svShort.includes(cleanInputName)) {
-                            console.log(`Fase 2: Scartato punto distante su via diversa (${svDesc})`);
                             continue;
                         }
 
                         // Se siamo qui: Punto Lontano (>10m) + Stessa Via = PERFETTO.
                         bestData = farData;
                         analysisMode = "GEOMETRIC";
-                        console.log(`✅ Fase 2 OK: Punto geometrico a ${distFar.toFixed(1)}m`);
                         break; // Trovato, fermati.
                     } catch (e) {}
                 }
@@ -6021,8 +5733,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             }
 
         } catch (fatalError) {
-            console.error(fatalError);
-            updateStatus(orientationStatusDiv, `Errore Tecnico: ${fatalError.message}`, 'error');
+updateStatus(orientationStatusDiv, `Errore Tecnico: ${fatalError.message}`, 'error');
             announceToScreenReader("Errore tecnico nell'analisi.");
         }
     }
@@ -6063,8 +5774,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             
             // Usa service (già definito globalmente come placesService)
             if (!service) {
-                console.error("PlacesService non inizializzato");
-                resolve([]);
+resolve([]);
                 return;
             }
             
@@ -6078,12 +5788,9 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                         );
                         return dist > 2;
                     });
-                    
-                    console.log(`Trovati ${others.length} indirizzi vicini`);
-                    resolve(others);
+resolve(others);
                 } else {
-                    console.log("Nessun indirizzo vicino trovato:", status);
-                    resolve([]);
+resolve([]);
                 }
             });
         });
@@ -6136,7 +5843,6 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                 
                 // Match con la richiesta
                 if (mode === 'SAME_SIDE' && isParallel) {
-                    console.log(`Trovato vicino stesso lato: ${place.name}, allineamento ${alignment.toFixed(1)}°`);
                     return { 
                         svData: svData, 
                         address: place.name || place.vicinity,
@@ -6145,7 +5851,6 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                 }
                 
                 if (mode === 'OPPOSITE_SIDE' && !isParallel) {
-                    console.log(`Trovato vicino lato opposto: ${place.name}, allineamento ${alignment.toFixed(1)}°`);
                     return { 
                         svData: svData, 
                         address: place.name || place.vicinity,
@@ -6348,7 +6053,6 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                     const actualDistance = google.maps.geometry.spherical.computeDistanceBetween(targetLoc, svLoc);
                     
                     if (actualDistance < 4) {
-                        console.warn(`⚠️ Street View troppo vicino: ${actualDistance.toFixed(1)}m nel raggio ${radius}m. Provo raggio successivo.`);
                         continue; // Salta questo raggio, prova il prossimo
                     }
                     
@@ -6478,8 +6182,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
                     // Non ha trovato un asse chiaro (es. incrocio a 5 vie)
                     // Usa l'orientamento di caricamento del panorama
                     streetDirection = (streetView.getPov().heading + 360) % 360;
-                     console.warn("Nessun asse stradale chiaro, uso il POV di caricamento.");
-                } else {
+} else {
                      // Usa l'orientamento del primo link della coppia come direzione
                      streetDirection = (bestPair[0].heading + 360) % 360;
                 }
@@ -6711,8 +6414,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         instructionDiv.appendChild(alertDiv);
         
       } catch (error) {
-        console.error('Errore Ray Casting:', error);
-        loadingDiv.remove();
+loadingDiv.remove();
       }
     }
     
@@ -6784,9 +6486,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         return result;
         
       } catch (error) {
-        console.error('Errore Overpass:', error);
-        
-        // Paracadute: usa analisi testuale Google
+// Paracadute: usa analisi testuale Google
         const instruction = step.instructions?.toLowerCase() || '';
         if (instruction.includes('attraversa') || instruction.includes('cross') || instruction.includes('rotonda')) {
           return {
@@ -6958,8 +6658,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         try {
           osmDetails = await checkRoadIntersection(startLoc, endLoc, step);
         } catch (e) {
-          console.warn('⚠️ OSM non disponibile, procedo con Google');
-        }
+}
         
         return {
           type: 'crossing',
@@ -6976,15 +6675,11 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
       }
       
       // 5. FONTE SECONDARIA: OSM
-      console.log('ℹ️ Google silenzioso, verifico OSM...');
-      
-      try {
+try {
         const osmData = await checkRoadIntersection(startLoc, endLoc, step);
         
         if (osmData.intersects) {
-          console.log('⚠️ OSM rileva attraversamento');
-          
-          return {
+return {
             type: 'crossing',
             angle: turnAngle,
             roadData: {
@@ -7002,15 +6697,13 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         debugLog('✅ Nessun attraversamento (Google + OSM concordano)');
         
       } catch (error) {
-        console.log('⚠️ OSM non disponibile, Google non indica attraversamento');
-      }
+}
       
       // 6. POST-FERMATA
       const isPostTransit = prevStep && prevStep.travel_mode === 'TRANSIT';
       
       if (isPostTransit) {
-        console.log('🚍 Inversione dopo mezzo pubblico');
-        return {
+return {
           type: 'post_transit_uturn',
           angle: turnAngle,
           transitInfo: prevStep.transit_details
@@ -7042,8 +6735,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
       if (cached) {
         const data = JSON.parse(cached);
         if (Date.now() - data.timestamp < 86400000) { // 24h
-          console.log('📦 Cache hit per intersezione strada');
-          return data.result;
+return data.result;
         }
       }
       
@@ -7072,10 +6764,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             geometry: way.geometry.map(node => ({lat: node.lat, lng: node.lon})),
             tags: way.tags
           }));
-        
-        console.log('🗺️ Overpass ha restituito', roads.length, 'strade');
-        
-        // Conta intersezioni
+// Conta intersezioni
         const intersectionCount = countIntersections(start, end, roads);
         
         // Verifica presenza attraversamenti pedonali
@@ -7099,9 +6788,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         return result;
         
       } catch (error) {
-        console.error('❌ Errore checkRoadIntersection:', error);
-        
-        // ⚠️ OSM fallito → restituisci null (incertezza)
+// ⚠️ OSM fallito → restituisci null (incertezza)
         return {
           intersects: null, // ← "NON LO SO"
           count: 0,
@@ -7155,13 +6842,10 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         })
         .filter(c => c !== null)
         .sort((a, b) => a.distance - b.distance);
-        
-        console.log('🚶 Trovati', crosswalks.length, 'attraversamenti pedonali');
-        return crosswalks;
+return crosswalks;
         
       } catch (error) {
-        console.warn('⚠️ Errore ricerca crosswalks:', error);
-        return [];
+return [];
       }
     }
     
@@ -7295,7 +6979,6 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
       }
     });
 
-
 // ===== GESTIONE API KEY =====
 (function() {
   const STORAGE = 'google_maps_api_key_mobilita';
@@ -7325,8 +7008,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
 
   function load() {
     if (loaded) return;
-    console.log('🔄 Caricamento Google Maps...');
-    document.getElementById('apiKeySetup').style.display = 'none';
+document.getElementById('apiKeySetup').style.display = 'none';
     document.body.classList.remove('api-setup-active');
     document.getElementById('settingsIcon').style.display = 'flex';
     
@@ -7342,14 +7024,12 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
       document.getElementById('settingsIcon').style.display = 'none';
     };
     sc.onload = () => {
-      console.log('✅ Maps caricato, chiamo initMap...');
-      // Chiama initMap manualmente dopo il caricamento
+// Chiama initMap manualmente dopo il caricamento
       if (typeof window.initMap === 'function') {
         window.initMap();
         notify('✅ App pronta!', 'success');
       } else {
-        console.error('❌ initMap non trovata!');
-        notify('❌ Errore inizializzazione', 'error');
+notify('❌ Errore inizializzazione', 'error');
       }
     };
     document.head.appendChild(sc);
@@ -7415,13 +7095,10 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
   const otmBtn = document.getElementById('openOnTheMoveBtn');
   if (otmBtn) {
     otmBtn.addEventListener('click', () => {
-      AppLogger.logInfo('OTM', 'Pulsante "Usa in Movimento" cliccato');
-      openOnTheMove();
+openOnTheMove();
     });
-    AppLogger.logInfo('INIT', 'Pulsante "Usa in Movimento" collegato');
-  } else {
-    AppLogger.warn('INIT', 'Pulsante "Usa in Movimento" non trovato nel DOM');
-  }
+} else {
+}
 
   document.getElementById('closeModalBtn').addEventListener('click', () => {
     document.getElementById('apiKeyModal').classList.remove('show');
@@ -7534,8 +7211,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         }
       }
     } catch (e) {
-      console.error('Errore caricamento destinazione salvata:', e);
-    }
+}
     // Nessuna destinazione salvata valida, mostra step iniziale
     showInitialChoice();
   }
@@ -7596,8 +7272,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
       
       startTrackingScreen();
     } catch (e) {
-      console.error('Errore ripresa destinazione:', e);
-      notify('❌ Errore ripresa destinazione', 'error');
+notify('❌ Errore ripresa destinazione', 'error');
       showInitialChoice();
     }
   }
@@ -7615,15 +7290,23 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           </p>
         </div>
         <div class="otm-buttons">
-          <button class="btn btn-green" onclick="showDirectDestination()" aria-label="Sì, ho già l'indirizzo o il nome del POI">
+          <button class="btn btn-green" 
+                  onclick="showDirectDestination()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();showDirectDestination();}"
+                  aria-label="Sì, ho già l'indirizzo o il nome del POI">
             ✅ Sì
           </button>
-          <button class="btn btn-secondary" onclick="showReferenceStep()" aria-label="No, devo cercare un POI vicino a un posto che conosco">
+          <button class="btn btn-secondary" 
+                  onclick="showReferenceStep()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();showReferenceStep();}"
+                  aria-label="No, devo cercare un POI vicino a un posto che conosco">
             🔍 No (cerco POI)
           </button>
         </div>
         <div style="text-align: center; margin-top: 20px;">
-          <button class="btn btn-ghost" onclick="closeOnTheMove()">
+          <button class="btn btn-ghost" 
+                  onclick="closeOnTheMove()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();closeOnTheMove();}">
             ❌ Chiudi
           </button>
         </div>
@@ -7649,10 +7332,15 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <input type="text" id="otmDirectDest" placeholder="Es: Piazza del Duomo, Milano" aria-label="Inserisci indirizzo o nome del punto di interesse">
         </div>
         <div class="otm-buttons">
-          <button class="btn btn-green" onclick="findDirectDestination()" id="otmFindDestBtn">
+          <button class="btn btn-green" 
+                  onclick="findDirectDestination()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();findDirectDestination();}"
+                  id="otmFindDestBtn">
             🔍 Trova Destinazione
           </button>
-          <button class="btn btn-ghost" onclick="showInitialChoice()">
+          <button class="btn btn-ghost" 
+                  onclick="showInitialChoice()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();showInitialChoice();}">
             ← Indietro
           </button>
         </div>
@@ -7772,10 +7460,15 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           </small>
         </div>
         <div class="otm-buttons">
-          <button class="btn btn-green" onclick="findReference()" id="otmFindRefBtn">
+          <button class="btn btn-green" 
+                  onclick="findReference()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();findReference();}"
+                  id="otmFindRefBtn">
             🔍 Trova Riferimento
           </button>
-          <button class="btn btn-ghost" onclick="showInitialChoice()">
+          <button class="btn btn-ghost" 
+                  onclick="showInitialChoice()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();showInitialChoice();}">
             ← Indietro
           </button>
         </div>
@@ -7869,6 +7562,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         aria-pressed="false" 
         data-type="${cat.type}"
         onclick="toggleOtmCategory(this)"
+        onkeydown="if(event.key==='Enter'){event.preventDefault();toggleOtmCategory(this);}"
       >
         ${cat.label}
       </button>
@@ -7902,10 +7596,17 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         </div>
         
         <div class="otm-buttons">
-          <button class="btn btn-green" onclick="searchPOIs()" id="otmSearchPOIBtn" disabled aria-label="Cerca punti di interesse">
+          <button class="btn btn-green" 
+                  onclick="searchPOIs()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();searchPOIs();}"
+                  id="otmSearchPOIBtn" 
+                  disabled 
+                  aria-label="Cerca punti di interesse">
             🔍 Cerca POI
           </button>
-          <button class="btn btn-ghost" onclick="showReferenceStep()">
+          <button class="btn btn-ghost" 
+                  onclick="showReferenceStep()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();showReferenceStep();}">
             ← Cambia Riferimento
           </button>
         </div>
@@ -7919,7 +7620,16 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
       document.querySelector('.otm-cat-toggle').focus();
       
       // Abilita/disabilita pulsante ricerca quando cambia input custom
-      document.getElementById('otmCustomSearch').addEventListener('input', updateSearchButton);
+      const customInput = document.getElementById('otmCustomSearch');
+      customInput.addEventListener('input', updateSearchButton);
+      
+      // INVIO per cercare
+      customInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') {
+          const btn = document.getElementById('otmSearchPOIBtn');
+          if (!btn.disabled) searchPOIs();
+        }
+      });
       
       // 🆕 Aggiungi long press handler a tutti i toggle
       addLongPressToOtmCategories();
@@ -8136,7 +7846,9 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         </div>
         
         <div style="text-align: center; margin-top: 20px;">
-          <button class="btn btn-ghost" onclick="showCategoriesStep()">
+          <button class="btn btn-ghost" 
+                  onclick="showCategoriesStep()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();showCategoriesStep();}">
             ← Cambia Ricerca
           </button>
         </div>
@@ -8174,9 +7886,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
     
     // AVVIA TRACKING DIRETTO (salta schermata impostazioni)
     startTrackingScreen();
-    
-    AppLogger.logInfo('OTM', `Doppio tap: tracking avviato verso ${poi.name}`);
-  }
+}
   
   /**
    * LONG-PRESS SUI POI: Apri su Google Maps
@@ -8231,10 +7941,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
       window.open(mapsUrl, '_blank', 'noopener,noreferrer');
       
       notify('🗺️ Aperto su Google Maps: ' + poi.name, 'info');
-      
-      AppLogger.logInfo('OTM', `Long-press: aperto Google Maps per ${poi.name}`);
-      
-    }, 800); // 800ms per attivare long-press
+}, 800); // 800ms per attivare long-press
   }
   
   function handlePOILongPressEnd(event) {
@@ -8427,8 +8134,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
    */
   function speakDistance(text) {
     if (!('speechSynthesis' in window)) {
-      console.log('Sintesi vocale non supportata');
-      return;
+return;
     }
     
     // Cancella eventuali annunci precedenti
@@ -8555,8 +8261,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         return JSON.parse(saved);
       }
     } catch (e) {
-      console.error('Errore caricamento impostazioni vibrazioni:', e);
-    }
+}
     
     // Default
     return {
@@ -8606,21 +8311,11 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
    * Avvia il tracking GPS continuo
    */
   async function startTracking() {
-    AppLogger.logInfo('OTM', 'Avvio tracking GPS...');
-    
-    if (!navigator.geolocation) {
-      AppLogger.error('OTM', 'Geolocalizzazione non supportata dal browser');
-      notify('❌ Geolocalizzazione non supportata', 'error');
+if (!navigator.geolocation) {
+notify('❌ Geolocalizzazione non supportata', 'error');
       return;
     }
-    
-    AppLogger.debug('OTM', 'Destinazione impostata', {
-      lat: otmDestination?.lat,
-      lng: otmDestination?.lng,
-      label: otmDestination?.label
-    });
-    
-    // Reset variabili annuncio e vibrazioni
+// Reset variabili annuncio e vibrazioni
     otmLastAnnouncedDistance = null;
     otmLastAnnouncedTime = Date.now();
     otmVibratedShort = false;
@@ -8655,14 +8350,12 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
    */
   function setupMediaSessionControls() {
     if (!('mediaSession' in navigator)) {
-      console.log('Media Session API non supportata');
-      return;
+return;
     }
     
     // Verifica che otmDestination sia impostato
     if (!otmDestination) {
-      console.error('setupMediaSessionControls: otmDestination non impostato');
-      return;
+return;
     }
     
     // Imposta metadata per mostrare info tracking nella lockscreen
@@ -8742,8 +8435,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
   function onPositionUpdate(position) {
     // Verifica che otmDestination sia impostato
     if (!otmDestination) {
-      console.error('onPositionUpdate: otmDestination non impostato, fermo il tracking');
-      stopTracking();
+stopTracking();
       return;
     }
     
@@ -8912,20 +8604,16 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
     switch(error.code) {
       case error.PERMISSION_DENIED:
         message = '❌ Permesso GPS negato';
-        AppLogger.error('GPS', 'Permesso GPS negato dall\'utente', errorDetails);
-        break;
+break;
       case error.POSITION_UNAVAILABLE:
         message = '⚠️ Posizione non disponibile';
-        AppLogger.warn('GPS', 'Posizione GPS non disponibile', errorDetails);
-        break;
+break;
       case error.TIMEOUT:
         message = '⏱️ Timeout GPS';
-        AppLogger.warn('GPS', 'Timeout nella richiesta GPS', errorDetails);
-        break;
+break;
       default:
         message = '❌ Errore GPS sconosciuto';
-        AppLogger.error('GPS', 'Errore GPS sconosciuto', errorDetails);
-    }
+}
     
     notify(message, 'error');
     announce(message);
@@ -9015,10 +8703,8 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
   window.toggleAutoVoice = toggleAutoVoice;
 
   window.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 App Mobilità');
-    if (!check()) {
-      console.log('📝 Nessuna API key trovata');
-    }
+if (!check()) {
+}
   });
 })();
 </script>
