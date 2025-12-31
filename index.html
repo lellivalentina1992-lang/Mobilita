@@ -101,6 +101,206 @@ body.api-setup-active::before {
 
 /* STILI ORIGINALI */
 /* Stili identici a prima */
+    /* === STILI USA IN MOVIMENTO === */
+    #onTheMoveOverlay {
+      position: fixed;
+      inset: 0;
+      background: #f8f9fb;
+      z-index: 10007;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    #onTheMoveOverlay.active { display: flex; }
+    .otm-header {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: #fff;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.15);
+    }
+    .otm-header h2 { margin: 0; font-size: 1.8em; }
+    .otm-header p { margin: 8px 0 0; opacity: 0.95; }
+    .otm-content {
+      flex: 1;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .otm-step { display: none; }
+    .otm-step.active { display: block; }
+    .otm-question {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      margin-bottom: 20px;
+    }
+    .otm-question h3 {
+      color: #28a745;
+      margin: 0 0 20px;
+      font-size: 1.4em;
+    }
+    .otm-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .otm-buttons .btn {
+      flex: 1;
+      min-width: 200px;
+      padding: 15px 20px;
+      font-size: 1.1em;
+    }
+    .otm-input-group {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      margin-bottom: 15px;
+    }
+    .otm-input-group label {
+      display: block;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+    .otm-input-group input {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .otm-input-group input:focus {
+      outline: 3px solid #28a745;
+      border-color: #28a745;
+    }
+    .otm-categories {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      margin-bottom: 15px;
+    }
+    .otm-categories h4 {
+      color: #28a745;
+      margin: 0 0 15px;
+      font-size: 1.2em;
+    }
+    .otm-cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .otm-cat-toggle {
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 600;
+      transition: all .2s;
+      text-align: left;
+    }
+    .otm-cat-toggle:hover {
+      background: #e9ecef;
+      border-color: #28a745;
+    }
+    .otm-cat-toggle:focus {
+      outline: 3px solid #28a745;
+      outline-offset: 2px;
+    }
+    .otm-cat-toggle[aria-pressed="true"] {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: #fff;
+      border-color: #28a745;
+    }
+    .otm-results {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+    .otm-result-item {
+      padding: 15px;
+      border-bottom: 1px solid #dee2e6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+    .otm-result-item:last-child { border-bottom: none; }
+    .otm-result-info {
+      flex: 1;
+    }
+    .otm-result-info strong {
+      display: block;
+      font-size: 1.1em;
+      color: #495057;
+      margin-bottom: 4px;
+    }
+    .otm-result-info small {
+      color: #6c757d;
+    }
+    .otm-tracking {
+      text-align: center;
+      padding: 30px 20px;
+    }
+    .otm-distance-display {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: #fff;
+      padding: 40px 30px;
+      border-radius: 16px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    }
+    .otm-distance-display .label {
+      font-size: 1.2em;
+      opacity: 0.9;
+      margin-bottom: 10px;
+    }
+    .otm-distance-display .value {
+      font-size: 3.5em;
+      font-weight: 700;
+      margin: 0;
+    }
+    .otm-destination-info {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .otm-destination-info h4 {
+      color: #28a745;
+      margin: 0 0 10px;
+      font-size: 1.3em;
+    }
+    .otm-accuracy {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 12px 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    .otm-accuracy.good {
+      background: #d4edda;
+      border-left-color: #28a745;
+    }
+    #statusAnnouncer {
+      position: absolute;
+      left: -10000px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    /* === FINE STILI USA IN MOVIMENTO === */
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:system-ui,Segoe UI,Arial,sans-serif;background:#f8f9fb}
     .header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:30px 20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.2)}
@@ -549,6 +749,16 @@ body.api-setup-active::before {
       </header>
 
       <main role="main" id="mainContent">
+
+      <!-- 🆕 PULSANTE USA IN MOVIMENTO -->
+      <div style="background: linear-gradient(135deg, #28a745, #20c997); padding: 20px; margin: 20px auto; max-width: 1400px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,.15); text-align: center;">
+        <button onclick="openOnTheMove()" class="btn btn-green" style="font-size: 1.3em; padding: 18px 40px; background: #fff; color: #28a745; border: 3px solid #28a745; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,.2);" aria-label="Apri modalità Usa in movimento per tracciare distanza in tempo reale">
+          🚶 Usa in Movimento
+        </button>
+        <p style="color: #fff; margin-top: 12px; font-size: 1.05em; font-weight: 500;">
+          Traccia la distanza in linea d'aria verso una destinazione mentre ti muovi
+        </p>
+      </div>
 
       <section aria-labelledby="section1-heading" role="search">
       <div class="section-divider">
@@ -1516,9 +1726,60 @@ body.api-setup-active::before {
         label.textContent = LABELS[type] || type;
         wrap.appendChild(cb);
         wrap.appendChild(label);
+        
+        // 🆕 LONG PRESS per ricerca rapida (accessibilità smartphone)
+        addLongPressToCategory(wrap, cb);
+        
         grid.appendChild(wrap);
       });
       updateCatsSummary();
+    }
+    
+    /**
+     * Aggiunge long press handler a una categoria per ricerca rapida
+     */
+    function addLongPressToCategory(wrapElement, checkbox) {
+      let pressTimer = null;
+      
+      const startPress = (e) => {
+        // Se è già checked, non serve long press
+        if (checkbox.checked) return;
+        
+        pressTimer = setTimeout(() => {
+          // Attiva la checkbox
+          checkbox.checked = true;
+          updateCatsSummary();
+          
+          // Feedback visivo e audio
+          wrapElement.style.background = '#d4edda';
+          announceToScreenReader('Categoria selezionata, avvio ricerca', 'assertive');
+          notify('🔍 Ricerca rapida...', 'info');
+          
+          // Avvia ricerca dopo 200ms
+          setTimeout(() => {
+            searchPlaces();
+            wrapElement.style.background = '';
+          }, 200);
+        }, 800); // 800ms = long press
+      };
+      
+      const cancelPress = () => {
+        if (pressTimer) {
+          clearTimeout(pressTimer);
+          pressTimer = null;
+        }
+      };
+      
+      // Touch events (smartphone)
+      wrapElement.addEventListener('touchstart', startPress, { passive: true });
+      wrapElement.addEventListener('touchend', cancelPress);
+      wrapElement.addEventListener('touchcancel', cancelPress);
+      wrapElement.addEventListener('touchmove', cancelPress);
+      
+      // Mouse events (desktop - bonus)
+      wrapElement.addEventListener('mousedown', startPress);
+      wrapElement.addEventListener('mouseup', cancelPress);
+      wrapElement.addEventListener('mouseleave', cancelPress);
     }
 
     function filterCategories() {
@@ -2653,11 +2914,11 @@ body.api-setup-active::before {
             </label>
             <input type="text" 
                    id="moovitUrlInput" 
-                   placeholder="https://moovitapp.com/index/it/mezzi_pubblici-..." 
+                   placeholder="https://moovitapp.com/?metroId=61&lang=it..." 
                    style="width: 100%; padding: 12px; border: 2px solid #667eea; border-radius: 8px; font-size: 14px;"
                    aria-label="Incolla il link di Moovit">
             <small style="color: #888; display: block; margin-top: 6px;">
-              Esempio: https://moovitapp.com/index/it/mezzi_pubblici-Roma-Roma_e_Lazio-city_81-61
+              Esempio: https://moovitapp.com/?metroId=61&lang=it oppure https://moovitapp.com/index/it/mezzi_pubblici-Roma-Roma_e_Lazio-city_81-61
             </small>
           </div>
           
@@ -2690,7 +2951,7 @@ body.api-setup-active::before {
     }
     
     // Processa l'URL Moovit incollato e apre il link finale
-    function processMoovitUrl() {
+    async function processMoovitUrl() {
       const moovitUrl = document.getElementById('moovitUrlInput').value.trim();
       const startAddress = document.getElementById('addressInput').value.trim();
       const destAddress = document.getElementById('customDest').value.trim();
@@ -2706,39 +2967,113 @@ body.api-setup-active::before {
         return;
       }
       
-      // Estrae lo slug dall'URL
-      // URL esempio: https://moovitapp.com/index/it/mezzi_pubblici-Mentana-Roma_e_Lazio-city_81124-61
-      // Vogliamo estrarre: Mentana-Roma_e_Lazio-city_81124-61
+      // 1) ESTRAZIONE metroId
+      let metroId = 61; // fallback
       
-      let slug = null;
-      
-      // Metodo 1: cerca dopo "mezzi_pubblici-"
-      const mezziMatch = moovitUrl.match(/mezzi_pubblici-(.+)$/);
-      if (mezziMatch && mezziMatch[1]) {
-        slug = mezziMatch[1];
+      // Cerca metroId nell'URL (metodo primario)
+      const metroIdMatch = moovitUrl.match(/[?&]metroId=(\d+)/);
+      if (metroIdMatch && metroIdMatch[1]) {
+        metroId = metroIdMatch[1];
       } else {
-        // Metodo 2: cerca dopo "public_transit-" (versione inglese)
-        const transitMatch = moovitUrl.match(/public_transit-(.+)$/);
-        if (transitMatch && transitMatch[1]) {
-          slug = transitMatch[1];
+        // Fallback: estrai slug e cerca il numero finale
+        let slug = null;
+        const mezziMatch = moovitUrl.match(/mezzi_pubblici-(.+?)(?:\?|$)/);
+        if (mezziMatch && mezziMatch[1]) {
+          slug = mezziMatch[1];
+        } else {
+          const transitMatch = moovitUrl.match(/public_transit-(.+?)(?:\?|$)/);
+          if (transitMatch && transitMatch[1]) {
+            slug = transitMatch[1];
+          }
+        }
+        
+        if (slug) {
+          // Rimuove query string e hash
+          slug = slug.split('?')[0].split('#')[0];
+          // Estrae il numero finale dopo l'ultimo "-"
+          const parts = slug.split('-');
+          const lastPart = parts[parts.length - 1];
+          if (/^\d+$/.test(lastPart)) {
+            metroId = lastPart;
+          }
         }
       }
       
-      if (!slug) {
-        notify('⚠️ Non riesco a leggere il link. Assicurati di copiare l\'URL completo dalla pagina Moovit', 'error');
+      // 2) GEOCODING COORDINATE REALI
+      notify('⏳ Geocoding indirizzi...', 'info');
+      
+      // Coordinate FROM
+      let fromLat, fromLng;
+      if (originalStartPoint) {
+        // Usa originalStartPoint se esiste
+        fromLat = typeof originalStartPoint.lat === 'function' ? originalStartPoint.lat() : originalStartPoint.lat;
+        fromLng = typeof originalStartPoint.lng === 'function' ? originalStartPoint.lng() : originalStartPoint.lng;
+      } else if (currentLocation) {
+        // Altrimenti usa currentLocation
+        fromLat = typeof currentLocation.lat === 'function' ? currentLocation.lat() : currentLocation.lat;
+        fromLng = typeof currentLocation.lng === 'function' ? currentLocation.lng() : currentLocation.lng;
+      } else {
+        // Verifica che startAddress non sia vuoto
+        if (!startAddress) {
+          notify('⚠️ Inserisci l\'indirizzo di partenza o seleziona un punto sulla mappa', 'error');
+          return;
+        }
+        // Geocode startAddress
+        try {
+          const fromResult = await new Promise((resolve, reject) => {
+            geocoder.geocode({ address: startAddress }, (results, status) => {
+              if (status === 'OK' && results[0]) {
+                resolve(results[0].geometry.location);
+              } else {
+                reject(new Error('Geocoding partenza fallito: ' + status));
+              }
+            });
+          });
+          fromLat = fromResult.lat();
+          fromLng = fromResult.lng();
+        } catch (err) {
+          notify('❌ ' + err.message, 'error');
+          return;
+        }
+      }
+      
+      // Coordinate TO
+      if (!destAddress) {
+        notify('⚠️ Inserisci la destinazione', 'error');
         return;
       }
       
-      // Rimuove eventuali parametri query string
-      slug = slug.split('?')[0].split('#')[0];
+      let toLat, toLng;
+      try {
+        const toResult = await new Promise((resolve, reject) => {
+          geocoder.geocode({ address: destAddress }, (results, status) => {
+            if (status === 'OK' && results[0]) {
+              resolve(results[0].geometry.location);
+            } else {
+              reject(new Error('Geocoding destinazione fallito: ' + status));
+            }
+          });
+        });
+        toLat = toResult.lat();
+        toLng = toResult.lng();
+      } catch (err) {
+        notify('❌ ' + err.message, 'error');
+        return;
+      }
       
-      // Codifica gli indirizzi per l'URL
-      const fromEncoded = encodeURIComponent(startAddress);
+      // 3) FORMATTAZIONE COORDINATE (5-6 decimali)
+      const fromLatStr = fromLat.toFixed(6);
+      const fromLngStr = fromLng.toFixed(6);
+      const toLatStr = toLat.toFixed(6);
+      const toLngStr = toLng.toFixed(6);
+      
+      // 4) COSTRUZIONE URL FINALE
+      // Se startAddress è vuoto, usa le coordinate come fallback per il parametro 'from'
+      const fromParam = startAddress || `${fromLatStr},${fromLngStr}`;
+      const fromEncoded = encodeURIComponent(fromParam);
       const toEncoded = encodeURIComponent(destAddress);
       
-      // Costruisce l'URL finale Moovit per le direzioni
-      // Formato: https://moovitapp.com/index/it/mezzi_pubblici-{slug}/directions?from={from}&to={to}
-      const finalUrl = `https://moovitapp.com/index/it/mezzi_pubblici-${slug}?from=${fromEncoded}&to=${toEncoded}&fll=0_0&tll=0_0`;
+      const finalUrl = `https://moovitapp.com/?metroId=${metroId}&lang=it&from=${fromEncoded}&to=${toEncoded}&fll=${fromLatStr}_${fromLngStr}&tll=${toLatStr}_${toLngStr}`;
       
       // Chiude il modal e apre Moovit
       closeModal();
@@ -6722,6 +7057,1380 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
     if (e.key === 'Enter') document.getElementById('saveKeyBtn').click();
   });
 
+  // ==========================================
+  // 🆕 USA IN MOVIMENTO - TRACKING DISTANZA
+  // ==========================================
+  
+  // Variabili globali per tracking
+  let otmWatchId = null;
+  let otmDestination = null;
+  let otmReference = null;
+  let otmSelectedCategories = new Set();
+  let otmLastAnnouncedDistance = null;
+  let otmLastAnnouncedTime = null;
+  let otmVibratedShort = false;  // Flag per evitare vibrazione ripetuta
+  let otmVibratedLong = false;   // Flag per evitare vibrazione ripetuta
+  
+  /**
+   * Apre la modalità "Usa in movimento"
+   */
+  function openOnTheMove() {
+    document.getElementById('onTheMoveOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Controlla se c'è una destinazione salvata recente
+    checkSavedDestination();
+    
+    announce('Modalità Usa in movimento aperta');
+  }
+  
+  /**
+   * Chiude la modalità "Usa in movimento"
+   */
+  function closeOnTheMove() {
+    stopTracking();
+    
+    // Chiudi notifica se esiste
+    if (window.otmNotification) {
+      window.otmNotification.close();
+      window.otmNotification = null;
+    }
+    
+    // Ripristina titolo
+    document.title = 'App Mobilità e Orientamento - Versione Distribuibile';
+    
+    document.getElementById('onTheMoveOverlay').classList.remove('active');
+    document.body.style.overflow = 'auto';
+    announce('Modalità Usa in movimento chiusa');
+  }
+  
+  /**
+   * Annuncia un messaggio allo screen reader
+   */
+  function announce(message) {
+    const announcer = document.getElementById('statusAnnouncer');
+    announcer.textContent = message;
+    // Pulisci dopo 3 secondi
+    setTimeout(() => { announcer.textContent = ''; }, 3000);
+  }
+  
+  /**
+   * Controlla se c'è una destinazione salvata recente (< 24h)
+   */
+  function checkSavedDestination() {
+    try {
+      const saved = localStorage.getItem('otm_destination');
+      if (saved) {
+        const dest = JSON.parse(saved);
+        const age = Date.now() - (dest.timestamp || 0);
+        // Se più vecchia di 24h, ignora
+        if (age < 24 * 60 * 60 * 1000) {
+          showResumeOption(dest);
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('Errore caricamento destinazione salvata:', e);
+    }
+    // Nessuna destinazione salvata valida, mostra step iniziale
+    showInitialChoice();
+  }
+  
+  /**
+   * Mostra opzione per riprendere destinazione precedente
+   */
+  function showResumeOption(dest) {
+    const content = `
+      <div class="otm-step active">
+        <div class="otm-question">
+          <h3>📍 Destinazione Recente Trovata</h3>
+          <p style="margin-bottom: 20px; font-size: 1.1em; color: #495057;">
+            <strong>${dest.label}</strong>
+          </p>
+        </div>
+        <div class="otm-buttons">
+          <button class="btn btn-green" onclick="resumeTracking()" style="flex: 2;">
+            ▶️ Riprendi Tracking
+          </button>
+          <button class="btn btn-secondary" onclick="showInitialChoice()">
+            🔄 Nuova Destinazione
+          </button>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <button class="btn btn-ghost" onclick="closeOnTheMove()">
+            ❌ Chiudi
+          </button>
+        </div>
+      </div>
+    `;
+    document.getElementById('otmContent').innerHTML = content;
+    
+    // Focus sul primo pulsante
+    setTimeout(() => {
+      document.querySelector('#otmContent .btn').focus();
+    }, 100);
+  }
+  
+  /**
+   * Riprende il tracking con la destinazione salvata
+   */
+  function resumeTracking() {
+    try {
+      const saved = localStorage.getItem('otm_destination');
+      otmDestination = JSON.parse(saved);
+      startTrackingScreen();
+    } catch (e) {
+      notify('❌ Errore ripresa destinazione', 'error');
+      showInitialChoice();
+    }
+  }
+  
+  /**
+   * Mostra la scelta iniziale: Sì/No
+   */
+  function showInitialChoice() {
+    const content = `
+      <div class="otm-step active">
+        <div class="otm-question">
+          <h3>📍 Hai già un indirizzo o POI di destinazione?</h3>
+          <p style="margin-bottom: 20px; color: #6c757d;">
+            Scegli come vuoi impostare la tua destinazione
+          </p>
+        </div>
+        <div class="otm-buttons">
+          <button class="btn btn-green" onclick="showDirectDestination()" aria-label="Sì, ho già l'indirizzo o il nome del POI">
+            ✅ Sì
+          </button>
+          <button class="btn btn-secondary" onclick="showReferenceStep()" aria-label="No, devo cercare un POI vicino a un posto che conosco">
+            🔍 No (cerco POI)
+          </button>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <button class="btn btn-ghost" onclick="closeOnTheMove()">
+            ❌ Chiudi
+          </button>
+        </div>
+      </div>
+    `;
+    document.getElementById('otmContent').innerHTML = content;
+    announce('Step 1: Hai già un indirizzo di destinazione?');
+    
+    // Focus sul primo pulsante
+    setTimeout(() => {
+      document.querySelector('#otmContent .btn').focus();
+    }, 100);
+  }
+  
+  /**
+   * Mostra il form per inserire direttamente la destinazione
+   */
+  function showDirectDestination() {
+    const content = `
+      <div class="otm-step active">
+        <div class="otm-input-group">
+          <label for="otmDirectDest">📍 Inserisci indirizzo o nome POI:</label>
+          <input type="text" id="otmDirectDest" placeholder="Es: Piazza del Duomo, Milano" aria-label="Inserisci indirizzo o nome del punto di interesse">
+        </div>
+        <div class="otm-buttons">
+          <button class="btn btn-green" onclick="findDirectDestination()" id="otmFindDestBtn">
+            🔍 Trova Destinazione
+          </button>
+          <button class="btn btn-ghost" onclick="showInitialChoice()">
+            ← Indietro
+          </button>
+        </div>
+      </div>
+    `;
+    document.getElementById('otmContent').innerHTML = content;
+    announce('Step 2: Inserisci indirizzo di destinazione');
+    
+    // Focus sull'input
+    setTimeout(() => {
+      const input = document.getElementById('otmDirectDest');
+      input.focus();
+      // Enter per cercare
+      input.addEventListener('keypress', e => {
+        if (e.key === 'Enter') findDirectDestination();
+      });
+    }, 100);
+  }
+  
+  /**
+   * Cerca la destinazione inserita direttamente
+   */
+  async function findDirectDestination() {
+    const input = document.getElementById('otmDirectDest');
+    const query = input.value.trim();
+    
+    if (!query) {
+      notify('⚠️ Inserisci un indirizzo o POI', 'error');
+      input.focus();
+      return;
+    }
+    
+    const btn = document.getElementById('otmFindDestBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Ricerca...';
+    notify('⏳ Ricerca destinazione...', 'info');
+    
+    try {
+      // Geocoding
+      const result = await new Promise((resolve, reject) => {
+        geocoder.geocode({ address: query }, (results, status) => {
+          if (status === 'OK' && results[0]) {
+            resolve(results[0]);
+          } else {
+            reject(new Error('Destinazione non trovata'));
+          }
+        });
+      });
+      
+      const loc = result.geometry.location;
+      otmDestination = {
+        lat: loc.lat(),
+        lng: loc.lng(),
+        label: result.formatted_address || query,
+        timestamp: Date.now()
+      };
+      
+      // Salva in localStorage
+      localStorage.setItem('otm_destination', JSON.stringify(otmDestination));
+      
+      showDestinationConfirmation();
+      
+    } catch (err) {
+      notify('❌ ' + err.message, 'error');
+      btn.disabled = false;
+      btn.textContent = '🔍 Trova Destinazione';
+      input.focus();
+    }
+  }
+  
+  /**
+   * Mostra conferma destinazione trovata
+   */
+  function showDestinationConfirmation() {
+    const content = `
+      <div class="otm-step active">
+        <div class="otm-question">
+          <h3>✅ Destinazione Trovata</h3>
+          <p style="margin: 15px 0; font-size: 1.1em; color: #495057;">
+            <strong>${otmDestination.label}</strong>
+          </p>
+          <p style="color: #6c757d; font-size: 0.95em;">
+            Lat: ${otmDestination.lat.toFixed(6)}, Lng: ${otmDestination.lng.toFixed(6)}
+          </p>
+        </div>
+        <div class="otm-buttons">
+          <button class="btn btn-green" onclick="startTrackingScreen()" style="font-size: 1.2em; padding: 18px 30px;">
+            ▶️ Avvia Tracking Distanza
+          </button>
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+          <button class="btn btn-ghost" onclick="showDirectDestination()">
+            ← Cambia Destinazione
+          </button>
+        </div>
+      </div>
+    `;
+    document.getElementById('otmContent').innerHTML = content;
+    announce('Destinazione trovata: ' + otmDestination.label);
+    
+    setTimeout(() => {
+      document.querySelector('#otmContent .btn-green').focus();
+    }, 100);
+  }
+  
+  /**
+   * STEP A: Inserimento riferimento per ricerca POI
+   */
+  function showReferenceStep() {
+    const content = `
+      <div class="otm-step active">
+        <div class="otm-input-group">
+          <label for="otmReference">📍 Inserisci luogo di riferimento:</label>
+          <input type="text" id="otmReference" placeholder="Es: Stazione Centrale Milano, Piazza San Marco Venezia" aria-label="Inserisci luogo di riferimento per cercare POI vicini">
+          <small style="display: block; margin-top: 8px; color: #6c757d;">
+            Inserisci un luogo noto: cercheremo POI nelle vicinanze
+          </small>
+        </div>
+        <div class="otm-buttons">
+          <button class="btn btn-green" onclick="findReference()" id="otmFindRefBtn">
+            🔍 Trova Riferimento
+          </button>
+          <button class="btn btn-ghost" onclick="showInitialChoice()">
+            ← Indietro
+          </button>
+        </div>
+      </div>
+    `;
+    document.getElementById('otmContent').innerHTML = content;
+    announce('Step 2A: Inserisci luogo di riferimento');
+    
+    setTimeout(() => {
+      const input = document.getElementById('otmReference');
+      input.focus();
+      input.addEventListener('keypress', e => {
+        if (e.key === 'Enter') findReference();
+      });
+    }, 100);
+  }
+  
+  /**
+   * Cerca il riferimento inserito
+   */
+  async function findReference() {
+    const input = document.getElementById('otmReference');
+    const query = input.value.trim();
+    
+    if (!query) {
+      notify('⚠️ Inserisci un luogo di riferimento', 'error');
+      input.focus();
+      return;
+    }
+    
+    const btn = document.getElementById('otmFindRefBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Ricerca...';
+    notify('⏳ Ricerca riferimento...', 'info');
+    
+    try {
+      const result = await new Promise((resolve, reject) => {
+        geocoder.geocode({ address: query }, (results, status) => {
+          if (status === 'OK' && results[0]) {
+            resolve(results[0]);
+          } else {
+            reject(new Error('Riferimento non trovato'));
+          }
+        });
+      });
+      
+      const loc = result.geometry.location;
+      otmReference = {
+        lat: loc.lat(),
+        lng: loc.lng(),
+        label: result.formatted_address || query
+      };
+      
+      notify('✅ Riferimento trovato!', 'success');
+      showCategoriesStep();
+      
+    } catch (err) {
+      notify('❌ ' + err.message, 'error');
+      btn.disabled = false;
+      btn.textContent = '🔍 Trova Riferimento';
+      input.focus();
+    }
+  }
+  
+  /**
+   * STEP B: Selezione categorie POI
+   */
+  function showCategoriesStep() {
+    // Categorie quotidiane basate su DAILY_DEFAULT con label italiane
+    const dailyCategories = [
+      { type: 'atm', label: '🏧 Bancomat' },
+      { type: 'bank', label: '🏦 Banca' },
+      { type: 'bar', label: '🍺 Bar' },
+      { type: 'cafe', label: '☕ Caffè' },
+      { type: 'restaurant', label: '🍽️ Ristorante' },
+      { type: 'supermarket', label: '🛒 Supermercato' },
+      { type: 'pharmacy', label: '💊 Farmacia' },
+      { type: 'hospital', label: '🏥 Ospedale' },
+      { type: 'bus_station', label: '🚌 Fermata Bus' },
+      { type: 'subway_station', label: '🚇 Metro' },
+      { type: 'train_station', label: '🚂 Stazione Treno' },
+      { type: 'post_office', label: '📮 Ufficio Postale' },
+      { type: 'store', label: '🏪 Negozio' },
+      { type: 'bakery', label: '🥖 Panetteria' }
+    ];
+    
+    const categoriesHtml = dailyCategories.map(cat => `
+      <button 
+        class="otm-cat-toggle" 
+        role="button" 
+        aria-pressed="false" 
+        data-type="${cat.type}"
+        onclick="toggleOtmCategory(this)"
+      >
+        ${cat.label}
+      </button>
+    `).join('');
+    
+    const content = `
+      <div class="otm-step active">
+        <div class="otm-question">
+          <h3>🎯 Scegli Categorie POI</h3>
+          <p style="color: #6c757d; margin-bottom: 15px;">
+            Riferimento: <strong>${otmReference.label}</strong>
+          </p>
+          <p style="color: #28a745; font-weight: 600; font-size: 0.95em; margin-bottom: 10px;">
+            💡 Tieni premuto su una categoria per ricerca rapida!
+          </p>
+        </div>
+        
+        <div class="otm-categories">
+          <h4>📋 Categorie Quotidiane</h4>
+          <div class="otm-cat-grid" id="otmCatGrid">
+            ${categoriesHtml}
+          </div>
+        </div>
+        
+        <div class="otm-input-group">
+          <label for="otmCustomSearch">🔍 Oppure scrivi una categoria/parola chiave:</label>
+          <input type="text" id="otmCustomSearch" placeholder="Es: pizzeria, gelateria, edicola..." aria-label="Scrivi categoria personalizzata">
+          <small style="display: block; margin-top: 8px; color: #6c757d;">
+            Se compili questo campo, useremo SOLO questa ricerca (ignora i toggle sopra)
+          </small>
+        </div>
+        
+        <div class="otm-buttons">
+          <button class="btn btn-green" onclick="searchPOIs()" id="otmSearchPOIBtn" disabled aria-label="Cerca punti di interesse">
+            🔍 Cerca POI
+          </button>
+          <button class="btn btn-ghost" onclick="showReferenceStep()">
+            ← Cambia Riferimento
+          </button>
+        </div>
+      </div>
+    `;
+    document.getElementById('otmContent').innerHTML = content;
+    announce('Step 2B: Scegli le categorie da cercare. Tieni premuto per ricerca rapida');
+    
+    // Focus sul primo toggle
+    setTimeout(() => {
+      document.querySelector('.otm-cat-toggle').focus();
+      
+      // Abilita/disabilita pulsante ricerca quando cambia input custom
+      document.getElementById('otmCustomSearch').addEventListener('input', updateSearchButton);
+      
+      // 🆕 Aggiungi long press handler a tutti i toggle
+      addLongPressToOtmCategories();
+    }, 100);
+  }
+  
+  /**
+   * Aggiunge long press handler ai toggle "Usa in movimento"
+   */
+  function addLongPressToOtmCategories() {
+    const toggles = document.querySelectorAll('.otm-cat-toggle');
+    
+    toggles.forEach(button => {
+      let pressTimer = null;
+      
+      const startPress = (e) => {
+        // Se già premuto, non fare nulla
+        if (button.getAttribute('aria-pressed') === 'true') return;
+        
+        pressTimer = setTimeout(() => {
+          // Attiva il toggle
+          const type = button.dataset.type;
+          button.setAttribute('aria-pressed', 'true');
+          otmSelectedCategories.add(type);
+          
+          // Feedback
+          announce('Categoria selezionata, avvio ricerca');
+          notify('🔍 Ricerca rapida...', 'info');
+          
+          // Avvia ricerca dopo 200ms
+          setTimeout(() => {
+            searchPOIs();
+          }, 200);
+        }, 800); // 800ms = long press
+      };
+      
+      const cancelPress = () => {
+        if (pressTimer) {
+          clearTimeout(pressTimer);
+          pressTimer = null;
+        }
+      };
+      
+      // Touch events
+      button.addEventListener('touchstart', startPress, { passive: true });
+      button.addEventListener('touchend', cancelPress);
+      button.addEventListener('touchcancel', cancelPress);
+      button.addEventListener('touchmove', cancelPress);
+      
+      // Mouse events (desktop)
+      button.addEventListener('mousedown', startPress);
+      button.addEventListener('mouseup', cancelPress);
+      button.addEventListener('mouseleave', cancelPress);
+    });
+  }
+  
+  /**
+   * Toggle categoria
+   */
+  function toggleOtmCategory(button) {
+    const type = button.dataset.type;
+    const pressed = button.getAttribute('aria-pressed') === 'true';
+    
+    button.setAttribute('aria-pressed', !pressed);
+    
+    if (!pressed) {
+      otmSelectedCategories.add(type);
+      announce('Aggiunta categoria: ' + button.textContent.trim());
+    } else {
+      otmSelectedCategories.delete(type);
+      announce('Rimossa categoria: ' + button.textContent.trim());
+    }
+    
+    updateSearchButton();
+  }
+  
+  /**
+   * Aggiorna stato pulsante ricerca
+   */
+  function updateSearchButton() {
+    const btn = document.getElementById('otmSearchPOIBtn');
+    const customSearch = document.getElementById('otmCustomSearch').value.trim();
+    
+    // Abilita se c'è almeno 1 categoria selezionata OPPURE ricerca custom
+    const enabled = otmSelectedCategories.size > 0 || customSearch.length > 0;
+    btn.disabled = !enabled;
+  }
+  
+  /**
+   * Cerca POI con le categorie selezionate
+   */
+  async function searchPOIs() {
+    const customSearch = document.getElementById('otmCustomSearch').value.trim();
+    const btn = document.getElementById('otmSearchPOIBtn');
+    
+    btn.disabled = true;
+    btn.textContent = '⏳ Ricerca POI...';
+    notify('⏳ Ricerca POI in corso...', 'info');
+    
+    try {
+      const results = await performPOISearch(customSearch);
+      
+      if (results.length === 0) {
+        notify('⚠️ Nessun POI trovato. Prova ad aumentare il raggio o cambiare categorie', 'error');
+        btn.disabled = false;
+        btn.textContent = '🔍 Cerca POI';
+        return;
+      }
+      
+      showPOIResults(results);
+      
+    } catch (err) {
+      notify('❌ Errore ricerca POI: ' + err.message, 'error');
+      btn.disabled = false;
+      btn.textContent = '🔍 Cerca POI';
+    }
+  }
+  
+  /**
+   * Esegue la ricerca POI effettiva
+   */
+  async function performPOISearch(customKeyword) {
+    return new Promise((resolve, reject) => {
+      const location = new google.maps.LatLng(otmReference.lat, otmReference.lng);
+      
+      const request = {
+        location: location,
+        radius: 500 // 500m di raggio
+      };
+      
+      // Se c'è ricerca custom, usa quella (keyword)
+      if (customKeyword) {
+        request.keyword = customKeyword;
+      } else {
+        // Altrimenti usa i tipi selezionati
+        request.types = Array.from(otmSelectedCategories);
+      }
+      
+      service.nearbySearch(request, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          // Limita a 20 risultati
+          const limited = results.slice(0, 20);
+          
+          // Aggiungi distanza per ogni risultato
+          const withDistance = limited.map(p => {
+            const pLoc = { lat: p.geometry.location.lat(), lng: p.geometry.location.lng() };
+            const dist = haversineDistance(otmReference, pLoc);
+            return { ...p, distance: dist };
+          });
+          
+          // Ordina per distanza
+          withDistance.sort((a, b) => a.distance - b.distance);
+          
+          resolve(withDistance);
+        } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+          resolve([]);
+        } else {
+          reject(new Error('Errore Places API: ' + status));
+        }
+      });
+    });
+  }
+  
+  /**
+   * STEP C: Mostra risultati POI
+   */
+  function showPOIResults(results) {
+    const resultsHtml = results.map((p, idx) => `
+      <div class="otm-result-item">
+        <div class="otm-result-info">
+          <strong>${p.name}</strong>
+          <small>${p.vicinity || 'Indirizzo non disponibile'}</small>
+          <small style="display: block; margin-top: 4px; color: #28a745; font-weight: 600;">
+            📏 ${formatDistance(p.distance)}
+          </small>
+        </div>
+        <button class="btn btn-green" onclick="selectPOI(${idx})" aria-label="Imposta ${p.name} come destinazione">
+          ✅ Imposta
+        </button>
+      </div>
+    `).join('');
+    
+    const content = `
+      <div class="otm-step active">
+        <div class="otm-question">
+          <h3>📍 Risultati POI (${results.length})</h3>
+          <p style="color: #6c757d;">
+            Vicino a: <strong>${otmReference.label}</strong>
+          </p>
+        </div>
+        
+        <div class="otm-results" id="otmResultsList">
+          ${resultsHtml}
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+          <button class="btn btn-ghost" onclick="showCategoriesStep()">
+            ← Cambia Ricerca
+          </button>
+        </div>
+      </div>
+    `;
+    document.getElementById('otmContent').innerHTML = content;
+    announce(`Trovati ${results.length} risultati`);
+    
+    // Salva risultati per selectPOI
+    window.otmCurrentResults = results;
+    
+    setTimeout(() => {
+      document.querySelector('.otm-results .btn').focus();
+    }, 100);
+  }
+  
+  /**
+   * Seleziona un POI come destinazione
+   */
+  function selectPOI(index) {
+    const poi = window.otmCurrentResults[index];
+    
+    otmDestination = {
+      lat: poi.geometry.location.lat(),
+      lng: poi.geometry.location.lng(),
+      label: poi.name + ' - ' + (poi.vicinity || ''),
+      timestamp: Date.now()
+    };
+    
+    // Salva in localStorage
+    localStorage.setItem('otm_destination', JSON.stringify(otmDestination));
+    
+    notify('✅ Destinazione impostata!', 'success');
+    announce('Destinazione impostata: ' + poi.name);
+    
+    startTrackingScreen();
+  }
+  
+  /**
+   * SCHERMO TRACKING: Avvia il tracking della distanza
+   */
+  function startTrackingScreen() {
+    const content = `
+      <div class="otm-step active">
+        <div class="otm-tracking">
+          <div class="otm-destination-info">
+            <h4>📍 Destinazione</h4>
+            <p style="color: #495057; font-size: 1.05em;">${otmDestination.label}</p>
+          </div>
+          
+          <div class="otm-distance-display" id="otmDistanceDisplay">
+            <div class="label">Mancano:</div>
+            <div class="value" id="otmDistanceValue">---</div>
+          </div>
+          
+          <div class="otm-accuracy" id="otmAccuracy" style="display: none;">
+            <strong>⚠️ Accuratezza GPS:</strong> <span id="otmAccuracyValue">---</span> m
+            <br><small>Distanza indicativa</small>
+          </div>
+          
+          <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <strong style="color: #1976d2;">🎵 Controllo Manuale (se NON ascolti musica)</strong>
+            <p style="margin: 8px 0 0; font-size: 0.95em; color: #555;">
+              Se l'app è aperta SENZA altra musica in play, puoi premere <strong>Play ▶️</strong> 
+              nei controlli lockscreen per sentire la distanza.
+            </p>
+            <p style="margin: 8px 0 0; font-size: 0.9em; color: #777;">
+              ⚠️ Non funziona se Spotify/YouTube sono attivi (sovrascrivono i controlli)
+            </p>
+          </div>
+          
+          <div style="background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,.08);">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+              <div style="flex: 1;">
+                <strong style="color: #495057; display: block; margin-bottom: 4px;">🔊 Annunci Vocali Automatici</strong>
+                <small style="color: #6c757d; display: block;">
+                  Sotto 1 km: voce sintetica legge la distanza automaticamente
+                </small>
+              </div>
+              <button 
+                class="btn btn-secondary" 
+                onclick="toggleAutoVoice()" 
+                id="autoVoiceBtn"
+                style="padding: 8px 16px; font-size: 0.9em;" 
+                aria-label="Attiva o disattiva annunci vocali automatici"
+              >
+                🔊 Attiva
+              </button>
+            </div>
+          </div>
+          
+          <div style="background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,.08);">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+              <div style="flex: 1;">
+                <strong style="color: #495057; display: block; margin-bottom: 4px;">📳 Vibrazioni</strong>
+                <small style="color: #6c757d; display: block;" id="vibrationSummary">
+                  Breve a <span id="vibShort1Display">500</span>m, lunga a <span id="vibLong1Display">150</span>m
+                </small>
+              </div>
+              <button class="btn btn-secondary" onclick="openVibrationSettings()" style="padding: 8px 16px; font-size: 0.9em;" aria-label="Regola impostazioni vibrazioni">
+                ⚙️ Regola
+              </button>
+            </div>
+          </div>
+          
+          <div style="background: #d4edda; border-left: 4px solid #28a745; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+            <strong style="color: #155724;">✅ Auto-Annuncio Riapertura</strong>
+            <p style="margin: 8px 0 0; font-size: 0.95em; color: #155724;">
+              Ogni volta che riapri l'app (da task switcher o sblocchi schermo), 
+              sentirai SUBITO la distanza attuale + vibrazione breve.
+            </p>
+          </div>
+          
+          <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 6px; margin-bottom: 20px;">
+            <strong>💡 Importante iOS/Safari:</strong>
+            <p style="margin: 8px 0 0; font-size: 0.95em;">
+              Safari blocca il GPS dopo <strong>30 secondi</strong> se chiudi completamente l'app. 
+              Tienila aperta (anche minimizzata) per funzionamento continuo.
+            </p>
+            <p style="margin: 8px 0 0; font-size: 0.9em; color: #856404;">
+              <strong>Best practice:</strong> Riapri l'app ogni 2-3 minuti per sentire la distanza aggiornata.
+            </p>
+          </div>
+          
+          <div class="otm-buttons">
+            <button class="btn btn-danger" onclick="stopAndReturn()" style="background: linear-gradient(135deg, #dc3545, #c82333);">
+              ⏹️ Stop
+            </button>
+            <button class="btn btn-secondary" onclick="showInitialChoice()">
+              🔄 Cambia Destinazione
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.getElementById('otmContent').innerHTML = content;
+    announce('Tracking avviato');
+    
+    // Carica impostazioni
+    loadVibrationSettings();
+    loadAutoVoiceState();
+    
+    // Avvia watchPosition
+    startTracking();
+  }
+  
+  /**
+   * Toggle annunci vocali automatici
+   */
+  function toggleAutoVoice() {
+    const btn = document.getElementById('autoVoiceBtn');
+    
+    if (window.otmAutoVoiceEnabled) {
+      // Disattiva
+      window.otmAutoVoiceEnabled = false;
+      btn.textContent = '🔊 Attiva';
+      btn.setAttribute('aria-label', 'Attiva annunci vocali automatici');
+      localStorage.setItem('otm_auto_voice', 'false');
+      notify('🔇 Annunci automatici disattivati', 'info');
+      announce('Annunci vocali automatici disattivati');
+    } else {
+      // Attiva
+      if (!('speechSynthesis' in window)) {
+        notify('⚠️ Il tuo browser non supporta la sintesi vocale', 'error');
+        return;
+      }
+      
+      window.otmAutoVoiceEnabled = true;
+      btn.textContent = '🔇 Disattiva';
+      btn.setAttribute('aria-label', 'Disattiva annunci vocali automatici');
+      localStorage.setItem('otm_auto_voice', 'true');
+      
+      speakDistance('Annunci vocali automatici attivati. Partiranno sotto 1 chilometro');
+      notify('🔊 Annunci automatici attivati (sotto 1 km)', 'success');
+    }
+  }
+  
+  /**
+   * Carica stato annunci vocali automatici
+   */
+  function loadAutoVoiceState() {
+    const saved = localStorage.getItem('otm_auto_voice');
+    window.otmAutoVoiceEnabled = saved === 'true';
+    
+    const btn = document.getElementById('autoVoiceBtn');
+    if (btn) {
+      if (window.otmAutoVoiceEnabled) {
+        btn.textContent = '🔇 Disattiva';
+        btn.setAttribute('aria-label', 'Disattiva annunci vocali automatici');
+      } else {
+        btn.textContent = '🔊 Attiva';
+        btn.setAttribute('aria-label', 'Attiva annunci vocali automatici');
+      }
+    }
+  }
+  
+  /**
+   * Pronuncia distanza con sintesi vocale
+   */
+  function speakDistance(text) {
+    if (!('speechSynthesis' in window)) {
+      console.log('Sintesi vocale non supportata');
+      return;
+    }
+    
+    // Cancella eventuali annunci precedenti
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'it-IT';
+    utterance.rate = 1.0; // Velocità normale
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+    
+    window.speechSynthesis.speak(utterance);
+  }
+  
+  /**
+   * Apre il pannello impostazioni vibrazioni
+   */
+  function openVibrationSettings() {
+    // Carica valori correnti
+    const settings = getVibrationSettings();
+    
+    const content = `
+      <div class="otm-step active">
+        <div class="otm-question">
+          <h3>📳 Impostazioni Vibrazioni</h3>
+          <p style="color: #6c757d; margin-bottom: 20px;">
+            Personalizza quando ricevere feedback tattile durante il tragitto
+          </p>
+        </div>
+        
+        <div class="otm-input-group">
+          <label for="vibShort1">
+            <strong>Prima Vibrazione (breve - 200ms)</strong>
+          </label>
+          <div style="display: flex; gap: 10px; align-items: center; margin-top: 8px;">
+            <span style="min-width: 20px;">A</span>
+            <input type="number" 
+                   id="vibShort1" 
+                   value="${settings.short1}" 
+                   min="50" 
+                   max="2000" 
+                   step="10"
+                   style="flex: 1; padding: 12px;"
+                   aria-label="Metri per prima vibrazione breve">
+            <span style="min-width: 50px;">metri</span>
+          </div>
+          <small style="display: block; margin-top: 8px; color: #6c757d;">
+            Esempio: 500 metri = vibrazione breve quando sei a metà strada
+          </small>
+        </div>
+        
+        <div class="otm-input-group">
+          <label for="vibLong1">
+            <strong>Seconda Vibrazione (lunga - 500ms)</strong>
+          </label>
+          <div style="display: flex; gap: 10px; align-items: center; margin-top: 8px;">
+            <span style="min-width: 20px;">A</span>
+            <input type="number" 
+                   id="vibLong1" 
+                   value="${settings.long1}" 
+                   min="20" 
+                   max="1000" 
+                   step="10"
+                   style="flex: 1; padding: 12px;"
+                   aria-label="Metri per vibrazione lunga">
+            <span style="min-width: 50px;">metri</span>
+          </div>
+          <small style="display: block; margin-top: 8px; color: #6c757d;">
+            Esempio: 150 metri = vibrazione lunga quando sei quasi arrivato
+          </small>
+        </div>
+        
+        <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 12px; border-radius: 6px; margin-top: 15px;">
+          <strong style="color: #1976d2;">💡 Suggerimento</strong>
+          <p style="margin: 8px 0 0; color: #555; font-size: 0.95em;">
+            La vibrazione breve dovrebbe essere a una distanza maggiore della lunga. 
+            Esempio: 500m (breve) e 150m (lunga)
+          </p>
+        </div>
+        
+        <div class="otm-buttons" style="margin-top: 20px;">
+          <button class="btn btn-green" onclick="saveVibrationSettings()">
+            ✅ Salva Impostazioni
+          </button>
+          <button class="btn btn-ghost" onclick="startTrackingScreen()">
+            ❌ Annulla
+          </button>
+        </div>
+      </div>
+    `;
+    
+    // Stop temporaneo tracking per modificare impostazioni
+    stopTracking();
+    
+    document.getElementById('otmContent').innerHTML = content;
+    announce('Impostazioni vibrazioni');
+    
+    setTimeout(() => {
+      document.getElementById('vibShort1').focus();
+    }, 100);
+  }
+  
+  /**
+   * Carica impostazioni vibrazioni da localStorage
+   */
+  function loadVibrationSettings() {
+    const settings = getVibrationSettings();
+    
+    // Aggiorna display se gli elementi esistono
+    const short1Display = document.getElementById('vibShort1Display');
+    const long1Display = document.getElementById('vibLong1Display');
+    
+    if (short1Display) short1Display.textContent = settings.short1;
+    if (long1Display) long1Display.textContent = settings.long1;
+  }
+  
+  /**
+   * Ottiene impostazioni vibrazioni (da localStorage o default)
+   */
+  function getVibrationSettings() {
+    try {
+      const saved = localStorage.getItem('otm_vibration_settings');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error('Errore caricamento impostazioni vibrazioni:', e);
+    }
+    
+    // Default
+    return {
+      short1: 500,  // Prima vibrazione breve a 500m
+      long1: 150    // Vibrazione lunga a 150m
+    };
+  }
+  
+  /**
+   * Salva impostazioni vibrazioni
+   */
+  function saveVibrationSettings() {
+    const short1 = parseInt(document.getElementById('vibShort1').value) || 500;
+    const long1 = parseInt(document.getElementById('vibLong1').value) || 150;
+    
+    // Validazione
+    if (short1 < 50 || short1 > 2000) {
+      notify('⚠️ Prima vibrazione: inserisci un valore tra 50 e 2000 metri', 'error');
+      return;
+    }
+    
+    if (long1 < 20 || long1 > 1000) {
+      notify('⚠️ Seconda vibrazione: inserisci un valore tra 20 e 1000 metri', 'error');
+      return;
+    }
+    
+    if (long1 >= short1) {
+      notify('⚠️ La vibrazione lunga dovrebbe essere a una distanza minore della breve', 'error');
+      return;
+    }
+    
+    // Salva
+    const settings = { short1, long1 };
+    localStorage.setItem('otm_vibration_settings', JSON.stringify(settings));
+    
+    notify('✅ Impostazioni vibrazioni salvate', 'success');
+    announce('Impostazioni vibrazioni salvate');
+    
+    // Torna al tracking
+    startTrackingScreen();
+    
+    // Riavvia watchPosition se era attivo prima
+    // NOTA: startTrackingScreen() chiama già startTracking() automaticamente
+  }
+  
+  /**
+   * Avvia il tracking GPS continuo
+   */
+  async function startTracking() {
+    if (!navigator.geolocation) {
+      notify('❌ Geolocalizzazione non supportata', 'error');
+      return;
+    }
+    
+    // Reset variabili annuncio e vibrazioni
+    otmLastAnnouncedDistance = null;
+    otmLastAnnouncedTime = Date.now();
+    otmVibratedShort = false;
+    otmVibratedLong = false;
+    
+    // 🆕 Richiedi permesso notifiche per tracking in background
+    const notifGranted = await requestNotificationPermission();
+    if (notifGranted) {
+      notify('✅ Notifiche abilitate: vedrai la distanza anche quando l\'app è in background', 'success');
+    }
+    
+    // 🆕 Configura Media Session per controllo da lockscreen
+    setupMediaSessionControls();
+    
+    const options = {
+      enableHighAccuracy: true,
+      maximumAge: 10000,
+      timeout: 27000
+    };
+    
+    otmWatchId = navigator.geolocation.watchPosition(
+      onPositionUpdate,
+      onPositionError,
+      options
+    );
+    
+    notify('✅ Tracking GPS avviato', 'success');
+  }
+  
+  /**
+   * Configura controlli Media Session per lockscreen
+   */
+  function setupMediaSessionControls() {
+    if (!('mediaSession' in navigator)) {
+      console.log('Media Session API non supportata');
+      return;
+    }
+    
+    // Imposta metadata per mostrare info tracking nella lockscreen
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: '📍 Tracking Distanza',
+      artist: otmDestination.label,
+      album: 'App Mobilità',
+      artwork: [
+        {
+          src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><circle cx="256" cy="256" r="200" fill="%2328a745"/><text x="256" y="340" font-size="200" text-anchor="middle" fill="white">📍</text></svg>',
+          sizes: '512x512',
+          type: 'image/svg+xml'
+        }
+      ]
+    });
+    
+    // PULSANTE PLAY = "Dimmi quanti metri mancano"
+    navigator.mediaSession.setActionHandler('play', () => {
+      announceCurrentDistance();
+    });
+    
+    // PULSANTE NEXT = "Dimmi quanti metri mancano" (alternativo)
+    navigator.mediaSession.setActionHandler('nexttrack', () => {
+      announceCurrentDistance();
+    });
+    
+    // PULSANTE PREVIOUS = "Ripeti ultima distanza"
+    navigator.mediaSession.setActionHandler('previoustrack', () => {
+      if (window.otmLastDistance) {
+        speakDistance(window.otmLastDistance);
+      } else {
+        speakDistance('Nessuna distanza disponibile');
+      }
+    });
+    
+    // PULSANTE PAUSE/STOP = "Ferma tracking"
+    navigator.mediaSession.setActionHandler('pause', () => {
+      speakDistance('Tracking fermato');
+      stopAndReturn();
+    });
+    
+    notify('🎵 Controlli lockscreen attivati: usa Play per sentire la distanza', 'success');
+    announce('Controlli lockscreen attivati: premi Play sulla lockscreen per sentire quanti metri mancano');
+  }
+  
+  /**
+   * Annuncia distanza corrente (chiamata da lockscreen)
+   */
+  function announceCurrentDistance() {
+    if (!otmDestination || !window.otmLastKnownPosition) {
+      speakDistance('GPS non ancora pronto, riprova tra qualche secondo');
+      return;
+    }
+    
+    const distance = haversineDistance(window.otmLastKnownPosition, otmDestination);
+    const distanceText = formatDistance(distance);
+    
+    // Salva per "ripeti"
+    window.otmLastDistance = `Mancano ${distanceText}`;
+    
+    // Annuncia
+    if (distance < 100) {
+      speakDistance(distanceText);
+    } else {
+      speakDistance(`Mancano ${distanceText}`);
+    }
+    
+    // Vibrazione breve come feedback
+    if (navigator.vibrate) {
+      navigator.vibrate(100);
+    }
+  }
+  
+  /**
+   * Callback per aggiornamento posizione GPS
+   */
+  function onPositionUpdate(position) {
+    const userPos = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
+    
+    // 🆕 Salva ultima posizione nota per interrogazioni manuali
+    window.otmLastKnownPosition = userPos;
+    
+    // Calcola distanza in linea d'aria
+    const distance = haversineDistance(userPos, otmDestination);
+    
+    // Aggiorna display
+    const distanceText = formatDistance(distance);
+    const distanceDisplay = document.getElementById('otmDistanceValue');
+    if (distanceDisplay) {
+      distanceDisplay.textContent = distanceText;
+    }
+    
+    // 🆕 Aggiorna titolo pagina per visualizzazione quando in background
+    document.title = `📍 ${distanceText} - Mobilità`;
+    
+    // Mostra accuratezza
+    const accuracy = position.coords.accuracy;
+    if (accuracy) {
+      const accDiv = document.getElementById('otmAccuracy');
+      const accValue = document.getElementById('otmAccuracyValue');
+      
+      if (accDiv && accValue) {
+        accValue.textContent = Math.round(accuracy);
+        
+        if (accuracy > 25) {
+          accDiv.style.display = 'block';
+          accDiv.classList.remove('good');
+        } else {
+          accDiv.style.display = 'block';
+          accDiv.classList.add('good');
+        }
+      }
+    }
+    
+    // Annuncia cambiamenti significativi (evita spam)
+    // Soglie progressive: più sei vicino, più sono frequenti
+    let threshold;
+    if (distance > 600) {
+      threshold = 100; // Ogni 100m da 1km a 600m
+    } else if (distance > 200) {
+      threshold = 50;  // Ogni 50m da 600m a 200m
+    } else if (distance > 80) {
+      threshold = 30;  // Ogni 30m da 200m a 80m
+    } else {
+      threshold = 10;  // Ogni 10m sotto 80m
+    }
+    
+    const shouldAnnounce = 
+      otmLastAnnouncedDistance === null ||
+      Math.abs(distance - otmLastAnnouncedDistance) >= threshold ||
+      (Date.now() - otmLastAnnouncedTime) >= 10000;
+    
+    if (shouldAnnounce) {
+      // Sotto i 100m: annuncia solo il numero (es. "50 metri")
+      // Sopra i 100m: annuncia "Mancano X"
+      let announcement;
+      if (distance < 100) {
+        announcement = distanceText; // Solo "50 metri" o "80 metri"
+      } else {
+        announcement = `Mancano ${distanceText}`; // "Mancano 150 metri" o "Mancano 1,2 chilometri"
+      }
+      
+      announce(announcement);
+      
+      // 🆕 ANNUNCIO VOCALE AUTOMATICO (solo sotto 1 km se attivato)
+      if (window.otmAutoVoiceEnabled && distance < 1000) {
+        // Sotto 1km: annuncia solo il numero (es. "450 metri")
+        speakDistance(distanceText);
+      }
+      
+      // 🆕 NOTIFICA quando app in background (opzionale)
+      if (document.hidden && 'Notification' in window && Notification.permission === 'granted') {
+        showDistanceNotification(distanceText);
+      }
+      
+      // 🆕 VIBRAZIONE strategica con impostazioni personalizzate
+      const vibSettings = getVibrationSettings();
+      
+      // Vibrazione breve (una sola volta quando si passa il checkpoint AVVICINANDOSI)
+      if (distance <= vibSettings.short1 && !otmVibratedShort && navigator.vibrate) {
+        // Vibra solo se ti stai avvicinando (distanza diminuisce)
+        if (otmLastAnnouncedDistance === null || distance < otmLastAnnouncedDistance) {
+          navigator.vibrate(200); // 200ms
+          otmVibratedShort = true;
+        }
+      }
+      
+      // Vibrazione lunga (una sola volta quando si passa il checkpoint AVVICINANDOSI)
+      if (distance <= vibSettings.long1 && !otmVibratedLong && navigator.vibrate) {
+        // Vibra solo se ti stai avvicinando (distanza diminuisce)
+        if (otmLastAnnouncedDistance === null || distance < otmLastAnnouncedDistance) {
+          navigator.vibrate(500); // 500ms
+          otmVibratedLong = true;
+        }
+      }
+      
+      otmLastAnnouncedDistance = distance;
+      otmLastAnnouncedTime = Date.now();
+    }
+  }
+  
+  /**
+   * Mostra notifica distanza (quando app in background)
+   */
+  function showDistanceNotification(distanceText) {
+    // Chiudi notifica precedente se esiste
+    if (window.otmNotification) {
+      window.otmNotification.close();
+    }
+    
+    // Crea nuova notifica
+    window.otmNotification = new Notification('📍 Distanza Rimanente', {
+      body: `Mancano ${distanceText}`,
+      icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%2328a745"/><text x="50" y="65" font-size="50" text-anchor="middle" fill="white">📍</text></svg>',
+      tag: 'otm-distance', // Sostituisce notifica precedente invece di accumulare
+      requireInteraction: false,
+      silent: true // Non suonare ogni volta
+    });
+    
+    // Click su notifica riporta all'app
+    window.otmNotification.onclick = () => {
+      window.focus();
+      window.otmNotification.close();
+    };
+  }
+  
+  /**
+   * Richiedi permesso notifiche quando si avvia tracking
+   */
+  async function requestNotificationPermission() {
+    if (!('Notification' in window)) {
+      return false; // Browser non supporta notifiche
+    }
+    
+    if (Notification.permission === 'granted') {
+      return true;
+    }
+    
+    if (Notification.permission !== 'denied') {
+      const permission = await Notification.requestPermission();
+      return permission === 'granted';
+    }
+    
+    return false;
+  }
+  
+  /**
+   * Callback per errore GPS
+   */
+  function onPositionError(error) {
+    let message = '';
+    switch(error.code) {
+      case error.PERMISSION_DENIED:
+        message = '❌ Permesso GPS negato';
+        break;
+      case error.POSITION_UNAVAILABLE:
+        message = '⚠️ Posizione non disponibile';
+        break;
+      case error.TIMEOUT:
+        message = '⏱️ Timeout GPS';
+        break;
+      default:
+        message = '❌ Errore GPS sconosciuto';
+    }
+    
+    notify(message, 'error');
+    announce(message);
+  }
+  
+  /**
+   * Ferma il tracking
+   */
+  function stopTracking() {
+    if (otmWatchId !== null) {
+      navigator.geolocation.clearWatch(otmWatchId);
+      otmWatchId = null;
+      notify('⏹️ Tracking fermato', 'info');
+    }
+  }
+  
+  /**
+   * Ferma e torna alla schermata iniziale
+   */
+  function stopAndReturn() {
+    stopTracking();
+    showInitialChoice();
+  }
+  
+  // Chiude overlay con Esc
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const overlay = document.getElementById('onTheMoveOverlay');
+      if (overlay.classList.contains('active')) {
+        closeOnTheMove();
+      }
+    }
+  });
+  
+  // 🆕 ANNUNCIO AUTOMATICO quando l'app torna visibile (fondamentale per iOS)
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && otmWatchId !== null && otmDestination && window.otmLastKnownPosition) {
+      // App tornata visibile E tracking attivo
+      // Annuncia SUBITO la distanza attuale
+      const distance = haversineDistance(window.otmLastKnownPosition, otmDestination);
+      const distanceText = formatDistance(distance);
+      
+      // Annuncia immediatamente
+      setTimeout(() => {
+        if (distance < 100) {
+          speakDistance(distanceText);
+        } else {
+          speakDistance(`Mancano ${distanceText}`);
+        }
+        
+        // Vibrazione breve come feedback "app riattivata"
+        if (navigator.vibrate) {
+          navigator.vibrate(100);
+        }
+      }, 500); // Piccolo delay per dare tempo al sistema di riattivarsi
+    }
+  });
+
+  // ==========================================
+  // FINE USA IN MOVIMENTO
+  // ==========================================
+
   window.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 App Mobilità');
     if (!check()) {
@@ -7335,6 +9044,21 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
 
     </div>
   </div>
+</div>
+
+<!-- 🆕 OVERLAY USA IN MOVIMENTO -->
+<div id="onTheMoveOverlay" role="dialog" aria-labelledby="otmTitle" aria-modal="true">
+  <div class="otm-header">
+    <h2 id="otmTitle">🚶 Usa in Movimento</h2>
+    <p id="otmSubtitle">Traccia la distanza in linea d'aria verso una destinazione</p>
+  </div>
+  
+  <div class="otm-content" id="otmContent">
+    <!-- Gli step verranno generati dinamicamente dal JavaScript -->
+  </div>
+  
+  <!-- Region per annunci screen reader -->
+  <div id="statusAnnouncer" role="status" aria-live="polite" aria-atomic="true"></div>
 </div>
 
 </body>
