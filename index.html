@@ -1128,7 +1128,7 @@ body.api-setup-active::before {
 <button class="guide-icon" id="guideIcon" aria-label="Apri guida completa all'uso dell'app" title="Guida completa all'uso dell'app">📖</button>
 
 <!-- Pulsante Report Diagnostico -->
-<button class="report-icon" id="reportIcon" aria-label="Visualizza report diagnostico e log errori" title="Report Diagnostico" onclick="">📊</button>
+<button class="report-icon" id="reportIcon" aria-label="Visualizza report diagnostico e log errori" title="Report Diagnostico" onclick="AppLogger.showReport()">📊</button>
 
 <div id="apiKeyModal" class="modal">
   <div class="modal-content">
@@ -1233,6 +1233,243 @@ body.api-setup-active::before {
     // Imposta a true per vedere log dettagliati nella console
     const DEBUG = true;
     
+    // Funzione helper per log condizionali
+    function debugLog(...args) {
+      if (DEBUG) console.log(...args);
+    }
+
+    // ========================
+    // 🆕 SISTEMA DI LOGGING AVANZATO
+    // ========================
+    
+    const AppLogger = {
+      logs: [],
+      errors: [],
+      warnings: [],
+      info: [],
+      startTime: Date.now(),
+      
+      // Aggiunge log
+      log(type, category, message, data = null) {
+        const entry = {
+          timestamp: Date.now() - this.startTime,
+          time: new Date().toISOString(),
+          type: type,
+          category: category,
+          message: message,
+          data: data
+        };
+        
+        this.logs.push(entry);
+        
+        switch(type) {
+          case 'error':
+            this.errors.push(entry);
+            console.error(`[${category}]`, message, data || '');
+            this.updateReportButton();
+            break;
+          case 'warn':
+            this.warnings.push(entry);
+            console.warn(`[${category}]`, message, data || '');
+            this.updateReportButton();
+            break;
+          case 'info':
+            this.info.push(entry);
+            console.info(`[${category}]`, message, data || '');
+            break;
+          default:
+            console.log(`[${category}]`, message, data || '');
+        }
+      },
+      
+      // Aggiorna badge pulsante report
+      updateReportButton() {
+        const btn = document.getElementById('reportIcon');
+        if (!btn) return;
+        
+        if (this.errors.length > 0) {
+          btn.classList.add('has-errors');
+          btn.setAttribute('aria-label', `Report Diagnostico - ${this.errors.length} errori rilevati`);
+          btn.title = `Report Diagnostico - ${this.errors.length} errori`;
+        } else if (this.warnings.length > 0) {
+          btn.setAttribute('aria-label', `Report Diagnostico - ${this.warnings.length} avvisi`);
+          btn.title = `Report Diagnostico - ${this.warnings.length} avvisi`;
+        }
+      },
+      
+      // Metodi shorthand
+      error(category, message, data) { this.log('error', category, message, data); },
+      warn(category, message, data) { this.log('warn', category, message, data); },
+      logInfo(category, message, data) { this.log('info', category, message, data); },
+      debug(category, message, data) { this.log('debug', category, message, data); },
+      
+      // Genera report testuale
+      generateReport() {
+        const elapsed = ((Date.now() - this.startTime) / 1000).toFixed(2);
+        
+        let report = '═══════════════════════════════════════════════════════════\n';
+        report += '  REPORT DIAGNOSTICO - APP MOBILITÀ E ORIENTAMENTO\n';
+        report += '═══════════════════════════════════════════════════════════\n\n';
+        report += `📅 Data: ${new Date().toLocaleString('it-IT')}\n`;
+        report += `⏱️  Tempo esecuzione: ${elapsed} secondi\n`;
+        report += `📊 Totale eventi: ${this.logs.length}\n`;
+        report += `   • Errori: ${this.errors.length}\n`;
+        report += `   • Avvisi: ${this.warnings.length}\n`;
+        report += `   • Info: ${this.info.length}\n\n`;
+        
+        // Browser info
+        report += '🌐 INFORMAZIONI BROWSER\n';
+        report += '─────────────────────────────────────────────────────────\n';
+        report += `User Agent: ${navigator.userAgent}\n`;
+        report += `Lingua: ${navigator.language}\n`;
+        report += `Piattaforma: ${navigator.platform}\n`;
+        report += `Online: ${navigator.onLine ? 'Sì' : 'No'}\n`;
+        report += `Cookie abilitati: ${navigator.cookieEnabled ? 'Sì' : 'No'}\n\n`;
+        
+        // Feature detection
+        report += '🔧 FUNZIONALITÀ DISPONIBILI\n';
+        report += '─────────────────────────────────────────────────────────\n';
+        report += `✓ Geolocation API: ${navigator.geolocation ? 'Sì' : 'No'}\n`;
+        report += `✓ Local Storage: ${typeof(Storage) !== 'undefined' ? 'Sì' : 'No'}\n`;
+        report += `✓ Service Worker: ${'serviceWorker' in navigator ? 'Sì' : 'No'}\n`;
+        report += `✓ Notification API: ${'Notification' in window ? 'Sì' : 'No'}\n`;
+        report += `✓ Vibration API: ${navigator.vibrate ? 'Sì' : 'No'}\n`;
+        report += `✓ Media Session: ${'mediaSession' in navigator ? 'Sì' : 'No'}\n`;
+        report += `✓ Speech Synthesis: ${'speechSynthesis' in window ? 'Sì' : 'No'}\n\n`;
+        
+        // Errori
+        if (this.errors.length > 0) {
+          report += '❌ ERRORI RISCONTRATI\n';
+          report += '─────────────────────────────────────────────────────────\n';
+          this.errors.forEach((err, i) => {
+            report += `${i + 1}. [${err.category}] ${err.message}\n`;
+            report += `   Tempo: +${(err.timestamp / 1000).toFixed(2)}s\n`;
+            if (err.data) {
+              report += `   Dettagli: ${JSON.stringify(err.data, null, 2)}\n`;
+            }
+            report += '\n';
+          });
+        }
+        
+        // Avvisi
+        if (this.warnings.length > 0) {
+          report += '⚠️  AVVISI\n';
+          report += '─────────────────────────────────────────────────────────\n';
+          this.warnings.forEach((warn, i) => {
+            report += `${i + 1}. [${warn.category}] ${warn.message}\n`;
+            report += `   Tempo: +${(warn.timestamp / 1000).toFixed(2)}s\n`;
+            if (warn.data) {
+              report += `   Dettagli: ${JSON.stringify(warn.data, null, 2)}\n`;
+            }
+            report += '\n';
+          });
+        }
+        
+        // Info principali
+        if (this.info.length > 0) {
+          report += 'ℹ️  EVENTI PRINCIPALI\n';
+          report += '─────────────────────────────────────────────────────────\n';
+          this.info.slice(0, 20).forEach((info, i) => {
+            report += `${i + 1}. [${info.category}] ${info.message}\n`;
+            report += `   Tempo: +${(info.timestamp / 1000).toFixed(2)}s\n`;
+          });
+          if (this.info.length > 20) {
+            report += `\n... e altri ${this.info.length - 20} eventi\n`;
+          }
+          report += '\n';
+        }
+        
+        // Timeline completa (ultimi 50 eventi)
+        report += '📋 TIMELINE EVENTI (ultimi 50)\n';
+        report += '─────────────────────────────────────────────────────────\n';
+        this.logs.slice(-50).forEach((log, i) => {
+          const icon = log.type === 'error' ? '❌' : log.type === 'warn' ? '⚠️' : log.type === 'info' ? 'ℹ️' : '📝';
+          report += `${icon} [+${(log.timestamp / 1000).toFixed(2)}s] [${log.category}] ${log.message}\n`;
+        });
+        
+        report += '\n═══════════════════════════════════════════════════════════\n';
+        report += 'Fine del report\n';
+        report += '═══════════════════════════════════════════════════════════\n';
+        
+        return report;
+      },
+      
+      // Scarica report come file
+      downloadReport() {
+        const report = this.generateReport();
+        const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `mobilita-report-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        notify('📥 Report scaricato!', 'success');
+        AppLogger.logInfo('REPORT', 'Report diagnostico scaricato');
+      },
+      
+      // Mostra report in modal
+      showReport() {
+        const report = this.generateReport();
+        const html = `
+          <div style="padding: 20px;">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📊 Report Diagnostico</h2>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+              <p><strong>Errori:</strong> ${this.errors.length}</p>
+              <p><strong>Avvisi:</strong> ${this.warnings.length}</p>
+              <p><strong>Totale eventi:</strong> ${this.logs.length}</p>
+            </div>
+            <pre style="background: #fff; padding: 15px; border: 1px solid #dee2e6; border-radius: 8px; max-height: 400px; overflow-y: auto; font-size: 12px; line-height: 1.4;">${report}</pre>
+            <div class="modal-buttons" style="margin-top: 20px;">
+              <button class="btn btn-ghost" onclick="closeModal()">Chiudi</button>
+              <button class="btn" onclick="AppLogger.downloadReport()">📥 Scarica Report</button>
+              <button class="btn btn-secondary" onclick="navigator.clipboard.writeText(AppLogger.generateReport()).then(() => notify('✅ Report copiato!', 'success'))">📋 Copia</button>
+            </div>
+          </div>
+        `;
+        
+        openModal('Report Diagnostico', html);
+      },
+      
+      // Pulisci log
+      clear() {
+        this.logs = [];
+        this.errors = [];
+        this.warnings = [];
+        this.info = [];
+        this.startTime = Date.now();
+        console.clear();
+        AppLogger.logInfo('SYSTEM', 'Log puliti');
+      }
+    };
+    
+    // Intercetta errori globali
+    window.addEventListener('error', function(e) {
+      AppLogger.error('GLOBAL', 'Errore non gestito: ' + e.message, {
+        filename: e.filename,
+        lineno: e.lineno,
+        colno: e.colno,
+        error: e.error ? e.error.stack : null
+      });
+    });
+    
+    // Intercetta promise rejection
+    window.addEventListener('unhandledrejection', function(e) {
+      AppLogger.error('PROMISE', 'Promise rejection non gestita', {
+        reason: e.reason,
+        promise: e.promise
+      });
+    });
+    
+    // Esponi globalmente
+    window.AppLogger = AppLogger;
+    
+    // Log iniziale
+    AppLogger.logInfo('SYSTEM', 'App Mobilità e Orientamento inizializzata');
+
     // ========================
     // UTILITY RETE
     // ========================
@@ -1390,7 +1627,8 @@ body.api-setup-active::before {
             resDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             
         } catch (error) {
-const html = `
+            console.error('Errore durante il confronto:', error);
+            const html = `
                 <div style="border-left: 5px solid #dc3545; padding: 15px; background: #fff; border-radius: 8px;">
                     <h4 style="color: #dc3545; margin: 0 0 10px 0;">❌ Errore Tecnico</h4>
                     <p style="margin: 0;">Si è verificato un errore durante l'analisi: ${error.message}</p>
@@ -1463,28 +1701,36 @@ const html = `
     // ---------------
     
     function initMap() {
-// Verifica caricamento librerie Google Maps
+      AppLogger.logInfo('INIT', 'Inizializzazione Google Maps...');
+      
+      // Verifica caricamento librerie Google Maps
       if (typeof google === 'undefined' || !google.maps) {
         const msg = 'Google Maps non caricato correttamente';
-notify('❌ Errore: ' + msg, 'error');
+        AppLogger.error('INIT', msg);
+        notify('❌ Errore: ' + msg, 'error');
         announceToScreenReader('Errore nel caricamento di Google Maps', 'assertive');
         return;
       }
       
       if (!google.maps.geometry || !google.maps.geometry.spherical) {
         const msg = 'Libreria Geometry non caricata';
-notify('❌ Errore: ' + msg, 'error');
+        AppLogger.error('INIT', msg);
+        notify('❌ Errore: ' + msg, 'error');
         announceToScreenReader('Errore: libreria Geometry mancante', 'assertive');
         return;
       }
       
       if (!google.maps.places || !google.maps.places.PlacesService) {
         const msg = 'Libreria Places non caricata';
-notify('❌ Errore: ' + msg, 'error');
+        AppLogger.error('INIT', msg);
+        notify('❌ Errore: ' + msg, 'error');
         announceToScreenReader('Errore: libreria Places mancante', 'assertive');
         return;
       }
-const defaultPos = {lat: 41.9028, lng: 12.4964};
+      
+      AppLogger.logInfo('INIT', 'Tutte le librerie Google Maps caricate correttamente');
+      
+      const defaultPos = {lat: 41.9028, lng: 12.4964};
       map = new google.maps.Map(document.getElementById('map'), {center: defaultPos, zoom: 15});
       streetView = new google.maps.StreetViewPanorama(document.getElementById('streetview'), {position: defaultPos, pov: {heading: 0, pitch: 0}});
       map.setStreetView(streetView);
@@ -1625,6 +1871,7 @@ const defaultPos = {lat: 41.9028, lng: 12.4964};
     }
 
     function updateStatus(targetDiv, message, type = 'info', isHtml = false) {
+        console.log(`Stato (${targetDiv.id}):`, message);
          if (isHtml) {
             targetDiv.innerHTML = message;
         } else {
@@ -1639,6 +1886,7 @@ const defaultPos = {lat: 41.9028, lng: 12.4964};
     // ---------------
     // FUNZIONALITÀ MOBILITÀ (Sez. 1-5)
     // ---------------
+    
 
       // 🆕 Funzione per aggiornare il location bias dell'autocomplete
       window.updateAutocompleteBias = function() {
@@ -1653,12 +1901,15 @@ const defaultPos = {lat: 41.9028, lng: 12.4964};
               radius: 5000
             }).getBounds()
           );
-}
+          console.log('✅ Autocomplete aggiornato con nuova posizione');
+        }
       };
       
     function initAutocomplete() {
-
-// Opzioni base autocomplete
+      console.log('🔍 initAutocomplete chiamata');
+      console.log('📍 Controllo elementi DOM...');
+      
+      // Opzioni base autocomplete
       const acOptions = {
         fields: ['geometry', 'formatted_address', 'name', 'address_components'],
         types: ['geocode', 'establishment'],
@@ -1672,16 +1923,21 @@ const defaultPos = {lat: 41.9028, lng: 12.4964};
           window.currentPosition.lng
         );
         acOptions.radius = 5000; // Raggio di 5km per dare priorità ai risultati vicini
-}
+        console.log('📍 Autocomplete configurato con location bias:', window.currentPosition);
+      }
 
       // Autocomplete Sezione 1
       const input = document.getElementById('addressInput');
+      console.log('📍 addressInput trovato:', input);
+      console.log('📍 addressInput visibile:', input ? (input.offsetParent !== null) : 'N/A');
       if (!input) {
-return;
+        console.error('❌ Input addressInput non trovato!');
+        return;
       }
       
       if (!window.google || !google.maps || !google.maps.places) {
-notify('⚠️ Autocomplete non disponibile', 'error');
+        console.error('❌ Google Maps Places non disponibile per autocomplete');
+        notify('⚠️ Autocomplete non disponibile', 'error');
         return;
       }
       
@@ -1692,9 +1948,11 @@ notify('⚠️ Autocomplete non disponibile', 'error');
       
       try {
         autocomplete = new google.maps.places.Autocomplete(input, acOptions);
-debugLog('✅ Autocomplete inizializzato correttamente');
+        console.log('✅ Autocomplete creato:', autocomplete);
+        debugLog('✅ Autocomplete inizializzato correttamente');
       } catch (error) {
-notify('⚠️ Errore autocomplete: ' + error.message, 'error');
+        console.error('❌ Errore inizializzazione autocomplete:', error);
+        notify('⚠️ Errore autocomplete: ' + error.message, 'error');
         return;
       }
       
@@ -1731,7 +1989,8 @@ notify('⚠️ Errore autocomplete: ' + error.message, 'error');
           notify('🧭 Calibrando orientamento...', 'info');
           calculateOrientationAutomatically(coords, address)
             .catch(error => {
-});
+              console.warn("Orientamento automatico fallito:", error);
+            });
         }
       });
 
@@ -2298,7 +2557,8 @@ notify('⚠️ Errore autocomplete: ' + error.message, 'error');
           try {
             await calculateOrientationAutomatically(coords, formattedAddress);
           } catch (error) {
-// Non blocchiamo se l'orientamento fallisce
+            console.warn("Orientamento automatico fallito:", error);
+            // Non blocchiamo se l'orientamento fallisce
           }
           
         } else {
@@ -2411,7 +2671,8 @@ notify('⚠️ Errore autocomplete: ' + error.message, 'error');
     // 🚨 MODALE: Street View Non Trovato
     function showStreetViewNotFoundModal(coords, address) {
       buildingDirectionFromStreet = null;
-
+      
+      
       const modalBody = document.getElementById('modalBody');
       modalBody.innerHTML = `
         <div style="padding: 15px;">
@@ -2522,7 +2783,8 @@ notify('⚠️ Errore autocomplete: ' + error.message, 'error');
           try {
             await calculateOrientationAutomatically(coords, address);
           } catch (error) {
-}
+            console.warn("Orientamento automatico fallito:", error);
+          }
         });
       }, () => notify('❌ Impossibile ottenere la posizione', 'error'));
     }
@@ -3670,7 +3932,8 @@ notify('⚠️ Errore autocomplete: ' + error.message, 'error');
                 `;
               }
             } catch (err) {
-// 🆕 Fallback: mostra almeno l'istruzione base
+              console.error('Errore analisi orientamento:', err);
+              // 🆕 Fallback: mostra almeno l'istruzione base
               section6Integration = `
                 <div style="margin-top:15px; padding:12px; background:#fff3cd; border-left:5px solid #ffc107; border-radius:4px; font-size:0.95em; color:#856404;">
                   ⚠️ Calcolo orientamento non disponibile. Usa i punti cardinali dalla sezione "Direzione Reale".
@@ -3688,7 +3951,8 @@ notify('⚠️ Errore autocomplete: ' + error.message, 'error');
           try {
             await analyzeRoadCrossings(step, navInstructionEl);
           } catch (err) {
-}
+            console.error('Errore Ray Casting:', err);
+          }
         }
       } else { // Arrivo
         returnButton.style.display = 'block'; 
@@ -4142,7 +4406,8 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
             const data = await response.json();
             return (data?.length > 0) ? { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) } : null;
         } catch (error) {
-throw error;
+            console.error("Fallimento chiamata Nominatim:", error);
+            throw error;
         }
     }
     
@@ -4195,7 +4460,8 @@ throw error;
                         resolve(results[0]);
                     } else {
                         // Tentativo B (FALLBACK): Se il testo fallisce, usa le coordinate (più robusto)
-geocoder.geocode({ 'location': currentLocation }, (resLoc, stLoc) => {
+                        console.warn("Geocoding testuale fallito, uso coordinate fallback.");
+                        geocoder.geocode({ 'location': currentLocation }, (resLoc, stLoc) => {
                             if (stLoc === 'OK' && resLoc?.[0]) {
                                 resolve(resLoc[0]);
                             } else {
@@ -4224,7 +4490,8 @@ geocoder.geocode({ 'location': currentLocation }, (resLoc, stLoc) => {
                      updateStatus(orientationStatusDiv, `Analisi in corso (Passo 3/3): Indirizzo non trovato su OSM. Procedo solo con Google...`, 'info');
                 }
             } catch (osmError) {
-updateStatus(orientationStatusDiv, `Analisi in corso (Passo 3/3): Servizio OSM non disponibile. Procedo solo con Google...`, 'info');
+                console.warn("Errore Nominatim:", osmError);
+                updateStatus(orientationStatusDiv, `Analisi in corso (Passo 3/3): Servizio OSM non disponibile. Procedo solo con Google...`, 'info');
             }
 
             // *** PASSO 3: Analisi Geometrica ***
@@ -4494,9 +4761,11 @@ updateStatus(orientationStatusDiv, `Analisi in corso (Passo 3/3): Servizio OSM n
                     
                     debugLog('✅ Calcolo geometrico completato:', geometricResult);
                 } else {
-}
+                    console.warn('⚠️ Impossibile determinare segmento rilevante');
+                }
             } else {
-}
+                console.warn('⚠️ Geometria strada non disponibile da OSM');
+            }
         }
         
         // ================================================================
@@ -4513,9 +4782,11 @@ updateStatus(orientationStatusDiv, `Analisi in corso (Passo 3/3): Servizio OSM n
             if (streetViewResult.available) {
                 debugLog('✅ Validazione Street View completata:', streetViewResult);
             } else {
-}
+                console.warn('⚠️ Street View non disponibile:', streetViewResult.reason);
+            }
         } catch (e) {
-}
+            console.error('❌ Errore validazione Street View:', e);
+        }
         
         // ================================================================
         // CONFRONTO METODI (Fase 3)
@@ -4863,16 +5134,22 @@ updateStatus(orientationStatusDiv, `Analisi in corso (Passo 3/3): Servizio OSM n
      * Usa Overpass API (GRATIS!)
      */
     async function getStreetGeometryFromOSM(coords, streetName) {
-// Pulisci e crea varianti del nome strada
+        console.log('🔍 Ricerca geometria per:', streetName);
+        
+        // Pulisci e crea varianti del nome strada
         const variants = generateStreetNameVariants(streetName);
-// TENTATIVO 1: Ricerca con nome strada (raggio 200m)
+        console.log('📝 Varianti nome:', variants);
+        
+        // TENTATIVO 1: Ricerca con nome strada (raggio 200m)
         let osmData = await searchStreetByName(coords, variants, 200);
         
         if (osmData.success) {
-return osmData;
+            console.log('✅ Trovata con ricerca per nome');
+            return osmData;
         }
         
         // TENTATIVO 2: Ricerca solo per coordinate vicine (raggio 50m - molto conservativo)
+        console.log('⚠️ Nome non trovato, provo ricerca per coordinate (50m)...');
         osmData = await searchStreetByProximity(coords, 50);
         
         if (osmData.success) {
@@ -4886,11 +5163,15 @@ return osmData;
             
             // Verifica che ci sia almeno una corrispondenza parziale
             if (foundCore.includes(originalCore.split(' ')[0]) || originalCore.includes(foundCore.split(' ')[0])) {
-return osmData;
+                console.log('✅ Trovata per coordinate e nome verificato:', osmData.name);
+                return osmData;
             } else {
-}
+                console.warn('⚠️ Strada trovata ma nome non corrisponde:', osmData.name, 'vs', streetName);
+            }
         }
-return { success: false, error: 'Strada non trovata in OpenStreetMap. Prova con un indirizzo più preciso o verifica il nome della via.' };
+        
+        console.warn('❌ Nessuna geometria trovata');
+        return { success: false, error: 'Strada non trovata in OpenStreetMap. Prova con un indirizzo più preciso o verifica il nome della via.' };
     }
     
     // Genera varianti del nome strada per migliorare la ricerca
@@ -4987,6 +5268,7 @@ return { success: false, error: 'Strada non trovata in OpenStreetMap. Prova con 
                 
                 if (closestStreet) {
                     const foundName = closestStreet.tags?.name || 'Sconosciuta';
+                    console.log(`✅ Geometria strada trovata: ${foundName} (${closestStreet.geometry.length} nodi, distanza: ${minDistance.toFixed(1)}m)`);
                     
                     return {
                         success: true,
@@ -5000,10 +5282,13 @@ return { success: false, error: 'Strada non trovata in OpenStreetMap. Prova con 
                     };
                 }
             }
-return { success: false, error: 'Strada non trovata' };
+            
+            console.warn('⚠️ Nessuna geometria strada trovata in OSM');
+            return { success: false, error: 'Strada non trovata' };
             
         } catch (e) {
-return { success: false, error: `Errore OSM: ${e.message}` };
+            console.error('❌ Errore chiamata OSM:', e);
+            return { success: false, error: `Errore OSM: ${e.message}` };
         }
     }
 
@@ -5123,7 +5408,10 @@ return { success: false, error: `Errore OSM: ${e.message}` };
         
         const crossA = lineVector.x * vectorToA.y - lineVector.y * vectorToA.x;
         const crossB = lineVector.x * vectorToB.y - lineVector.y * vectorToB.x;
-
+        
+        console.log(`📐 Cross Product A: ${crossA.toFixed(8)}`);
+        console.log(`📐 Cross Product B: ${crossB.toFixed(8)}`);
+        
         // Tolleranza per punti quasi sulla linea
         const tolerance = 0.000001;
         
@@ -5218,7 +5506,8 @@ return { success: false, error: `Errore OSM: ${e.message}` };
             };
             
         } catch (e) {
-return { available: false, reason: e.message };
+            console.warn('Street View check failed:', e);
+            return { available: false, reason: e.message };
         }
     }
 
@@ -5542,6 +5831,7 @@ return { available: false, reason: e.message };
                 updateStatus(orientationStatusDiv, '❌ Impossibile verificare la precisione dell\'indirizzo', 'error');
             } else {
                 // Mostra info precisione
+                console.log(`📊 Precisione Geocoding: ${precisionData.type} (Score: ${precisionData.score}/100)`);
                 
                 // Se NON affidabile, mostra warning
                 if (!precisionData.reliable) {
@@ -5579,7 +5869,8 @@ return { available: false, reason: e.message };
             }
             
             if (locationInfo.isComplex) {
-announceToScreenReader(`Attenzione: ${locationInfo.type} rilevato. Calcolo con cautela.`);
+                console.log(`⚠️ Luogo complesso rilevato: ${locationInfo.type} - ${locationInfo.name}`);
+                announceToScreenReader(`Attenzione: ${locationInfo.type} rilevato. Calcolo con cautela.`);
                 
                 // Mostra warning dettagliato all'utente
                 showComplexLocationGuidance(locationInfo.type, locationInfo.name);
@@ -5623,13 +5914,17 @@ announceToScreenReader(`Attenzione: ${locationInfo.type} rilevato. Calcolo con c
                     if (cleanInputName.length <= 2 || svDesc.includes(cleanInputName)) {
                          bestData = closeData;
                          analysisMode = "STANDARD";
+                         console.log(`✅ Fase 1 OK: Punto standard trovato a ${dist.toFixed(1)}m`);
                     } else {
-}
+                        console.warn("Fase 1: Via diversa. Ignoro.");
+                    }
                 } else {
+                    console.warn(`⚠️ Fase 1: Punto troppo vicino (${dist.toFixed(2)}m). Rischio instabilità. Passo a Geometria.`);
                     announceToScreenReader("Punto troppo vicino. Passo a modalità geometrica.");
                 }
             } catch (e) {
-}
+                console.log("Fase 1: Nessun punto vicino trovato.");
+            }
 
             // ---------------------------------------------------------
             // FASE 2: TENTATIVO GEOMETRICO DISTANTE (Se Fase 1 fallita o saltata)
@@ -5650,6 +5945,7 @@ announceToScreenReader(`Attenzione: ${locationInfo.type} rilevato. Calcolo con c
                         // Dobbiamo assicurarci che il punto trovato sia DAVVERO lontano.
                         // Se Google ci ridà lo stesso punto a 2 metri, dobbiamo scartarlo e allargare il cerchio.
                         if (distFar < 10.0) {
+                            console.warn(`Fase 2 (Raggio ${r}): Punto trovato ma è ancora troppo vicino (${distFar.toFixed(1)}m). Scarto.`);
                             continue; // Salta al prossimo raggio
                         }
 
@@ -5660,12 +5956,14 @@ announceToScreenReader(`Attenzione: ${locationInfo.type} rilevato. Calcolo con c
                         if (cleanInputName.length > 2 && 
                             !svDesc.includes(cleanInputName) && 
                             !svShort.includes(cleanInputName)) {
+                            console.log(`Fase 2: Scartato punto distante su via diversa (${svDesc})`);
                             continue;
                         }
 
                         // Se siamo qui: Punto Lontano (>10m) + Stessa Via = PERFETTO.
                         bestData = farData;
                         analysisMode = "GEOMETRIC";
+                        console.log(`✅ Fase 2 OK: Punto geometrico a ${distFar.toFixed(1)}m`);
                         break; // Trovato, fermati.
                     } catch (e) {}
                 }
@@ -5725,7 +6023,8 @@ announceToScreenReader(`Attenzione: ${locationInfo.type} rilevato. Calcolo con c
             }
 
         } catch (fatalError) {
-updateStatus(orientationStatusDiv, `Errore Tecnico: ${fatalError.message}`, 'error');
+            console.error(fatalError);
+            updateStatus(orientationStatusDiv, `Errore Tecnico: ${fatalError.message}`, 'error');
             announceToScreenReader("Errore tecnico nell'analisi.");
         }
     }
@@ -5766,7 +6065,8 @@ updateStatus(orientationStatusDiv, `Errore Tecnico: ${fatalError.message}`, 'err
             
             // Usa service (già definito globalmente come placesService)
             if (!service) {
-resolve([]);
+                console.error("PlacesService non inizializzato");
+                resolve([]);
                 return;
             }
             
@@ -5780,9 +6080,12 @@ resolve([]);
                         );
                         return dist > 2;
                     });
-resolve(others);
+                    
+                    console.log(`Trovati ${others.length} indirizzi vicini`);
+                    resolve(others);
                 } else {
-resolve([]);
+                    console.log("Nessun indirizzo vicino trovato:", status);
+                    resolve([]);
                 }
             });
         });
@@ -5835,6 +6138,7 @@ resolve([]);
                 
                 // Match con la richiesta
                 if (mode === 'SAME_SIDE' && isParallel) {
+                    console.log(`Trovato vicino stesso lato: ${place.name}, allineamento ${alignment.toFixed(1)}°`);
                     return { 
                         svData: svData, 
                         address: place.name || place.vicinity,
@@ -5843,6 +6147,7 @@ resolve([]);
                 }
                 
                 if (mode === 'OPPOSITE_SIDE' && !isParallel) {
+                    console.log(`Trovato vicino lato opposto: ${place.name}, allineamento ${alignment.toFixed(1)}°`);
                     return { 
                         svData: svData, 
                         address: place.name || place.vicinity,
@@ -6045,6 +6350,7 @@ resolve([]);
                     const actualDistance = google.maps.geometry.spherical.computeDistanceBetween(targetLoc, svLoc);
                     
                     if (actualDistance < 4) {
+                        console.warn(`⚠️ Street View troppo vicino: ${actualDistance.toFixed(1)}m nel raggio ${radius}m. Provo raggio successivo.`);
                         continue; // Salta questo raggio, prova il prossimo
                     }
                     
@@ -6174,7 +6480,8 @@ resolve([]);
                     // Non ha trovato un asse chiaro (es. incrocio a 5 vie)
                     // Usa l'orientamento di caricamento del panorama
                     streetDirection = (streetView.getPov().heading + 360) % 360;
-} else {
+                     console.warn("Nessun asse stradale chiaro, uso il POV di caricamento.");
+                } else {
                      // Usa l'orientamento del primo link della coppia come direzione
                      streetDirection = (bestPair[0].heading + 360) % 360;
                 }
@@ -6406,7 +6713,8 @@ resolve([]);
         instructionDiv.appendChild(alertDiv);
         
       } catch (error) {
-loadingDiv.remove();
+        console.error('Errore Ray Casting:', error);
+        loadingDiv.remove();
       }
     }
     
@@ -6478,7 +6786,9 @@ loadingDiv.remove();
         return result;
         
       } catch (error) {
-// Paracadute: usa analisi testuale Google
+        console.error('Errore Overpass:', error);
+        
+        // Paracadute: usa analisi testuale Google
         const instruction = step.instructions?.toLowerCase() || '';
         if (instruction.includes('attraversa') || instruction.includes('cross') || instruction.includes('rotonda')) {
           return {
@@ -6650,7 +6960,8 @@ loadingDiv.remove();
         try {
           osmDetails = await checkRoadIntersection(startLoc, endLoc, step);
         } catch (e) {
-}
+          console.warn('⚠️ OSM non disponibile, procedo con Google');
+        }
         
         return {
           type: 'crossing',
@@ -6667,11 +6978,15 @@ loadingDiv.remove();
       }
       
       // 5. FONTE SECONDARIA: OSM
-try {
+      console.log('ℹ️ Google silenzioso, verifico OSM...');
+      
+      try {
         const osmData = await checkRoadIntersection(startLoc, endLoc, step);
         
         if (osmData.intersects) {
-return {
+          console.log('⚠️ OSM rileva attraversamento');
+          
+          return {
             type: 'crossing',
             angle: turnAngle,
             roadData: {
@@ -6689,13 +7004,15 @@ return {
         debugLog('✅ Nessun attraversamento (Google + OSM concordano)');
         
       } catch (error) {
-}
+        console.log('⚠️ OSM non disponibile, Google non indica attraversamento');
+      }
       
       // 6. POST-FERMATA
       const isPostTransit = prevStep && prevStep.travel_mode === 'TRANSIT';
       
       if (isPostTransit) {
-return {
+        console.log('🚍 Inversione dopo mezzo pubblico');
+        return {
           type: 'post_transit_uturn',
           angle: turnAngle,
           transitInfo: prevStep.transit_details
@@ -6727,7 +7044,8 @@ return {
       if (cached) {
         const data = JSON.parse(cached);
         if (Date.now() - data.timestamp < 86400000) { // 24h
-return data.result;
+          console.log('📦 Cache hit per intersezione strada');
+          return data.result;
         }
       }
       
@@ -6756,7 +7074,10 @@ return data.result;
             geometry: way.geometry.map(node => ({lat: node.lat, lng: node.lon})),
             tags: way.tags
           }));
-// Conta intersezioni
+        
+        console.log('🗺️ Overpass ha restituito', roads.length, 'strade');
+        
+        // Conta intersezioni
         const intersectionCount = countIntersections(start, end, roads);
         
         // Verifica presenza attraversamenti pedonali
@@ -6780,7 +7101,9 @@ return data.result;
         return result;
         
       } catch (error) {
-// ⚠️ OSM fallito → restituisci null (incertezza)
+        console.error('❌ Errore checkRoadIntersection:', error);
+        
+        // ⚠️ OSM fallito → restituisci null (incertezza)
         return {
           intersects: null, // ← "NON LO SO"
           count: 0,
@@ -6834,10 +7157,13 @@ return data.result;
         })
         .filter(c => c !== null)
         .sort((a, b) => a.distance - b.distance);
-return crosswalks;
+        
+        console.log('🚶 Trovati', crosswalks.length, 'attraversamenti pedonali');
+        return crosswalks;
         
       } catch (error) {
-return [];
+        console.warn('⚠️ Errore ricerca crosswalks:', error);
+        return [];
       }
     }
     
@@ -6971,6 +7297,7 @@ return [];
       }
     });
 
+
 // ===== GESTIONE API KEY =====
 (function() {
   const STORAGE = 'google_maps_api_key_mobilita';
@@ -7000,7 +7327,8 @@ return [];
 
   function load() {
     if (loaded) return;
-document.getElementById('apiKeySetup').style.display = 'none';
+    console.log('🔄 Caricamento Google Maps...');
+    document.getElementById('apiKeySetup').style.display = 'none';
     document.body.classList.remove('api-setup-active');
     document.getElementById('settingsIcon').style.display = 'flex';
     
@@ -7016,73 +7344,49 @@ document.getElementById('apiKeySetup').style.display = 'none';
       document.getElementById('settingsIcon').style.display = 'none';
     };
     sc.onload = () => {
-// Chiama initMap manualmente dopo il caricamento
+      console.log('✅ Maps caricato, chiamo initMap...');
+      // Chiama initMap manualmente dopo il caricamento
       if (typeof window.initMap === 'function') {
         window.initMap();
         notify('✅ App pronta!', 'success');
       } else {
-notify('❌ Errore inizializzazione', 'error');
+        console.error('❌ initMap non trovata!');
+        notify('❌ Errore inizializzazione', 'error');
       }
     };
     document.head.appendChild(sc);
     loaded = true;
   }
 
-  // ==========================================
-  // LISTENER API KEY SETUP (quando DOM è pronto)
-  // ==========================================
-  document.addEventListener('DOMContentLoaded', () => {
-    const saveBtn = document.getElementById('saveKeyBtn');
-    const testBtn = document.getElementById('testKeyBtn');
-    const toggleBtn = document.getElementById('toggleKeyBtn');
-    const apiInput = document.getElementById('apiKeyInput');
-    
-    if (saveBtn) {
-      saveBtn.addEventListener('click', () => {
-        const k = apiInput.value.trim();
-        if (!k) return notify('❌ Inserisci la chiave', 'error');
-        if (!k.startsWith('AIzaSy')) return notify('⚠️ Dovrebbe iniziare con AIzaSy', 'error');
-        localStorage.setItem(STORAGE, k);
-        window.userApiKey = k;
-        notify('✅ Salvata!', 'success');
-        setTimeout(load, 800);
-      });
-    }
+  document.getElementById('saveKeyBtn').addEventListener('click', () => {
+    const k = document.getElementById('apiKeyInput').value.trim();
+    if (!k) return notify('❌ Inserisci la chiave', 'error');
+    if (!k.startsWith('AIzaSy')) return notify('⚠️ Dovrebbe iniziare con AIzaSy', 'error');
+    localStorage.setItem(STORAGE, k);
+    window.userApiKey = k;
+    notify('✅ Salvata!', 'success');
+    setTimeout(load, 800);
+  });
 
-    if (testBtn) {
-      testBtn.addEventListener('click', async () => {
-        const k = apiInput.value.trim();
-        if (!k) return notify('❌ Inserisci la chiave', 'error');
-        const st = document.getElementById('apiKeyStatus');
-        st.innerHTML = '<p style="color:#17a2b8">🔄 Test...</p>';
-        try {
-          const r = await fetch('https://maps.googleapis.com/maps/api/geocode/json?address=Roma&key=' + k);
-          const d = await r.json();
-          if (d.status === 'OK') st.innerHTML = '<p style="color:#28a745;font-weight:600">✅ Valida!</p>';
-          else if (d.status === 'REQUEST_DENIED') st.innerHTML = '<p style="color:#dc3545;font-weight:600">❌ Rifiutata</p>';
-          else st.innerHTML = '<p style="color:#ff9800">⚠️ ' + d.status + '</p>';
-        } catch(e) {
-          st.innerHTML = '<p style="color:#dc3545">❌ Errore</p>';
-        }
-      });
+  document.getElementById('testKeyBtn').addEventListener('click', async () => {
+    const k = document.getElementById('apiKeyInput').value.trim();
+    if (!k) return notify('❌ Inserisci la chiave', 'error');
+    const st = document.getElementById('apiKeyStatus');
+    st.innerHTML = '<p style="color:#17a2b8">🔄 Test...</p>';
+    try {
+      const r = await fetch('https://maps.googleapis.com/maps/api/geocode/json?address=Roma&key=' + k);
+      const d = await r.json();
+      if (d.status === 'OK') st.innerHTML = '<p style="color:#28a745;font-weight:600">✅ Valida!</p>';
+      else if (d.status === 'REQUEST_DENIED') st.innerHTML = '<p style="color:#dc3545;font-weight:600">❌ Rifiutata</p>';
+      else st.innerHTML = '<p style="color:#ff9800">⚠️ ' + d.status + '</p>';
+    } catch(e) {
+      st.innerHTML = '<p style="color:#dc3545">❌ Errore</p>';
     }
+  });
 
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', () => {
-        const i = document.getElementById('apiKeyInput');
-        i.type = i.type === 'password' ? 'text' : 'password';
-      });
-    }
-    
-    // INVIO sull'input API
-    if (apiInput) {
-      apiInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          saveBtn.click();
-        }
-      });
-    }
+  document.getElementById('toggleKeyBtn').addEventListener('click', () => {
+    const i = document.getElementById('apiKeyInput');
+    i.type = i.type === 'password' ? 'text' : 'password';
   });
 
   document.getElementById('settingsIcon').addEventListener('click', () => {
@@ -7113,10 +7417,13 @@ notify('❌ Errore inizializzazione', 'error');
   const otmBtn = document.getElementById('openOnTheMoveBtn');
   if (otmBtn) {
     otmBtn.addEventListener('click', () => {
-openOnTheMove();
+      AppLogger.logInfo('OTM', 'Pulsante "Usa in Movimento" cliccato');
+      openOnTheMove();
     });
-} else {
-}
+    AppLogger.logInfo('INIT', 'Pulsante "Usa in Movimento" collegato');
+  } else {
+    AppLogger.warn('INIT', 'Pulsante "Usa in Movimento" non trovato nel DOM');
+  }
 
   document.getElementById('closeModalBtn').addEventListener('click', () => {
     document.getElementById('apiKeyModal').classList.remove('show');
@@ -7150,6 +7457,10 @@ openOnTheMove();
   // Chiudi guida cliccando fuori
   document.getElementById('guideModal').addEventListener('click', e => {
     if (e.target.id === 'guideModal') closeGuideModal();
+  });
+
+  document.getElementById('apiKeyInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') document.getElementById('saveKeyBtn').click();
   });
 
   // ==========================================
@@ -7225,7 +7536,8 @@ openOnTheMove();
         }
       }
     } catch (e) {
-}
+      console.error('Errore caricamento destinazione salvata:', e);
+    }
     // Nessuna destinazione salvata valida, mostra step iniziale
     showInitialChoice();
   }
@@ -7286,7 +7598,8 @@ openOnTheMove();
       
       startTrackingScreen();
     } catch (e) {
-notify('❌ Errore ripresa destinazione', 'error');
+      console.error('Errore ripresa destinazione:', e);
+      notify('❌ Errore ripresa destinazione', 'error');
       showInitialChoice();
     }
   }
@@ -7306,19 +7619,21 @@ notify('❌ Errore ripresa destinazione', 'error');
         <div class="otm-buttons">
           <button class="btn btn-green" 
                   onclick="showDirectDestination()" 
-                  id="otmYesBtn"
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();showDirectDestination();}"
                   aria-label="Sì, ho già l'indirizzo o il nome del POI">
             ✅ Sì
           </button>
           <button class="btn btn-secondary" 
                   onclick="showReferenceStep()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();showReferenceStep();}"
                   aria-label="No, devo cercare un POI vicino a un posto che conosco">
             🔍 No (cerco POI)
           </button>
         </div>
         <div style="text-align: center; margin-top: 20px;">
           <button class="btn btn-ghost" 
-                  onclick="closeOnTheMove()">
+                  onclick="closeOnTheMove()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();closeOnTheMove();}">
             ❌ Chiudi
           </button>
         </div>
@@ -7327,10 +7642,9 @@ notify('❌ Errore ripresa destinazione', 'error');
     document.getElementById('otmContent').innerHTML = content;
     announce('Step 1: Hai già un indirizzo di destinazione?');
     
-    // Focus sul primo pulsante (Sì)
+    // Focus sul primo pulsante
     setTimeout(() => {
-      const btn = document.getElementById('otmYesBtn');
-      if (btn) btn.focus();
+      document.querySelector('#otmContent .btn').focus();
     }, 100);
   }
   
@@ -7347,11 +7661,13 @@ notify('❌ Errore ripresa destinazione', 'error');
         <div class="otm-buttons">
           <button class="btn btn-green" 
                   onclick="findDirectDestination()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();findDirectDestination();}"
                   id="otmFindDestBtn">
             🔍 Trova Destinazione
           </button>
           <button class="btn btn-ghost" 
-                  onclick="showInitialChoice()">
+                  onclick="showInitialChoice()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();showInitialChoice();}">
             ← Indietro
           </button>
         </div>
@@ -7473,11 +7789,13 @@ notify('❌ Errore ripresa destinazione', 'error');
         <div class="otm-buttons">
           <button class="btn btn-green" 
                   onclick="findReference()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();findReference();}"
                   id="otmFindRefBtn">
             🔍 Trova Riferimento
           </button>
           <button class="btn btn-ghost" 
-                  onclick="showInitialChoice()">
+                  onclick="showInitialChoice()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();showInitialChoice();}">
             ← Indietro
           </button>
         </div>
@@ -7606,14 +7924,16 @@ notify('❌ Errore ripresa destinazione', 'error');
         
         <div class="otm-buttons">
           <button class="btn btn-green" 
-                  onclick="searchPOIs()"
+                  onclick="searchPOIs()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();searchPOIs();}"
                   id="otmSearchPOIBtn" 
                   disabled 
                   aria-label="Cerca punti di interesse">
             🔍 Cerca POI
           </button>
           <button class="btn btn-ghost" 
-                  onclick="showReferenceStep()">
+                  onclick="showReferenceStep()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();showReferenceStep();}">
             ← Cambia Riferimento
           </button>
         </div>
@@ -7854,7 +8174,8 @@ notify('❌ Errore ripresa destinazione', 'error');
         
         <div style="text-align: center; margin-top: 20px;">
           <button class="btn btn-ghost" 
-                  onclick="showCategoriesStep()">
+                  onclick="showCategoriesStep()" 
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();showCategoriesStep();}">
             ← Cambia Ricerca
           </button>
         </div>
@@ -7892,7 +8213,9 @@ notify('❌ Errore ripresa destinazione', 'error');
     
     // AVVIA TRACKING DIRETTO (salta schermata impostazioni)
     startTrackingScreen();
-}
+    
+    AppLogger.logInfo('OTM', `Doppio tap: tracking avviato verso ${poi.name}`);
+  }
   
   /**
    * LONG-PRESS SUI POI: Apri su Google Maps
@@ -7947,7 +8270,10 @@ notify('❌ Errore ripresa destinazione', 'error');
       window.open(mapsUrl, '_blank', 'noopener,noreferrer');
       
       notify('🗺️ Aperto su Google Maps: ' + poi.name, 'info');
-}, 800); // 800ms per attivare long-press
+      
+      AppLogger.logInfo('OTM', `Long-press: aperto Google Maps per ${poi.name}`);
+      
+    }, 800); // 800ms per attivare long-press
   }
   
   function handlePOILongPressEnd(event) {
@@ -8140,7 +8466,8 @@ notify('❌ Errore ripresa destinazione', 'error');
    */
   function speakDistance(text) {
     if (!('speechSynthesis' in window)) {
-return;
+      console.log('Sintesi vocale non supportata');
+      return;
     }
     
     // Cancella eventuali annunci precedenti
@@ -8267,7 +8594,8 @@ return;
         return JSON.parse(saved);
       }
     } catch (e) {
-}
+      console.error('Errore caricamento impostazioni vibrazioni:', e);
+    }
     
     // Default
     return {
@@ -8317,11 +8645,21 @@ return;
    * Avvia il tracking GPS continuo
    */
   async function startTracking() {
-if (!navigator.geolocation) {
-notify('❌ Geolocalizzazione non supportata', 'error');
+    AppLogger.logInfo('OTM', 'Avvio tracking GPS...');
+    
+    if (!navigator.geolocation) {
+      AppLogger.error('OTM', 'Geolocalizzazione non supportata dal browser');
+      notify('❌ Geolocalizzazione non supportata', 'error');
       return;
     }
-// Reset variabili annuncio e vibrazioni
+    
+    AppLogger.debug('OTM', 'Destinazione impostata', {
+      lat: otmDestination?.lat,
+      lng: otmDestination?.lng,
+      label: otmDestination?.label
+    });
+    
+    // Reset variabili annuncio e vibrazioni
     otmLastAnnouncedDistance = null;
     otmLastAnnouncedTime = Date.now();
     otmVibratedShort = false;
@@ -8356,12 +8694,14 @@ notify('❌ Geolocalizzazione non supportata', 'error');
    */
   function setupMediaSessionControls() {
     if (!('mediaSession' in navigator)) {
-return;
+      console.log('Media Session API non supportata');
+      return;
     }
     
     // Verifica che otmDestination sia impostato
     if (!otmDestination) {
-return;
+      console.error('setupMediaSessionControls: otmDestination non impostato');
+      return;
     }
     
     // Imposta metadata per mostrare info tracking nella lockscreen
@@ -8441,7 +8781,8 @@ return;
   function onPositionUpdate(position) {
     // Verifica che otmDestination sia impostato
     if (!otmDestination) {
-stopTracking();
+      console.error('onPositionUpdate: otmDestination non impostato, fermo il tracking');
+      stopTracking();
       return;
     }
     
@@ -8610,16 +8951,20 @@ stopTracking();
     switch(error.code) {
       case error.PERMISSION_DENIED:
         message = '❌ Permesso GPS negato';
-break;
+        AppLogger.error('GPS', 'Permesso GPS negato dall\'utente', errorDetails);
+        break;
       case error.POSITION_UNAVAILABLE:
         message = '⚠️ Posizione non disponibile';
-break;
+        AppLogger.warn('GPS', 'Posizione GPS non disponibile', errorDetails);
+        break;
       case error.TIMEOUT:
         message = '⏱️ Timeout GPS';
-break;
+        AppLogger.warn('GPS', 'Timeout nella richiesta GPS', errorDetails);
+        break;
       default:
         message = '❌ Errore GPS sconosciuto';
-}
+        AppLogger.error('GPS', 'Errore GPS sconosciuto', errorDetails);
+    }
     
     notify(message, 'error');
     announce(message);
@@ -8707,16 +9052,12 @@ break;
   window.openVibrationSettings = openVibrationSettings;
   window.saveVibrationSettings = saveVibrationSettings;
   window.toggleAutoVoice = toggleAutoVoice;
-  
-  // Export funzioni OTM iniziali
-  window.showInitialChoice = showInitialChoice;
-  window.showDirectDestination = showDirectDestination;
-  window.showReferenceStep = showReferenceStep;
-  window.closeOnTheMove = closeOnTheMove;
 
   window.addEventListener('DOMContentLoaded', () => {
-if (!check()) {
-}
+    console.log('🚀 App Mobilità');
+    if (!check()) {
+      console.log('📝 Nessuna API key trovata');
+    }
   });
 })();
 </script>
