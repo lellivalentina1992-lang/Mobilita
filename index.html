@@ -7038,35 +7038,61 @@ notify('❌ Errore inizializzazione', 'error');
     loaded = true;
   }
 
-  document.getElementById('saveKeyBtn').addEventListener('click', () => {
-    const k = document.getElementById('apiKeyInput').value.trim();
-    if (!k) return notify('❌ Inserisci la chiave', 'error');
-    if (!k.startsWith('AIzaSy')) return notify('⚠️ Dovrebbe iniziare con AIzaSy', 'error');
-    localStorage.setItem(STORAGE, k);
-    window.userApiKey = k;
-    notify('✅ Salvata!', 'success');
-    setTimeout(load, 800);
-  });
-
-  document.getElementById('testKeyBtn').addEventListener('click', async () => {
-    const k = document.getElementById('apiKeyInput').value.trim();
-    if (!k) return notify('❌ Inserisci la chiave', 'error');
-    const st = document.getElementById('apiKeyStatus');
-    st.innerHTML = '<p style="color:#17a2b8">🔄 Test...</p>';
-    try {
-      const r = await fetch('https://maps.googleapis.com/maps/api/geocode/json?address=Roma&key=' + k);
-      const d = await r.json();
-      if (d.status === 'OK') st.innerHTML = '<p style="color:#28a745;font-weight:600">✅ Valida!</p>';
-      else if (d.status === 'REQUEST_DENIED') st.innerHTML = '<p style="color:#dc3545;font-weight:600">❌ Rifiutata</p>';
-      else st.innerHTML = '<p style="color:#ff9800">⚠️ ' + d.status + '</p>';
-    } catch(e) {
-      st.innerHTML = '<p style="color:#dc3545">❌ Errore</p>';
+  // ==========================================
+  // LISTENER API KEY SETUP (quando DOM è pronto)
+  // ==========================================
+  document.addEventListener('DOMContentLoaded', () => {
+    const saveBtn = document.getElementById('saveKeyBtn');
+    const testBtn = document.getElementById('testKeyBtn');
+    const toggleBtn = document.getElementById('toggleKeyBtn');
+    const apiInput = document.getElementById('apiKeyInput');
+    
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => {
+        const k = apiInput.value.trim();
+        if (!k) return notify('❌ Inserisci la chiave', 'error');
+        if (!k.startsWith('AIzaSy')) return notify('⚠️ Dovrebbe iniziare con AIzaSy', 'error');
+        localStorage.setItem(STORAGE, k);
+        window.userApiKey = k;
+        notify('✅ Salvata!', 'success');
+        setTimeout(load, 800);
+      });
     }
-  });
 
-  document.getElementById('toggleKeyBtn').addEventListener('click', () => {
-    const i = document.getElementById('apiKeyInput');
-    i.type = i.type === 'password' ? 'text' : 'password';
+    if (testBtn) {
+      testBtn.addEventListener('click', async () => {
+        const k = apiInput.value.trim();
+        if (!k) return notify('❌ Inserisci la chiave', 'error');
+        const st = document.getElementById('apiKeyStatus');
+        st.innerHTML = '<p style="color:#17a2b8">🔄 Test...</p>';
+        try {
+          const r = await fetch('https://maps.googleapis.com/maps/api/geocode/json?address=Roma&key=' + k);
+          const d = await r.json();
+          if (d.status === 'OK') st.innerHTML = '<p style="color:#28a745;font-weight:600">✅ Valida!</p>';
+          else if (d.status === 'REQUEST_DENIED') st.innerHTML = '<p style="color:#dc3545;font-weight:600">❌ Rifiutata</p>';
+          else st.innerHTML = '<p style="color:#ff9800">⚠️ ' + d.status + '</p>';
+        } catch(e) {
+          st.innerHTML = '<p style="color:#dc3545">❌ Errore</p>';
+        }
+      });
+    }
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        const i = document.getElementById('apiKeyInput');
+        i.type = i.type === 'password' ? 'text' : 'password';
+      });
+    }
+    
+    // INVIO sull'input API
+    if (apiInput) {
+      apiInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          saveBtn.click();
+        }
+      });
+    }
   });
 
   document.getElementById('settingsIcon').addEventListener('click', () => {
@@ -7134,10 +7160,6 @@ openOnTheMove();
   // Chiudi guida cliccando fuori
   document.getElementById('guideModal').addEventListener('click', e => {
     if (e.target.id === 'guideModal') closeGuideModal();
-  });
-
-  document.getElementById('apiKeyInput').addEventListener('keypress', e => {
-    if (e.key === 'Enter') document.getElementById('saveKeyBtn').click();
   });
 
   // ==========================================
