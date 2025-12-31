@@ -1507,6 +1507,13 @@ body.api-setup-active::before {
       if (guideBtn) guideBtn.focus();
     }
 
+    function closeMoovitZonesModal() {
+      const modal = document.getElementById('moovitZonesModal');
+      if (modal) {
+        modal.classList.remove('show');
+      }
+    }
+
     // Chiudi modali con tasto ESC
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
@@ -3959,12 +3966,12 @@ Chiudi sempre chiedendo:
         const ok = await copyText(prompt);
         openModal('🚏 Prompt: Ricerca Trasporti Pubblici', `
           <p style="margin-bottom:10px">${ok ? '✅ Prompt copiato negli appunti!' : '📋 Copia il prompt qui sotto:'}</p>
-          <textarea id="copyBox" style="width:100%;height:400px;font-family:monospace;font-size:13px;padding:10px;border-radius:8px;border:2px solid #667eea" readonly>${prompt}</textarea>
+          <textarea id="transitCopyBox" style="width:100%;height:400px;font-family:monospace;font-size:13px;padding:10px;border-radius:8px;border:2px solid #667eea" readonly>${prompt}</textarea>
           <div class="modal-buttons">
-            <button class="btn btn-ghost" onclick="document.getElementById('copyBox').select();document.execCommand('copy');notify('✅ Copiato!','success')">📋 Copia</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('transitCopyBox').select();document.execCommand('copy');notify('✅ Copiato!','success')">📋 Copia</button>
             <button class="btn" onclick="closeModal()">Chiudi</button>
           </div>`);
-        document.getElementById('copyBox').select();
+        document.getElementById('transitCopyBox').select();
       } catch (e) { notify('❌ Errore: ' + e.message, 'error'); }
     }
 
@@ -3990,12 +3997,12 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         const ok = await copyText(prompt);
         openModal('💬 Prompt: Ricerca Social', `
           <p style="margin-bottom:10px">${ok ? '✅ Prompt copiato negli appunti!' : '📋 Copia il prompt qui sotto:'}</p>
-          <textarea id="copyBox" style="width:100%;height:260px;font-family:monospace;font-size:13px;padding:10px;border-radius:8px;border:2px solid #667eea" readonly>${prompt}</textarea>
+          <textarea id="socialCopyBox" style="width:100%;height:260px;font-family:monospace;font-size:13px;padding:10px;border-radius:8px;border:2px solid #667eea" readonly>${prompt}</textarea>
           <div class="modal-buttons">
-            <button class="btn btn-ghost" onclick="document.getElementById('copyBox').select();document.execCommand('copy');notify('✅ Copiato!','success')">📋 Copia</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('socialCopyBox').select();document.execCommand('copy');notify('✅ Copiato!','success')">📋 Copia</button>
             <button class="btn" onclick="closeModal()">Chiudi</button>
           </div>`);
-        document.getElementById('copyBox').select();
+        document.getElementById('socialCopyBox').select();
       } catch (e) { notify('❌ Errore prompt: ' + e.message, 'error'); }
     }
 
@@ -4208,7 +4215,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
     /**
      * Estrae il nome della via da un indirizzo
      */
-    function extractStreetName(address) {
+    function extractStreetNameForComparison(address) {
         // Rimuove numero civico e città
         const cleaned = address.toLowerCase()
             .replace(/,.*$/, '') // Rimuove tutto dopo la virgola
@@ -4312,8 +4319,8 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
         }
         
         // Verifica che siano sulla stessa via
-        const streetA = extractStreetName(addressA);
-        const streetB = extractStreetName(addressB);
+        const streetA = extractStreetNameForComparison(addressA);
+        const streetB = extractStreetNameForComparison(addressB);
         
         if (streetA !== streetB) {
             const html = `
@@ -7177,9 +7184,22 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
   function resumeTracking() {
     try {
       const saved = localStorage.getItem('otm_destination');
+      if (!saved) {
+        // Nessuna destinazione salvata, mostra scelta iniziale
+        showInitialChoice();
+        return;
+      }
+      
       otmDestination = JSON.parse(saved);
+      
+      // Verifica che la destinazione sia valida
+      if (!otmDestination || !otmDestination.lat || !otmDestination.lng) {
+        throw new Error('Destinazione salvata non valida');
+      }
+      
       startTrackingScreen();
     } catch (e) {
+      console.error('Errore ripresa destinazione:', e);
       notify('❌ Errore ripresa destinazione', 'error');
       showInitialChoice();
     }
@@ -8124,10 +8144,16 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
       return;
     }
     
+    // Verifica che otmDestination sia impostato
+    if (!otmDestination) {
+      console.error('setupMediaSessionControls: otmDestination non impostato');
+      return;
+    }
+    
     // Imposta metadata per mostrare info tracking nella lockscreen
     navigator.mediaSession.metadata = new MediaMetadata({
       title: '📍 Tracking Distanza',
-      artist: otmDestination.label,
+      artist: otmDestination.label || 'Destinazione',
       album: 'App Mobilità',
       artwork: [
         {
@@ -8199,6 +8225,13 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
    * Callback per aggiornamento posizione GPS
    */
   function onPositionUpdate(position) {
+    // Verifica che otmDestination sia impostato
+    if (!otmDestination) {
+      console.error('onPositionUpdate: otmDestination non impostato, fermo il tracking');
+      stopTracking();
+      return;
+    }
+    
     const userPos = {
       lat: position.coords.latitude,
       lng: position.coords.longitude
@@ -8383,6 +8416,14 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
       otmWatchId = null;
       notify('⏹️ Tracking fermato', 'info');
     }
+    
+    // Reset flag vibrazione per permettere nuove vibrazioni al prossimo tracking
+    otmVibratedShort = false;
+    otmVibratedLong = false;
+    
+    // Reset ultima distanza annunciata
+    otmLastAnnouncedDistance = null;
+    otmLastAnnouncedTime = null;
   }
   
   /**
@@ -8475,7 +8516,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
 <div id="guideModal" class="modal guide-modal" role="dialog" aria-labelledby="guideModalTitle" aria-modal="true">
   <div class="modal-content" role="document">
     <div class="modal-header" id="guideModalTitle" tabindex="0">📖 Guida Completa - App Mobilità e Orientamento</div>
-    <div id="modalBody" style="padding: 30px;">
+    <div id="guideModalBody" style="padding: 30px;">
       
       <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 30px;">
         Questa applicazione è stata progettata per aiutarti nell'esplorazione urbana e nell'orientamento, 
@@ -9052,9 +9093,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
           <li><strong>Overpass API:</strong> Query dati OpenStreetMap</li>
           <li><strong>Moovit:</strong> Trasporto pubblico</li>
         </ul>
-
-        
-      </div>
+      </section>
 
       <div class="modal-buttons">
         <button class="btn btn-ghost" onclick="closeGuideModal()">❌ Chiudi Guida</button>
