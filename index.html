@@ -7306,21 +7306,19 @@ notify('❌ Errore ripresa destinazione', 'error');
         <div class="otm-buttons">
           <button class="btn btn-green" 
                   onclick="showDirectDestination()" 
-                  onkeydown="if(event.key==='Enter'){event.preventDefault();showDirectDestination();}"
+                  id="otmYesBtn"
                   aria-label="Sì, ho già l'indirizzo o il nome del POI">
             ✅ Sì
           </button>
           <button class="btn btn-secondary" 
                   onclick="showReferenceStep()" 
-                  onkeydown="if(event.key==='Enter'){event.preventDefault();showReferenceStep();}"
                   aria-label="No, devo cercare un POI vicino a un posto che conosco">
             🔍 No (cerco POI)
           </button>
         </div>
         <div style="text-align: center; margin-top: 20px;">
           <button class="btn btn-ghost" 
-                  onclick="closeOnTheMove()" 
-                  onkeydown="if(event.key==='Enter'){event.preventDefault();closeOnTheMove();}">
+                  onclick="closeOnTheMove()">
             ❌ Chiudi
           </button>
         </div>
@@ -7329,9 +7327,10 @@ notify('❌ Errore ripresa destinazione', 'error');
     document.getElementById('otmContent').innerHTML = content;
     announce('Step 1: Hai già un indirizzo di destinazione?');
     
-    // Focus sul primo pulsante
+    // Focus sul primo pulsante (Sì)
     setTimeout(() => {
-      document.querySelector('#otmContent .btn').focus();
+      const btn = document.getElementById('otmYesBtn');
+      if (btn) btn.focus();
     }, 100);
   }
   
@@ -7348,13 +7347,11 @@ notify('❌ Errore ripresa destinazione', 'error');
         <div class="otm-buttons">
           <button class="btn btn-green" 
                   onclick="findDirectDestination()" 
-                  onkeydown="if(event.key==='Enter'){event.preventDefault();findDirectDestination();}"
                   id="otmFindDestBtn">
             🔍 Trova Destinazione
           </button>
           <button class="btn btn-ghost" 
-                  onclick="showInitialChoice()" 
-                  onkeydown="if(event.key==='Enter'){event.preventDefault();showInitialChoice();}">
+                  onclick="showInitialChoice()">
             ← Indietro
           </button>
         </div>
@@ -7476,13 +7473,11 @@ notify('❌ Errore ripresa destinazione', 'error');
         <div class="otm-buttons">
           <button class="btn btn-green" 
                   onclick="findReference()" 
-                  onkeydown="if(event.key==='Enter'){event.preventDefault();findReference();}"
                   id="otmFindRefBtn">
             🔍 Trova Riferimento
           </button>
           <button class="btn btn-ghost" 
-                  onclick="showInitialChoice()" 
-                  onkeydown="if(event.key==='Enter'){event.preventDefault();showInitialChoice();}">
+                  onclick="showInitialChoice()">
             ← Indietro
           </button>
         </div>
@@ -7611,16 +7606,14 @@ notify('❌ Errore ripresa destinazione', 'error');
         
         <div class="otm-buttons">
           <button class="btn btn-green" 
-                  onclick="searchPOIs()" 
-                  onkeydown="if(event.key==='Enter'){event.preventDefault();searchPOIs();}"
+                  onclick="searchPOIs()"
                   id="otmSearchPOIBtn" 
                   disabled 
                   aria-label="Cerca punti di interesse">
             🔍 Cerca POI
           </button>
           <button class="btn btn-ghost" 
-                  onclick="showReferenceStep()" 
-                  onkeydown="if(event.key==='Enter'){event.preventDefault();showReferenceStep();}">
+                  onclick="showReferenceStep()">
             ← Cambia Riferimento
           </button>
         </div>
@@ -7861,8 +7854,7 @@ notify('❌ Errore ripresa destinazione', 'error');
         
         <div style="text-align: center; margin-top: 20px;">
           <button class="btn btn-ghost" 
-                  onclick="showCategoriesStep()" 
-                  onkeydown="if(event.key==='Enter'){event.preventDefault();showCategoriesStep();}">
+                  onclick="showCategoriesStep()">
             ← Cambia Ricerca
           </button>
         </div>
