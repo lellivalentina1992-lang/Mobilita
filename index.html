@@ -610,38 +610,6 @@ body.api-setup-active::before {
  outline-offset: 2px;
 }
 
-.report-icon {
- position: fixed;
- bottom: 160px;
- right: 20px;
- width: 60px;
- height: 60px;
- background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
- border-radius: 50%;
- display: flex;
- align-items: center;
- justify-content: center;
- color: white;
- font-size: 28px;
- cursor: pointer;
- box-shadow: 0 4px 15px rgba(0,0,0,.3);
- z-index: 1000;
- transition: transform .2s;
- border: none;
- padding: 0;
-}
-.report-icon:hover, .report-icon:focus {
- transform: scale(1.1);
- outline: 3px solid #ff6b6b;
- outline-offset: 2px;
-}
-.report-icon.has-errors {
- animation: pulse 2s infinite;
-}
-@keyframes pulse {
- 0%, 100% { box-shadow: 0 4px 15px rgba(0,0,0,.3); }
- 50% { box-shadow: 0 4px 25px rgba(255,107,107,.8); }
-}
 
 .settings-icon {
  border: none; /* Per button */
@@ -741,7 +709,7 @@ body.api-setup-active::before {
  style="margin-top: 15px; background: white; border: 2px solid #ffcc80; border-radius: 12px; padding: 20px; min-height: 100px;" 
  role="region"
  aria-live="polite"
- aria-label="Risultati confronto civici"><div style="text-align: center; color: #999; padding: 40px 20px;"><p style="font-size: 1.1em; margin: 0 0 10px 0;">Pronto per l'analisi</p><p style="margin: 0; font-size: 0.9em;">Inserisci due indirizzi sulla<strong>stessa via</strong>per confrontarli scientificamente.</p></div></div><!-- Help Box --><details style="margin-top: 20px;"><summary style="cursor: pointer; color: #e65100; font-weight: bold; padding: 10px; background: #fff3e0; border-radius: 8px;">Come funziona il confronto?</summary><div style="margin-top: 10px; padding: 15px; background: white; border-left: 4px solid #ff9800; border-radius: 8px;"><p style="margin: 0 0 10px 0;"><strong>Quando usarlo:</strong></p><ul style="margin: 0 0 15px 0; padding-left: 20px; line-height: 1.8;"><li><strong>Il Vicino di Casa:</strong>Sei al civico 20 (dove c'è Street View) e devi andare al 24 (dove non c'è). Vuoi sapere se devi attraversare.</li><li><strong>La Verifica Scientifica:</strong>Street View sembra ambiguo? Vuoi una conferma matematica.</li><li><strong>Pianificazione a Tavolino:</strong>Sei a casa e vuoi capire la conformazione di una via inserendo due civici.</li></ul><p style="margin: 0 0 10px 0;"><strong>I 3 metodi combinati:</strong></p><ol style="margin: 0; padding-left: 20px; line-height: 1.8;"><li><strong>Check Precisione:</strong>Verifica se Google conosce esattamente i civici (ROOFTOP) o li ha "indovinati" (INTERPOLATED)</li><li><strong>Calcolo Geometrico:</strong>Usa il prodotto vettoriale con la geometria OpenStreetMap per determinare matematicamente su quale lato sono i civici</li><li><strong>Validazione Street View:</strong>Controlla visivamente se i due punti si "guardano" in modo parallelo (stesso lato) o opposto (lati opposti)</li></ol><p style="margin: 15px 0 0 0; padding: 10px; background: #e8f5e9; border-radius: 6px; font-size: 0.9em;"><strong>Risultato:</strong>Riceverai un verdetto con score combinato (0-100) e segnalazione di eventuali discordanze tra i metodi!</p></div></details></div></section></main></div><button class="settings-icon" id="settingsIcon" aria-label="Gestisci API Key" title="Gestisci API Key"></button><!-- Pulsante Guida --><button class="guide-icon" id="guideIcon" aria-label="Apri guida completa all'uso dell'app" title="Guida completa all'uso dell'app"></button><!-- Pulsante Report Diagnostico --><button class="report-icon" id="reportIcon" aria-label="Visualizza report diagnostico e log errori" title="Report Diagnostico" onclick="AppLogger.showReport()"></button><div id="apiKeyModal" class="modal"><div class="modal-content"><div class="modal-header">Gestione API Key</div><div style="padding:20px"><p><strong>Stato:</strong><span id="currentApiStatus"></span></p><p style="margin-top:15px"><strong>Chiave:</strong></p><input type="password" id="newApiKeyInput" placeholder="Nuova API Key..." style="width:100%;padding:12px;border:2px solid #dee2e6;border-radius:8px;margin-top:10px;font-family:monospace"><span class="show-key-toggle" id="toggleNewKeyBtn">Mostra/Nascondi</span><div class="modal-buttons"><button class="btn btn-green" id="updateKeyBtn">Aggiorna</button><button class="btn btn-danger" id="removeKeyBtn">Rimuovi</button><button class="btn btn-ghost" id="closeModalBtn">Chiudi</button></div></div></div></div><script>// ===== CODICE APP ORIGINALE (deve essere PRIMA della gestione API) =====
+ aria-label="Risultati confronto civici"><div style="text-align: center; color: #999; padding: 40px 20px;"><p style="font-size: 1.1em; margin: 0 0 10px 0;">Pronto per l'analisi</p><p style="margin: 0; font-size: 0.9em;">Inserisci due indirizzi sulla<strong>stessa via</strong>per confrontarli scientificamente.</p></div></div><!-- Help Box --><details style="margin-top: 20px;"><summary style="cursor: pointer; color: #e65100; font-weight: bold; padding: 10px; background: #fff3e0; border-radius: 8px;">Come funziona il confronto?</summary><div style="margin-top: 10px; padding: 15px; background: white; border-left: 4px solid #ff9800; border-radius: 8px;"><p style="margin: 0 0 10px 0;"><strong>Quando usarlo:</strong></p><ul style="margin: 0 0 15px 0; padding-left: 20px; line-height: 1.8;"><li><strong>Il Vicino di Casa:</strong>Sei al civico 20 (dove c'è Street View) e devi andare al 24 (dove non c'è). Vuoi sapere se devi attraversare.</li><li><strong>La Verifica Scientifica:</strong>Street View sembra ambiguo? Vuoi una conferma matematica.</li><li><strong>Pianificazione a Tavolino:</strong>Sei a casa e vuoi capire la conformazione di una via inserendo due civici.</li></ul><p style="margin: 0 0 10px 0;"><strong>I 3 metodi combinati:</strong></p><ol style="margin: 0; padding-left: 20px; line-height: 1.8;"><li><strong>Check Precisione:</strong>Verifica se Google conosce esattamente i civici (ROOFTOP) o li ha "indovinati" (INTERPOLATED)</li><li><strong>Calcolo Geometrico:</strong>Usa il prodotto vettoriale con la geometria OpenStreetMap per determinare matematicamente su quale lato sono i civici</li><li><strong>Validazione Street View:</strong>Controlla visivamente se i due punti si "guardano" in modo parallelo (stesso lato) o opposto (lati opposti)</li></ol><p style="margin: 15px 0 0 0; padding: 10px; background: #e8f5e9; border-radius: 6px; font-size: 0.9em;"><strong>Risultato:</strong>Riceverai un verdetto con score combinato (0-100) e segnalazione di eventuali discordanze tra i metodi!</p></div></details></div></section></main></div><button class="settings-icon" id="settingsIcon" aria-label="Gestisci API Key" title="Gestisci API Key"></button><!-- Pulsante Guida --><button class="guide-icon" id="guideIcon" aria-label="Apri guida completa all'uso dell'app" title="Guida completa all'uso dell'app"></button><div id="apiKeyModal" class="modal"><div class="modal-content"><div class="modal-header">Gestione API Key</div><div style="padding:20px"><p><strong>Stato:</strong><span id="currentApiStatus"></span></p><p style="margin-top:15px"><strong>Chiave:</strong></p><input type="password" id="newApiKeyInput" placeholder="Nuova API Key..." style="width:100%;padding:12px;border:2px solid #dee2e6;border-radius:8px;margin-top:10px;font-family:monospace"><span class="show-key-toggle" id="toggleNewKeyBtn">Mostra/Nascondi</span><div class="modal-buttons"><button class="btn btn-green" id="updateKeyBtn">Aggiorna</button><button class="btn btn-danger" id="removeKeyBtn">Rimuovi</button><button class="btn btn-ghost" id="closeModalBtn">Chiudi</button></div></div></div></div><script>// ===== CODICE APP ORIGINALE (deve essere PRIMA della gestione API) =====
 // ===============================================================================
  // - ROUTES FIX (CHIAMATE MULTIPLE)
  // ===============================================================================
@@ -834,219 +802,6 @@ body.api-setup-active::before {
  // SISTEMA DI LOGGING AVANZATO
  // ========================
  
- const AppLogger = {
- logs: [],
- errors: [],
- warnings: [],
- info: [],
- startTime: Date.now(),
- 
- // Aggiunge log
- log(type, category, message, data = null) {
- const entry = {
- timestamp: Date.now() - this.startTime,
- time: new Date().toISOString(),
- type: type,
- category: category,
- message: message,
- data: data
- };
- 
- this.logs.push(entry);
- 
- switch(type) {
- case 'error':
- this.errors.push(entry);
- console.error(`[${category}]`, message, data || '');
- this.updateReportButton();
- break;
- case 'warn':
- this.warnings.push(entry);
- console.warn(`[${category}]`, message, data || '');
- this.updateReportButton();
- break;
- case 'info':
- this.info.push(entry);
- console.info(`[${category}]`, message, data || '');
- break;
- default:
- console.log(`[${category}]`, message, data || '');
- }
- },
- 
- // Aggiorna badge pulsante report
- updateReportButton() {
- const btn = document.getElementById('reportIcon');
- if (!btn) return;
- 
- if (this.errors.length >0) {
- btn.classList.add('has-errors');
- btn.setAttribute('aria-label', `Report Diagnostico - ${this.errors.length} errori rilevati`);
- btn.title = `Report Diagnostico - ${this.errors.length} errori`;
- } else if (this.warnings.length >0) {
- btn.setAttribute('aria-label', `Report Diagnostico - ${this.warnings.length} avvisi`);
- btn.title = `Report Diagnostico - ${this.warnings.length} avvisi`;
- }
- },
- 
- // Metodi shorthand
- error(category, message, data) { this.log('error', category, message, data); },
- warn(category, message, data) { this.log('warn', category, message, data); },
- logInfo(category, message, data) { this.log('info', category, message, data); },
- debug(category, message, data) { this.log('debug', category, message, data); },
- 
- // Genera report testuale
- generateReport() {
- const elapsed = ((Date.now() - this.startTime) / 1000).toFixed(2);
- 
- let report = ' \n';
- report += ' REPORT DIAGNOSTICO - APP MOBILITÀ E ORIENTAMENTO\n';
- report += ' \n\n';
- report += ` Data: ${new Date().toLocaleString('it-IT')}\n`;
- report += `⏱ Tempo esecuzione: ${elapsed} secondi\n`;
- report += ` Totale eventi: ${this.logs.length}\n`;
- report += ` • Errori: ${this.errors.length}\n`;
- report += ` • Avvisi: ${this.warnings.length}\n`;
- report += ` • Info: ${this.info.length}\n\n`;
- 
- // Browser info
- report += ' INFORMAZIONI BROWSER\n';
- report += ' \n';
- report += `User Agent: ${navigator.userAgent}\n`;
- report += `Lingua: ${navigator.language}\n`;
- report += `Piattaforma: ${navigator.platform}\n`;
- report += `Online: ${navigator.onLine ? 'Sì' : 'No'}\n`;
- report += `Cookie abilitati: ${navigator.cookieEnabled ? 'Sì' : 'No'}\n\n`;
- 
- // Feature detection
- report += ' FUNZIONALITÀ DISPONIBILI\n';
- report += ' \n';
- report += ` Geolocation API: ${navigator.geolocation ? 'Sì' : 'No'}\n`;
- report += ` Local Storage: ${typeof(Storage) !== 'undefined' ? 'Sì' : 'No'}\n`;
- report += ` Service Worker: ${'serviceWorker' in navigator ? 'Sì' : 'No'}\n`;
- report += ` Notification API: ${'Notification' in window ? 'Sì' : 'No'}\n`;
- report += ` Vibration API: ${navigator.vibrate ? 'Sì' : 'No'}\n`;
- report += ` Media Session: ${'mediaSession' in navigator ? 'Sì' : 'No'}\n`;
- report += ` Speech Synthesis: ${'speechSynthesis' in window ? 'Sì' : 'No'}\n\n`;
- 
- // Errori
- if (this.errors.length >0) {
- report += ' ERRORI RISCONTRATI\n';
- report += ' \n';
- this.errors.forEach((err, i) =>{
- report += `${i + 1}. [${err.category}] ${err.message}\n`;
- report += ` Tempo: +${(err.timestamp / 1000).toFixed(2)}s\n`;
- if (err.data) {
- report += ` Dettagli: ${JSON.stringify(err.data, null, 2)}\n`;
- }
- report += '\n';
- });
- }
- 
- // Avvisi
- if (this.warnings.length >0) {
- report += ' AVVISI\n';
- report += ' \n';
- this.warnings.forEach((warn, i) =>{
- report += `${i + 1}. [${warn.category}] ${warn.message}\n`;
- report += ` Tempo: +${(warn.timestamp / 1000).toFixed(2)}s\n`;
- if (warn.data) {
- report += ` Dettagli: ${JSON.stringify(warn.data, null, 2)}\n`;
- }
- report += '\n';
- });
- }
- 
- // Info principali
- if (this.info.length >0) {
- report += 'ℹ EVENTI PRINCIPALI\n';
- report += ' \n';
- this.info.slice(0, 20).forEach((info, i) =>{
- report += `${i + 1}. [${info.category}] ${info.message}\n`;
- report += ` Tempo: +${(info.timestamp / 1000).toFixed(2)}s\n`;
- });
- if (this.info.length >20) {
- report += `\n... e altri ${this.info.length - 20} eventi\n`;
- }
- report += '\n';
- }
- 
- // Timeline completa (ultimi 50 eventi)
- report += ' TIMELINE EVENTI (ultimi 50)\n';
- report += ' \n';
- this.logs.slice(-50).forEach((log, i) =>{
- const icon = log.type === 'error' ? ' ' : log.type === 'warn' ? ' ' : log.type === 'info' ? 'ℹ ' : ' ';
- report += `${icon} [+${(log.timestamp / 1000).toFixed(2)}s] [${log.category}] ${log.message}\n`;
- });
- 
- report += '\n \n';
- report += 'Fine del report\n';
- report += ' \n';
- 
- return report;
- },
- 
- // Scarica report come file
- downloadReport() {
- const report = this.generateReport();
- const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
- const url = URL.createObjectURL(blob);
- const a = document.createElement('a');
- a.href = url;
- a.download = `mobilita-report-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
- document.body.appendChild(a);
- a.click();
- document.body.removeChild(a);
- URL.revokeObjectURL(url);
- 
- notify(' Report scaricato!', 'success');
- AppLogger.logInfo('REPORT', 'Report diagnostico scaricato');
- },
- 
- // Mostra report in modal
- showReport() {
- const report = this.generateReport();
- const html = `<div style="padding: 20px;"><h2 style="color: #667eea; margin-bottom: 20px;">Report Diagnostico</h2><div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;"><p><strong>Errori:</strong>${this.errors.length}</p><p><strong>Avvisi:</strong>${this.warnings.length}</p><p><strong>Totale eventi:</strong>${this.logs.length}</p></div><pre style="background: #fff; padding: 15px; border: 1px solid #dee2e6; border-radius: 8px; max-height: 400px; overflow-y: auto; font-size: 12px; line-height: 1.4;">${report}</pre><div class="modal-buttons" style="margin-top: 20px;"><button class="btn btn-ghost" onclick="closeModal()">Chiudi</button><button class="btn" onclick="AppLogger.downloadReport()">Scarica Report</button><button class="btn btn-secondary" onclick="navigator.clipboard.writeText(AppLogger.generateReport()).then(() =>notify(' Report copiato!', 'success'))">Copia</button></div></div>`;
- 
- openModal('Report Diagnostico', html);
- },
- 
- // Pulisci log
- clear() {
- this.logs = [];
- this.errors = [];
- this.warnings = [];
- this.info = [];
- this.startTime = Date.now();
- console.clear();
- AppLogger.logInfo('SYSTEM', 'Log puliti');
- }
- };
- 
- // Intercetta errori globali
- window.addEventListener('error', function(e) {
- AppLogger.error('GLOBAL', 'Errore non gestito: ' + e.message, {
- filename: e.filename,
- lineno: e.lineno,
- colno: e.colno,
- error: e.error ? e.error.stack : null
- });
- });
- 
- // Intercetta promise rejection
- window.addEventListener('unhandledrejection', function(e) {
- AppLogger.error('PROMISE', 'Promise rejection non gestita', {
- reason: e.reason,
- promise: e.promise
- });
- });
- 
- // Esponi globalmente
- window.AppLogger = AppLogger;
- 
- // Log iniziale
- AppLogger.logInfo('SYSTEM', 'App Mobilità e Orientamento inizializzata');
-
  // ========================
  // UTILITY RETE
  // ========================
@@ -1263,12 +1018,10 @@ body.api-setup-active::before {
  // ---------------
  
  function initMap() {
- AppLogger.logInfo('INIT', 'Inizializzazione Google Maps...');
  
  // Verifica caricamento librerie Google Maps
  if (typeof google === 'undefined' || !google.maps) {
  const msg = 'Google Maps non caricato correttamente';
- AppLogger.error('INIT', msg);
  notify(' Errore: ' + msg, 'error');
  announceToScreenReader('Errore nel caricamento di Google Maps', 'assertive');
  return;
@@ -1276,7 +1029,6 @@ body.api-setup-active::before {
  
  if (!google.maps.geometry || !google.maps.geometry.spherical) {
  const msg = 'Libreria Geometry non caricata';
- AppLogger.error('INIT', msg);
  notify(' Errore: ' + msg, 'error');
  announceToScreenReader('Errore: libreria Geometry mancante', 'assertive');
  return;
@@ -1284,13 +1036,11 @@ body.api-setup-active::before {
  
  if (!google.maps.places || !google.maps.places.PlacesService) {
  const msg = 'Libreria Places non caricata';
- AppLogger.error('INIT', msg);
  notify(' Errore: ' + msg, 'error');
  announceToScreenReader('Errore: libreria Places mancante', 'assertive');
  return;
  }
  
- AppLogger.logInfo('INIT', 'Tutte le librerie Google Maps caricate correttamente');
  
  const defaultPos = {lat: 41.9028, lng: 12.4964};
  map = new google.maps.Map(document.getElementById('map'), {center: defaultPos, zoom: 15});
@@ -3348,36 +3098,6 @@ body.api-setup-active::before {
  }
  }
  
- // Metodo 1: cerca metroId nei parametri query
- const metroIdMatch = url.match(/[?&]metroId=(\d+)/);
- if (metroIdMatch && metroIdMatch[1]) {
- return metroIdMatch[1];
- }
- 
- // Metodo 2: estrai da slug tipo "Roma_e_Lazio-city_81-61"
- let slug = null;
- const mezziMatch = url.match(/mezzi_pubblici-(.+?)(?:\?|$)/);
- if (mezziMatch && mezziMatch[1]) {
- slug = mezziMatch[1];
- } else {
- const transitMatch = url.match(/public_transit-(.+?)(?:\?|$)/);
- if (transitMatch && transitMatch[1]) {
- slug = transitMatch[1];
- }
- }
- 
- if (slug) {
- slug = slug.split('?')[0].split('#')[0];
- const parts = slug.split('-');
- const lastPart = parts[parts.length - 1];
- if (/^\d+$/.test(lastPart)) {
- return lastPart;
- }
- }
- 
- return null;
- }
- 
  // Calcola coordinate per partenza e destinazione
  async function calculateMoovitCoordinates() {
  const startAddress = document.getElementById('addressInput').value.trim();
@@ -3462,16 +3182,6 @@ body.api-setup-active::before {
  const toLngStr = toLng.toFixed(6);
  
  return `https://www.moovit.com/?metroId=${metroId}&lang=it&from=${fromEncoded}&to=${toEncoded}&fll=${fromLatStr}_${fromLngStr}&tll=${toLatStr}_${toLngStr}`;
- }
- 
- // Variabili globali per il modal Moovit
- let moovitCoordinatesData = null;
- 
- // Helper per escape HTML (prevenzione XSS)
- function escapeHtml(text) {
- const div = document.createElement('div');
- div.textContent = text;
- return div.innerHTML;
  }
  
  // Apre il modal Moovit con le 2 opzioni (APP e BROWSER)
@@ -7243,12 +6953,8 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  const otmBtn = document.getElementById('openOnTheMoveBtn');
  if (otmBtn) {
  otmBtn.addEventListener('click', () =>{
- AppLogger.logInfo('OTM', 'Pulsante "Usa in Movimento" cliccato');
  openOnTheMove();
  });
- AppLogger.logInfo('INIT', 'Pulsante "Usa in Movimento" collegato');
- } else {
- AppLogger.warn('INIT', 'Pulsante "Usa in Movimento" non trovato nel DOM');
  }
 
  document.getElementById('closeModalBtn').addEventListener('click', () =>{
@@ -7332,7 +7038,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  }
  
  // Ripristina titolo
- document.title = 'App Mobilità e Orientamento - Versione Distribuibile';
+ document.title = 'App Mobilità e Orientamento';
  
  document.getElementById('onTheMoveOverlay').classList.remove('active');
  document.body.style.overflow = 'auto';
@@ -7427,6 +7133,11 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  * Mostra la scelta iniziale: Sì/No
  */
  function showInitialChoice() {
+ // Ferma il tracking se attivo (l'utente vuole cambiare destinazione)
+ if (otmWatchId !== null) {
+ stopTracking();
+ }
+ 
  const content = `<div class="otm-step active"><div class="otm-question"><h3>Hai già un indirizzo o POI di destinazione?</h3><p style="margin-bottom: 20px; color: #6c757d;">Scegli come vuoi impostare la tua destinazione</p></div><div class="otm-buttons"><button class="btn btn-green" 
  onclick="showDirectDestination()" 
  onkeydown="if(event.key==='Enter'){event.preventDefault();showDirectDestination();}"
@@ -7912,7 +7623,6 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  // AVVIA TRACKING DIRETTO (salta schermata impostazioni)
  startTrackingScreen();
  
- AppLogger.logInfo('OTM', `Doppio tap: tracking avviato verso ${poi.name}`);
  }
  
  /**
@@ -7969,7 +7679,6 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  
  notify(' Aperto su Google Maps: ' + poi.name, 'info');
  
- AppLogger.logInfo('OTM', `Long-press: aperto Google Maps per ${poi.name}`);
  
  }, 800); // 800ms per attivare long-press
  }
@@ -8005,6 +7714,8 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  * SCHERMO TRACKING: Avvia il tracking della distanza
  */
  function startTrackingScreen() {
+ // Quando apriamo la schermata tracking, il GPS DEVE partire
+ // Quindi il pulsante deve sempre mostrare "Ferma"
  const content = `<div class="otm-step active"><div class="otm-tracking"><div class="otm-destination-info"><h4>Destinazione</h4><p style="color: #495057; font-size: 1.05em;">${otmDestination.label}</p></div><div class="otm-distance-display" id="otmDistanceDisplay"><div class="label">Mancano:</div><div class="value" id="otmDistanceValue">---</div></div><div class="otm-accuracy" id="otmAccuracy" style="display: none;"><strong>Accuratezza GPS:</strong><span id="otmAccuracyValue">---</span>m<br><small>Distanza indicativa</small></div><div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; border-radius: 8px; margin-bottom: 15px;"><strong style="color: #1976d2;">Controllo Manuale (se NON ascolti musica)</strong><p style="margin: 8px 0 0; font-size: 0.95em; color: #555;">Se l'app è aperta SENZA altra musica in play, puoi premere<strong>Play</strong>nei controlli lockscreen per sentire la distanza.</p><p style="margin: 8px 0 0; font-size: 0.9em; color: #777;">Non funziona se Spotify/YouTube sono attivi (sovrascrivono i controlli)</p></div><div style="background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,.08);"><div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;"><div style="flex: 1;"><strong style="color: #495057; display: block; margin-bottom: 4px;">Annunci Vocali Automatici</strong><small style="color: #6c757d; display: block;">Sotto 1 km: voce sintetica legge la distanza automaticamente</small></div><button 
  class="btn btn-secondary" 
  onclick="toggleAutoVoice()" 
@@ -8013,7 +7724,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  aria-label="Attiva o disattiva annunci vocali automatici"
  >Attiva</button></div></div><div style="background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,.08);"><div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;"><div style="flex: 1;"><strong style="color: #495057; display: block; margin-bottom: 4px;">Vibrazioni</strong><small style="color: #6c757d; display: block;" id="vibrationSummary">Breve a<span id="vibShort1Display">500</span>m, lunga a<span id="vibLong1Display">150</span>m</small></div><button class="btn btn-secondary" onclick="openVibrationSettings()" style="padding: 8px 16px; font-size: 0.9em;" aria-label="Regola impostazioni vibrazioni">Regola</button></div></div><div style="background: #d4edda; border-left: 4px solid #28a745; padding: 12px; border-radius: 6px; margin-bottom: 15px;"><strong style="color: #155724;">Auto-Annuncio Riapertura</strong><p style="margin: 8px 0 0; font-size: 0.95em; color: #155724;">Ogni volta che riapri l'app (da task switcher o sblocchi schermo), 
  sentirai SUBITO la distanza attuale + vibrazione breve.</p></div><div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 6px; margin-bottom: 20px;"><strong>Importante iOS/Safari:</strong><p style="margin: 8px 0 0; font-size: 0.95em;">Safari blocca il GPS dopo<strong>30 secondi</strong>se chiudi completamente l'app. 
- Tienila aperta (anche minimizzata) per funzionamento continuo.</p><p style="margin: 8px 0 0; font-size: 0.9em; color: #856404;"><strong>Best practice:</strong>Riapri l'app ogni 2-3 minuti per sentire la distanza aggiornata.</p></div><div class="otm-buttons"><button class="btn btn-danger" onclick="stopAndReturn()" style="background: linear-gradient(135deg, #dc3545, #c82333);">⏹ Stop</button><button class="btn btn-secondary" onclick="showInitialChoice()">Cambia Destinazione</button></div></div></div>`;
+ Tienila aperta (anche minimizzata) per funzionamento continuo.</p><p style="margin: 8px 0 0; font-size: 0.9em; color: #856404;"><strong>Best practice:</strong>Riapri l'app ogni 2-3 minuti per sentire la distanza aggiornata.</p></div><div class="otm-buttons"><button class="btn btn-warning" id="toggleTrackingBtn" onclick="toggleTracking()" style="background: linear-gradient(135deg, #ffc107, #ff9800);" aria-label="Ferma tracking GPS">⏸ Ferma</button><button class="btn btn-secondary" onclick="showInitialChoice()">Cambia Destinazione</button><button class="btn btn-danger" onclick="stopAndReturn()" style="background: linear-gradient(135deg, #dc3545, #c82333);">⏹ Chiudi</button></div></div></div>`;
  updateOtmContent(content);
  announce('Tracking avviato');
  
@@ -8021,7 +7732,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  loadVibrationSettings();
  loadAutoVoiceState();
  
- // Avvia watchPosition
+ // Avvia watchPosition (se già attivo, startTracking gestisce il caso)
  startTracking();
  }
  
@@ -8206,19 +7917,16 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  * Avvia il tracking GPS continuo
  */
  async function startTracking() {
- AppLogger.logInfo('OTM', 'Avvio tracking GPS...');
- 
- if (!navigator.geolocation) {
- AppLogger.error('OTM', 'Geolocalizzazione non supportata dal browser');
- notify(' Geolocalizzazione non supportata', 'error');
+ // Previeni doppio avvio
+ if (otmWatchId !== null) {
  return;
  }
  
- AppLogger.debug('OTM', 'Destinazione impostata', {
- lat: otmDestination?.lat,
- lng: otmDestination?.lng,
- label: otmDestination?.label
- });
+ 
+ if (!navigator.geolocation) {
+ notify(' Geolocalizzazione non supportata', 'error');
+ return;
+ }
  
  // Reset variabili annuncio e vibrazioni
  otmLastAnnouncedDistance = null;
@@ -8512,19 +8220,15 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  switch(error.code) {
  case error.PERMISSION_DENIED:
  message = ' Permesso GPS negato';
- AppLogger.error('GPS', 'Permesso GPS negato dall\'utente', errorDetails);
  break;
  case error.POSITION_UNAVAILABLE:
  message = ' Posizione non disponibile';
- AppLogger.warn('GPS', 'Posizione GPS non disponibile', errorDetails);
  break;
  case error.TIMEOUT:
  message = '⏱ Timeout GPS';
- AppLogger.warn('GPS', 'Timeout nella richiesta GPS', errorDetails);
  break;
  default:
  message = ' Errore GPS sconosciuto';
- AppLogger.error('GPS', 'Errore GPS sconosciuto', errorDetails);
  }
  
  notify(message, 'error');
@@ -8548,6 +8252,43 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  // Reset ultima distanza annunciata
  otmLastAnnouncedDistance = null;
  otmLastAnnouncedTime = null;
+ }
+ 
+ /**
+ * Toggle tracking on/off
+ */
+ async function toggleTracking() {
+ if (otmWatchId !== null) {
+ // Ferma il tracking
+ stopTracking();
+ 
+ // Aggiorna il pulsante
+ const btn = document.getElementById('toggleTrackingBtn');
+ if (btn) {
+ btn.textContent = '▶ Avvia';
+ btn.className = 'btn btn-success';
+ btn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+ btn.setAttribute('aria-label', 'Avvia tracking GPS');
+ }
+ 
+ announce('Tracking fermato');
+ } else {
+ // Avvia il tracking
+ await startTracking();
+ 
+ // Aggiorna il pulsante solo se il tracking è stato effettivamente avviato
+ if (otmWatchId !== null) {
+ const btn = document.getElementById('toggleTrackingBtn');
+ if (btn) {
+ btn.textContent = '⏸ Ferma';
+ btn.className = 'btn btn-warning';
+ btn.style.background = 'linear-gradient(135deg, #ffc107, #ff9800)';
+ btn.setAttribute('aria-label', 'Ferma tracking GPS');
+ }
+ 
+ announce('Tracking avviato');
+ }
+ }
  }
  
  /**
@@ -8608,8 +8349,11 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  window.toggleOtmCategory = toggleOtmCategory;
  window.searchPOIs = searchPOIs;
  window.selectPOI = selectPOI;
+ window.handlePOILongPressStart = handlePOILongPressStart;
+ window.handlePOILongPressEnd = handlePOILongPressEnd;
  window.startTrackingScreen = startTrackingScreen;
  window.resumeTracking = resumeTracking;
+ window.toggleTracking = toggleTracking;
  window.stopAndReturn = stopAndReturn;
  window.openVibrationSettings = openVibrationSettings;
  window.saveVibrationSettings = saveVibrationSettings;
