@@ -688,7 +688,9 @@ body.api-setup-active::before {
  padding: 2px 6px;
  font-family: monospace;
  font-size: 0.9em;
-}</style></head><body class="api-setup-active"><div id="apiKeySetup"><h2>Configurazione API Key Google Maps</h2><!-- CAMPO INPUT IN CIMA --><label for="apiKeyInput" style="font-weight:600;display:block;margin-top:20px;margin-bottom:10px;">Inserisci la tua API Key:</label><input type="password" id="apiKeyInput" placeholder="AIzaSy..." autocomplete="off" style="margin-bottom:10px;"><span class="show-key-toggle" id="toggleKeyBtn">Mostra/Nascondi</span><div class="button-group"><button class="btn btn-green" id="saveKeyBtn">Salva e Avvia App</button><button class="btn btn-secondary" id="testKeyBtn">Testa Validità</button></div><div id="apiKeyStatus" style="margin-top:20px;text-align:center"></div><!-- SPIEGAZIONI SOTTO --><div class="info-box" style="margin-top:30px;"><strong>ℹ Privacy</strong><br>La tua chiave API sarà salvata<strong>solo nel tuo browser</strong>(localStorage).</div><div class="warning-box"><strong>Come ottenere la API Key (5 minuti):</strong><ol><li>Vai su<a href="https://console.cloud.google.com/google/maps-apis" target="_blank" rel="noopener">Google Cloud Console</a></li><li>Crea un progetto</li><li>Abilita: Maps JavaScript API, Places API, Directions API, Geocoding API</li><li>Vai su "Credenziali" → "Crea credenziali" → "Chiave API"</li><li>Copia la chiave qui sopra</li></ol><small>quote gratuite mensili (vedi dettagli sopra).</small></div></div><!-- Skip Links per navigazione rapida --><div class="skip-links"><a href="#mainContent" class="skip-link">Salta al contenuto principale</a><a href="#searchSection" class="skip-link">Salta alla ricerca luoghi</a><a href="#mapSection" class="skip-link">Salta alla mappa</a><a href="#orientationSection" class="skip-link">Salta all'orientamento</a></div><!-- Regione di annunci live per screen reader --><div id="sr-announcements" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div><div id="mainAppWrapper"><div class="container" id="mainContainer"><header class="header" id="topHeader" role="banner"><h1>App Mobilità e Orientamento</h1><p>Assistente testuale per l'esplorazione urbana e l'orientamento civico</p><div style="margin-top:10px"><span style="background:rgba(255,255,255,0.2);padding:5px 15px;border-radius:20px;display:inline-block;font-size:0.9em;font-weight:600"></span><span class="expert-mode-badge">EXPERT MODE</span></div></header><main role="main" id="mainContent"><!-- PULSANTE USA IN MOVIMENTO --><div style="background: linear-gradient(135deg, #28a745, #20c997); padding: 20px; margin: 20px auto; max-width: 1400px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,.15); text-align: center;"><button id="openOnTheMoveBtn" class="btn btn-green" style="font-size: 1.3em; padding: 18px 40px; background: #fff; color: #28a745; border: 3px solid #28a745; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,.2);" aria-label="Apri modalità Usa in movimento per tracciare distanza in tempo reale">Usa in Movimento</button><p style="color: #fff; margin-top: 12px; font-size: 1.05em; font-weight: 500;">Traccia la distanza in linea d'aria verso una destinazione mentre ti muovi</p></div><section aria-labelledby="section1-heading" role="search"><div class="section-divider"><h2 id="section1-heading">Sezione 1: Punto di Partenza</h2><p>Inserisci un indirizzo completo per iniziare.</p></div><div class="card"><div class="search-box"><input type="text" id="addressInput" placeholder="Es: Via Nazionale 6, Roma" aria-label="Inserisci indirizzo di partenza" aria-describedby="addressInputHelp"><span id="addressInputHelp" class="sr-only">Inserisci un indirizzo completo con via, numero civico e città</span><button id="searchButton" class="btn" onclick="searchLocation()" aria-label="Cerca l'indirizzo inserito">Cerca</button><!-- Pulsante GPS rimosso --><!-- Pulsante GPS rimosso --></div><!-- CONTROLLO RAGGIO DI RICERCA EXPERT MODE --><div class="search-radius-control"><label for="searchRadius">Raggio di Ricerca Street View (Expert Mode)</label><input type="range" id="searchRadius" min="30" max="100" value="60" step="10" 
+}</style></head><body class="api-setup-active"><div id="apiKeySetup"><h2>Configurazione API Key Google Maps</h2><!-- CAMPO INPUT IN CIMA --><label for="apiKeyInput" style="font-weight:600;display:block;margin-top:20px;margin-bottom:10px;">Inserisci la tua API Key:</label><input type="password" id="apiKeyInput" placeholder="AIzaSy..." autocomplete="off" style="margin-bottom:10px;"><span class="show-key-toggle" id="toggleKeyBtn">Mostra/Nascondi</span><div class="button-group"><button class="btn btn-green" id="saveKeyBtn">Salva e Avvia App</button><button class="btn btn-secondary" id="testKeyBtn">Testa Validità</button></div><div id="apiKeyStatus" style="margin-top:20px;text-align:center"></div><!-- SPIEGAZIONI SOTTO --><div class="info-box" style="margin-top:30px;"><strong>ℹ Privacy</strong><br>La tua chiave API sarà salvata<strong>solo nel tuo browser</strong>(localStorage).</div><div class="warning-box"><strong>Come ottenere la API Key (5 minuti):</strong><ol><li>Vai su<a href="https://console.cloud.google.com/google/maps-apis" target="_blank" rel="noopener">Google Cloud Console</a></li><li>Crea un progetto</li><li>Abilita: Maps JavaScript API, Places API, Directions API, Geocoding API</li><li>Vai su "Credenziali" → "Crea credenziali" → "Chiave API"</li><li>Copia la chiave qui sopra</li></ol><small>quote gratuite mensili (vedi dettagli sopra).</small></div></div><!-- Skip Links per navigazione rapida --><div class="skip-links"><a href="#mainContent" class="skip-link">Salta al contenuto principale</a><a href="#searchSection" class="skip-link">Salta alla ricerca luoghi</a><a href="#mapSection" class="skip-link">Salta alla mappa</a><a href="#orientationSection" class="skip-link">Salta all'orientamento</a></div><!-- Regione di annunci live per screen reader --><div id="sr-announcements" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div><div id="mainAppWrapper"><div class="container" id="mainContainer"><header class="header" id="topHeader" role="banner"><h1>App Mobilità e Orientamento</h1><p>Assistente testuale per l'esplorazione urbana e l'orientamento civico</p><div style="margin-top:10px"><span style="background:rgba(255,255,255,0.2);padding:5px 15px;border-radius:20px;display:inline-block;font-size:0.9em;font-weight:600"></span><span class="expert-mode-badge">EXPERT MODE</span></div></header><main role="main" id="mainContent">
+<!-- PULSANTE USA IN MOVIMENTO --><div style="background: linear-gradient(135deg, #28a745, #20c997); padding: 20px; margin: 20px auto; max-width: 1400px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,.15); text-align: center;"><button id="openOnTheMoveBtn" class="btn btn-green" style="font-size: 1.3em; padding: 18px 40px; background: #fff; color: #28a745; border: 3px solid #28a745; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,.2);" aria-label="Apri modalità Usa in movimento per tracciare distanza in tempo reale">Usa in Movimento</button><p style="color: #fff; margin-top: 12px; font-size: 1.05em; font-weight: 500;">Traccia la distanza in linea d'aria verso una destinazione mentre ti muovi</p></div>
+<!-- PULSANTE USA IN MOVIMENTO --><div style="background: linear-gradient(135deg, #28a745, #20c997); padding: 20px; margin: 20px auto; max-width: 1400px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,.15); text-align: center;"><button id="openOnTheMoveBtn" class="btn btn-green" style="font-size: 1.3em; padding: 18px 40px; background: #fff; color: #28a745; border: 3px solid #28a745; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,.2);" aria-label="Apri modalità Usa in movimento per tracciare distanza in tempo reale">Usa in Movimento</button><p style="color: #fff; margin-top: 12px; font-size: 1.05em; font-weight: 500;">Traccia la distanza in linea d'aria verso una destinazione mentre ti muovi</p></div><section aria-labelledby="section1-heading" role="search"><div class="section-divider"><h2 id="section1-heading">Sezione 1: Punto di Partenza</h2><p>Inserisci un indirizzo completo per iniziare.</p></div><div class="card"><div class="search-box"><input type="text" id="addressInput" placeholder="Es: Via Nazionale 6, Roma" aria-label="Inserisci indirizzo di partenza" aria-describedby="addressInputHelp"><span id="addressInputHelp" class="sr-only">Inserisci un indirizzo completo con via, numero civico e città</span><button id="searchButton" class="btn" onclick="searchLocation()" aria-label="Cerca l'indirizzo inserito">Cerca</button><!-- Pulsante GPS rimosso --><!-- Pulsante GPS rimosso --></div><!-- CONTROLLO RAGGIO DI RICERCA EXPERT MODE --><div class="search-radius-control"><label for="searchRadius">Raggio di Ricerca Street View (Expert Mode)</label><input type="range" id="searchRadius" min="30" max="100" value="60" step="10" 
  oninput="document.getElementById('radiusValue').textContent = this.value"
  aria-label="Seleziona raggio di ricerca in metri"><div class="range-value"><span id="radiusValue">60</span>metri</div><small style="color: #6c757d; display: block; margin-top: 5px;">Più alto = trova più punti ma potrebbe essere meno preciso. Consigliato: 50-70m</small></div></div></section><section aria-labelledby="section2-heading" id="mapSection" style="display:none;"><div class="section-divider"><h2 id="section2-heading">Sezione 2: Mappa e Street View</h2><p>Esplora l'area con la mappa 2D o con la visuale a livello della strada.</p></div><div class="map-grid" id="mapGrid" style="display:none;"><div class="map-box"><div class="map-label" aria-hidden="true" tabindex="-1">MAPPA</div><div id="map"></div></div><div class="map-box"><div class="map-label" aria-hidden="true" tabindex="-1">STREET VIEW</div><div id="streetview" tabindex="0" role="application" aria-label="Google Street View"></div><div class="sv-controls" aria-label="Controlli Street View"><div class="control-row"><button class="control-btn" onclick="movePov('up')" title="Guarda in alto">SU</button></div><div class="control-row"><button class="control-btn" onclick="movePov('left')" title="Guarda a sinistra">SINISTRA</button><button class="control-btn" onclick="moveForward()" title="Vai avanti">AVANTI</button><button class="control-btn" onclick="movePov('right')" title="Guarda a destra">DESTRA</button></div><div class="control-row"><button class="control-btn" onclick="movePov('down')" title="Guarda in basso">GIÙ</button></div><div class="control-row" style="margin-top: 10px;"><button class="control-btn" onclick="moveBackward()" title="Vai indietro">INDIETRO</button></div><div class="control-row" style="margin-top: 10px;"><button class="control-btn" onclick="resetStreetView()" title="Resetta alla posizione iniziale" style="background: #ffc107; border-color: #ffc107; color: #000;">RESET</button></div></div><div id="svInfo" class="sv-live" role="status" aria-live="polite" aria-atomic="true" style="display:none"><div><strong>Indirizzo:</strong><span id="svAddress">-</span></div><div><strong>Direzione:</strong><span id="svDirection">-</span></div></div></div></div><div class="card" id="staticLinkCard" style="display:none; margin-top: -10px; text-align: center;"><p style="margin-bottom: 10px; color: #6c757d;">Usa questo link per aprire l'immagine statica di Street View (per screenshot):</p><a id="staticStreetViewLink" href="#" target="_blank" class="btn btn-secondary">Apri Immagine Street View Statica</a></div><div class="card" id="orientationResultCard" style="display:none; margin-top: 10px; background: linear-gradient(135deg, #e3f2fd, #f3e5f5); border-left: 5px solid #667eea;"><h3 style="margin: 0 0 15px 0; color: #667eea;">Orientamento Edificio</h3><div style="margin-bottom: 15px;"><button class="btn" onclick="runCivicAnalysisCascade()" aria-label=" Ricalcola Orientamento" style="font-size: 1.05em; padding: 14px 20px;">Analizza Orientamento</button><p style="margin: 8px 0 0 0; font-size: 0.9em; color: #666;">Sistema intelligente a 4 tentativi: Street View diretto, vicini stesso lato, vicini lato opposto, calcolo geometrico</p></div><!-- RAPPORTO DI TRASPARENZA EXPERT MODE --><div id="transparencyReport" class="transparency-report" style="display:none"><strong>Rapporto di Trasparenza (Expert Mode)</strong><div id="transparencyContent" style="margin-top:10px"></div></div><div id="orientation-status" class="orientation-results-box" style="background: white; margin: 0;" aria-live="polite">Premi il pulsante qui sopra per analizzare l'orientamento dell'edificio.</div><div id="turn-instruction-wrapper" style="margin-top: 15px; display: none;"><label for="desired-direction" class="option-label">Per andare verso:</label><select id="desired-direction" style="padding: 10px; border-radius: 6px; border: 2px solid #dee2e6; font-size: 15px; margin-bottom: 10px; width: 100%; max-width: 250px;"><option value="">-- Seleziona direzione --</option><option value="N">Nord</option><option value="NE">Nord-Est</option><option value="E">Est</option><option value="SE">Sud-Est</option><option value="S">Sud</option><option value="SW">Sud-Ovest</option><option value="W">Ovest</option><option value="NW">Nord-Ovest</option></select><div id="turn-instruction-status" class="orientation-results-box" style="background: white; margin-top: 10px;" aria-live="polite">Seleziona una direzione qui sopra per vedere come girare quando esci dall'edificio.</div></div></div></section><section aria-labelledby="section3-heading" role="region" id="searchSection" style="display:none;"><div class="section-divider"><h2 id="section3-heading">Sezione 3: Cerca nelle Vicinanze</h2><p>Usa i pulsanti per ottenere informazioni sull'area intorno al punto di partenza.</p></div><div class="card" id="searchCard" style="display:none;"><div class="options-grid"><div><label class="option-label" for="radiusInput">Raggio (metri):</label><input type="number" id="radiusInput" value="500" min="100" max="5000" step="100"></div><div><label class="option-label" for="categorySearch">Cerca Categorie:</label><input type="search" id="categorySearch" oninput="filterCategories()" placeholder="Cerca es. farmacia, bar..." 
  style="width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 15px;"><label class="option-label">Categorie Google Places:</label><div class="cats-wrapper"><div id="catsGrid" class="cats-grid"></div></div><div id="catsSummary" class="summary">Nessuna categoria selezionata (userò le quotidiane).</div></div><div class="tools-sticky"><div id="tools-group" style="display:flex;flex-direction:column;gap:8px"><button class="btn" onclick="searchPlaces()">Cerca Luoghi (Google)</button><button class="btn btn-secondary" onclick="fetchWeather()">Meteo Ora</button><button class="btn btn-secondary" onclick="listOSMIntersections()">Incroci (Proxy)</button><button class="btn btn-secondary" onclick="listOSMPlacesAll()">POI OSM (Proxy)</button><button class="btn btn-ghost" onclick="prepareSocialPrompt()">Ricerca Social (Prompt)</button><button class="btn btn-ghost" onclick="prepareTransitPrompt()">Ricerca Trasporti (Prompt)</button></div></div></div><div id="weatherResults" class="osm-results" style="display:none"></div></div><div class="section-divider" id="resultsSection" style="display:none;"><h2>Sezione 4: Risultati della Ricerca</h2><p>Scegli un'azione dal menu a tendina per ogni luogo.</p></div><div class="card" id="resultsCard" style="display:none;"><div class="places-container" id="placesList"></div></div><div class="section-divider" id="customRouteSection" style="display:none;"><h2>Sezione 5: Percorso Personalizzato</h2><p>Inserisci una destinazione qualsiasi per avere le istruzioni di percorso.</p></div><div class="card" id="customRouteCard" style="display:none;"><div class="search-box"><input type="text" id="customDest" placeholder="Es: Piazza del Duomo, Roma"><select id="customRouteMode" 
@@ -2566,7 +2568,7 @@ body.api-setup-active::before {
  const toLatStr = toLat.toFixed(6);
  const toLngStr = toLng.toFixed(6);
  
- return `https://www.moovit.com/?metroId=${metroId}&lang=it&from=${fromEncoded}&to=${toEncoded}&fll=${fromLatStr}_${fromLngStr}&tll=${toLatStr}_${toLngStr}`;
+ return `https://moovitapp.com/?metroId=${metroId}&lang=it&from=${fromEncoded}&to=${toEncoded}&fll=${fromLatStr}_${fromLngStr}&tll=${toLatStr}_${toLngStr}`;
  }
  
  // Variabili globali per il modal Moovit
@@ -2667,12 +2669,12 @@ body.api-setup-active::before {
  // ========================================
  function selectMoovitArea(metroId, areaName) {
  localStorage.setItem('moovit_metroId', metroId);
- notify(`✓ Area salvata: ${areaName} (ID: ${metroId})`, 'success');
+ notify(` Area salvata: ${areaName} (ID: ${metroId})`, 'success');
  
  // Aggiorna UI
  const statusDiv = document.getElementById('moovitMetroIdStatus');
  if (statusDiv) {
- statusDiv.innerHTML = `✓ Area selezionata: <strong>${escapeHtml(areaName)}</strong> (ID: ${metroId})`;
+ statusDiv.innerHTML = ` Area selezionata: <strong>${escapeHtml(areaName)}</strong> (ID: ${metroId})`;
  statusDiv.style.display = 'block';
  statusDiv.style.background = '#d4edda';
  statusDiv.style.color = '#155724';
@@ -2694,11 +2696,11 @@ body.api-setup-active::before {
  const destAddress = document.getElementById('customDest').value.trim();
  
  if (!startAddress) {
- notify('⚠ Inserisci prima un indirizzo di partenza nella Sezione 1', 'error');
+ notify(' Inserisci prima un indirizzo di partenza nella Sezione 1', 'error');
  return;
  }
  if (!destAddress) {
- notify('⚠ Inserisci prima una destinazione', 'error');
+ notify(' Inserisci prima una destinazione', 'error');
  return;
  }
  
@@ -2715,8 +2717,8 @@ body.api-setup-active::before {
  <div class="modal-info" style="padding: 10px 0;">
  <!-- Riepilogo percorso -->
  <div style="background: #f0f4ff; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
- <p style="margin: 0 0 8px 0; color: #495057;"><strong>📍 Da:</strong> ${startAddressEscaped}</p>
- <p style="margin: 0; color: #495057;"><strong>🎯 A:</strong> ${destAddressEscaped}</p>
+ <p style="margin: 0 0 8px 0; color: #495057;"><strong> Da:</strong> ${startAddressEscaped}</p>
+ <p style="margin: 0; color: #495057;"><strong> A:</strong> ${destAddressEscaped}</p>
  </div>
  
  <!-- Stato calcolo coordinate (aria-live) -->
@@ -2727,31 +2729,31 @@ body.api-setup-active::before {
  <!-- Raccomandazione visibile -->
  <div style="background: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
  <p style="margin: 0; color: #2e7d32; font-size: 0.95em;">
- 💡 <strong>Consigliato:</strong> Se hai Moovit installata, usa <strong>"Apri in App"</strong> (non serve configurazione).
+ <strong>Consigliato:</strong> Se hai Moovit installata, usa <strong>"Apri in App"</strong> (non serve configurazione).
  </p>
  </div>
  
  <!-- Pulsanti principali (inizialmente disabilitati) -->
  <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px;">
  <button id="moovitAppBtn" class="btn btn-green" disabled style="font-size: 1.1em; padding: 15px; opacity: 0.5; cursor: not-allowed;">
- 📱 Apri in App Moovit
+ Apri in App Moovit
  </button>
  <button id="moovitBrowserBtn" class="btn" disabled style="font-size: 1.1em; padding: 15px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; opacity: 0.5; cursor: not-allowed;">
- 🌐 Apri in Browser
+ Apri in Browser
  </button>
  </div>
  
  <!-- Messaggio visibile quando browser è disabilitato -->
  <div id="moovitBrowserWarning" style="display: ${savedMetroId ? 'none' : 'block'}; background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
  <p style="margin: 0; color: #856404; font-size: 0.95em;">
- ⚠ <strong>Pulsante Browser disabilitato:</strong> Seleziona un'area Moovit qui sotto per abilitarlo.
+ <strong>Pulsante Browser disabilitato:</strong> Seleziona un'area Moovit qui sotto per abilitarlo.
  </p>
  </div>
  
  <!-- Spiegazione aree (accessibilità) -->
  <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
  <p style="margin: 0; color: #1565c0; font-size: 0.9em; line-height: 1.5;">
- ℹ️ <strong>Nota:</strong> Nel browser, Moovit usa aree di servizio (es. "Roma e Lazio"), non sempre la singola città. 
+ ℹ <strong>Nota:</strong> Nel browser, Moovit usa aree di servizio (es. "Roma e Lazio"), non sempre la singola città. 
  Scegli l'area che include il tuo comune. Se i risultati non tornano, cambiala.
  </p>
  </div>
@@ -2759,16 +2761,16 @@ body.api-setup-active::before {
  <!-- Suggerimento automatico area (nascosto inizialmente) -->
  <div id="moovitAreaSuggestion" style="display: none; background: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
  <p style="margin: 0 0 10px 0; color: #2e7d32; font-size: 0.95em;">
- <strong>💡 Suggerimento area:</strong> <span id="moovitSuggestedAreaText"></span>
+ <strong> Suggerimento area:</strong> <span id="moovitSuggestedAreaText"></span>
  </p>
  <button class="btn btn-secondary" onclick="useSuggestedMoovitArea()" style="padding: 8px 16px; font-size: 0.9em;">
- ✓ Usa questo suggerimento
+ Usa questo suggerimento
  </button>
  </div>
  
  <!-- Sezione Selettore Area -->
  <div style="background: #f8f9fb; border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #667eea;">
- <h4 style="margin: 0 0 12px 0; color: #667eea; font-size: 1.05em;">🗺️ Selettore Area Moovit (Italia)</h4>
+ <h4 style="margin: 0 0 12px 0; color: #667eea; font-size: 1.05em;"> Selettore Area Moovit (Italia)</h4>
  
  <!-- Ricerca area -->
  <div style="margin-bottom: 12px;">
@@ -2791,14 +2793,14 @@ body.api-setup-active::before {
  
  <!-- Stato area selezionata -->
  <div id="moovitMetroIdStatus" style="margin-top: 12px; padding: 10px; border-radius: 6px; display: ${savedMetroId ? 'block' : 'none'}; background: #d4edda; color: #155724;">
- ✓ Area selezionata: <strong>${escapeHtml(savedAreaName)}</strong> ${savedMetroId ? `(ID: ${savedMetroId})` : ''}
+ Area selezionata: <strong>${escapeHtml(savedAreaName)}</strong> ${savedMetroId ? `(ID: ${savedMetroId})` : ''}
  </div>
  </div>
  
  <!-- Fallback: input manuale MetroId -->
  <details style="margin-bottom: 15px;">
  <summary style="cursor: pointer; padding: 10px; background: #f8f9fb; border-radius: 6px; font-weight: 600; color: #667eea;">
- ⚙️ Opzioni avanzate (MetroId manuale o link)
+ Opzioni avanzate (MetroId manuale o link)
  </summary>
  <div style="padding: 15px; background: #f8f9fb; border-radius: 6px; margin-top: 8px;">
  <div style="display: flex; gap: 10px; margin-bottom: 12px;">
@@ -2808,8 +2810,8 @@ body.api-setup-active::before {
  value="${savedMetroId}"
  style="flex: 1; padding: 10px; border: 2px solid #667eea; border-radius: 6px; font-size: 14px;"
  aria-label="Inserisci MetroId numerico manualmente">
- <button class="btn btn-secondary" onclick="saveMoovitMetroIdManual()" style="padding: 10px 20px;">
- 💾 Salva
+ <button class="btn btn-secondary" onclick="saveMoovitMetroId()" style="padding: 10px 20px;">
+ Salva
  </button>
  </div>
  
@@ -2822,7 +2824,7 @@ body.api-setup-active::before {
  style="flex: 1; padding: 10px; border: 2px solid #667eea; border-radius: 6px; font-size: 14px;"
  aria-label="Incolla link Moovit per estrarre MetroId">
  <button class="btn btn-secondary" onclick="extractAndSaveMetroId()" style="padding: 10px 20px;">
- 🔍 Estrai
+ Estrai
  </button>
  </div>
  
@@ -2839,7 +2841,7 @@ body.api-setup-active::before {
  </div>
  `;
  
- openModal('🚍 Apri in Moovit', modalContent);
+ openModal(' Apri in Moovit', modalContent);
  
  // Popola la lista aree
  renderMoovitAreaList();
@@ -2888,7 +2890,7 @@ body.api-setup-active::before {
  // Aggiorna stato
  const statusDiv = document.getElementById('moovitStatusLive');
  if (statusDiv) {
- statusDiv.innerHTML = '<strong style="color: #28a745;">✓ Coordinate pronte!</strong>';
+ statusDiv.innerHTML = '<strong style="color: #28a745;"> Coordinate pronte!</strong>';
  statusDiv.style.background = '#d4edda';
  }
  
@@ -2907,10 +2909,10 @@ body.api-setup-active::before {
  } catch (err) {
  const statusDiv = document.getElementById('moovitStatusLive');
  if (statusDiv) {
- statusDiv.innerHTML = `<strong style="color: #dc3545;">✗ Errore: ${escapeHtml(err.message)}</strong>`;
+ statusDiv.innerHTML = `<strong style="color: #dc3545;"> Errore: ${escapeHtml(err.message)}</strong>`;
  statusDiv.style.background = '#f8d7da';
  }
- notify('⚠ ' + err.message, 'error');
+ notify(' ' + err.message, 'error');
  }
  }
  
@@ -2947,17 +2949,17 @@ body.api-setup-active::before {
  // ========================================
  // SALVATAGGIO MANUALE METRO ID (fallback)
  // ========================================
- function saveMoovitMetroIdManual() {
+ function saveMoovitMetroId() {
  const input = document.getElementById('moovitMetroIdInput');
  const metroId = input?.value.trim();
  
  if (!metroId) {
- notify('⚠ Inserisci un MetroId', 'error');
+ notify(' Inserisci un MetroId', 'error');
  return;
  }
  
  if (!/^\d+$/.test(metroId)) {
- notify('⚠ Il MetroId deve essere un numero', 'error');
+ notify(' Il MetroId deve essere un numero', 'error');
  return;
  }
  
@@ -2967,12 +2969,12 @@ body.api-setup-active::before {
  const area = MOOVIT_IT_AREAS.find(a => a.id == metroId);
  const areaName = area ? area.name : 'Area personalizzata';
  
- notify(`✓ MetroId salvato: ${metroId}`, 'success');
+ notify(` MetroId salvato: ${metroId}`, 'success');
  
  // Aggiorna status
  const statusDiv = document.getElementById('moovitMetroIdStatus');
  if (statusDiv) {
- statusDiv.innerHTML = `✓ Area: <strong>${escapeHtml(areaName)}</strong> (ID: ${metroId})`;
+ statusDiv.innerHTML = ` Area: <strong>${escapeHtml(areaName)}</strong> (ID: ${metroId})`;
  statusDiv.style.display = 'block';
  statusDiv.style.background = '#d4edda';
  statusDiv.style.color = '#155724';
@@ -2988,19 +2990,19 @@ body.api-setup-active::before {
  const url = input?.value.trim();
  
  if (!url) {
- notify('⚠ Incolla un link Moovit', 'error');
+ notify(' Incolla un link Moovit', 'error');
  return;
  }
  
  if (!url.includes('moovit')) {
- notify('⚠ Il link deve essere di Moovit', 'error');
+ notify(' Il link deve essere di Moovit', 'error');
  return;
  }
  
  const metroId = extractMetroIdFromMoovitUrl(url);
  
  if (!metroId) {
- notify('⚠ Non riesco a estrarre MetroId da questo link', 'error');
+ notify(' Non riesco a estrarre MetroId da questo link', 'error');
  return;
  }
  
@@ -3010,7 +3012,7 @@ body.api-setup-active::before {
  const area = MOOVIT_IT_AREAS.find(a => a.id == metroId);
  const areaName = area ? area.name : 'Area estratta';
  
- notify(`✓ MetroId estratto e salvato: ${metroId}`, 'success');
+ notify(` MetroId estratto e salvato: ${metroId}`, 'success');
  
  // Aggiorna input numerico
  const numInput = document.getElementById('moovitMetroIdInput');
@@ -3021,7 +3023,7 @@ body.api-setup-active::before {
  // Aggiorna status
  const statusDiv = document.getElementById('moovitMetroIdStatus');
  if (statusDiv) {
- statusDiv.innerHTML = `✓ Area: <strong>${escapeHtml(areaName)}</strong> (ID: ${metroId})`;
+ statusDiv.innerHTML = ` Area: <strong>${escapeHtml(areaName)}</strong> (ID: ${metroId})`;
  statusDiv.style.display = 'block';
  statusDiv.style.background = '#d4edda';
  statusDiv.style.color = '#155724';
@@ -3034,7 +3036,7 @@ body.api-setup-active::before {
  // Apre Moovit nell'app con deeplink
  function openMoovitApp() {
  if (!moovitCoordinatesData) {
- notify('⚠ Coordinate non ancora pronte', 'error');
+ notify(' Coordinate non ancora pronte', 'error');
  return;
  }
  
@@ -3042,11 +3044,11 @@ body.api-setup-active::before {
  try {
  deeplink = buildMoovitDeepLink(moovitCoordinatesData);
  } catch (err) {
- notify('⚠ Errore creazione deeplink: ' + err.message, 'error');
+ notify(' Errore creazione deeplink: ' + err.message, 'error');
  return;
  }
  
- notify('📱 Apertura Moovit App...', 'success');
+ notify(' Apertura Moovit App...', 'success');
  closeModal();
  
  // Prova ad aprire l'app
@@ -3068,13 +3070,13 @@ body.api-setup-active::before {
  // Apre Moovit nel browser senza popup block
  function openMoovitBrowser() {
  if (!moovitCoordinatesData) {
- notify('⚠ Coordinate non ancora pronte', 'error');
+ notify(' Coordinate non ancora pronte', 'error');
  return;
  }
  
  const metroId = localStorage.getItem('moovit_metroId');
  if (!metroId) {
- notify('⚠ Seleziona un\'area Moovit prima', 'error');
+ notify(' Seleziona un\'area Moovit prima', 'error');
  return;
  }
  
@@ -3082,7 +3084,7 @@ body.api-setup-active::before {
  const newWindow = window.open('about:blank', '_blank');
  
  if (!newWindow) {
- notify('⚠ Popup bloccato dal browser. Abilita i popup per questo sito.', 'error');
+ notify(' Popup bloccato dal browser. Abilita i popup per questo sito.', 'error');
  return;
  }
  
@@ -3091,398 +3093,13 @@ body.api-setup-active::before {
  newWindow.location.href = webUrl;
  
  closeModal();
- notify('🌐 Apertura Moovit in browser...', 'success');
+ notify(' Apertura Moovit in browser...', 'success');
  } catch (err) {
  newWindow.close();
- notify('⚠ Errore apertura browser: ' + err.message, 'error');
+ notify(' Errore apertura browser: ' + err.message, 'error');
  }
  }
  
- // Calcola coordinate per partenza e destinazione
- async function calculateMoovitCoordinates() {
- const startAddress = document.getElementById('addressInput').value.trim();
- const destAddress = document.getElementById('customDest').value.trim();
- 
- if (!startAddress) {
- throw new Error('Inserisci prima un indirizzo di partenza nella Sezione 1');
- }
- if (!destAddress) {
- throw new Error('Inserisci prima una destinazione');
- }
- 
- // Coordinate FROM
- let fromLat, fromLng, fromLabel;
- if (originalStartPoint) {
- fromLat = typeof originalStartPoint.lat === 'function' ? originalStartPoint.lat() : originalStartPoint.lat;
- fromLng = typeof originalStartPoint.lng === 'function' ? originalStartPoint.lng() : originalStartPoint.lng;
- fromLabel = startAddress;
- } else if (currentLocation) {
- fromLat = typeof currentLocation.lat === 'function' ? currentLocation.lat() : currentLocation.lat;
- fromLng = typeof currentLocation.lng === 'function' ? currentLocation.lng() : currentLocation.lng;
- fromLabel = startAddress;
- } else {
- // Geocode startAddress
- const fromResult = await new Promise((resolve, reject) =>{
- geocoder.geocode({ address: startAddress }, (results, status) =>{
- if (status === 'OK' && results[0]) {
- resolve(results[0]);
- } else {
- reject(new Error('Geocoding partenza fallito: ' + status));
- }
- });
- });
- fromLat = fromResult.geometry.location.lat();
- fromLng = fromResult.geometry.location.lng();
- fromLabel = fromResult.formatted_address || startAddress;
- }
- 
- // Coordinate TO - sempre geocode
- const toResult = await new Promise((resolve, reject) =>{
- geocoder.geocode({ address: destAddress }, (results, status) =>{
- if (status === 'OK' && results[0]) {
- resolve(results[0]);
- } else {
- reject(new Error('Geocoding destinazione fallito: ' + status));
- }
- });
- });
- const toLat = toResult.geometry.location.lat();
- const toLng = toResult.geometry.location.lng();
- const toLabel = toResult.formatted_address || destAddress;
- 
- return {
- fromLat,
- fromLng,
- fromLabel,
- toLat,
- toLng,
- toLabel
- };
- }
- 
- // Costruisce il deeplink Moovit per l'app
- function buildMoovitDeepLink(data) {
- const { fromLat, fromLng, fromLabel, toLat, toLng, toLabel } = data;
- 
- const destName = encodeURIComponent(toLabel);
- const origName = encodeURIComponent(fromLabel);
- 
- return `moovit://directions?dest_lat=${toLat.toFixed(6)}&dest_lon=${toLng.toFixed(6)}&dest_name=${destName}&orig_lat=${fromLat.toFixed(6)}&orig_lon=${fromLng.toFixed(6)}&orig_name=${origName}&auto_run=true&partner_id=mobilita_vercel_app`;
- }
- 
- // Costruisce l'URL web Moovit per il browser
- function buildMoovitWebUrl(data, metroId) {
- const { fromLat, fromLng, fromLabel, toLat, toLng, toLabel } = data;
- 
- const fromEncoded = encodeURIComponent(fromLabel);
- const toEncoded = encodeURIComponent(toLabel);
- const fromLatStr = fromLat.toFixed(6);
- const fromLngStr = fromLng.toFixed(6);
- const toLatStr = toLat.toFixed(6);
- const toLngStr = toLng.toFixed(6);
- 
- return `https://www.moovit.com/?metroId=${metroId}&lang=it&from=${fromEncoded}&to=${toEncoded}&fll=${fromLatStr}_${fromLngStr}&tll=${toLatStr}_${toLngStr}`;
- }
- 
- // Apre il modal Moovit con le 2 opzioni (APP e BROWSER)
- async function openMoovitModal() {
- const startAddress = document.getElementById('addressInput').value.trim();
- const destAddress = document.getElementById('customDest').value.trim();
- 
- if (!startAddress) {
- notify('⚠ Inserisci prima un indirizzo di partenza nella Sezione 1', 'error');
- return;
- }
- if (!destAddress) {
- notify('⚠ Inserisci prima una destinazione', 'error');
- return;
- }
- 
- // Legge metroId salvato
- const savedMetroId = localStorage.getItem('moovit_metroId') || '';
- 
- // Escape HTML per sicurezza
- const startAddressEscaped = escapeHtml(startAddress.substring(0, 60) + (startAddress.length > 60 ? '...' : ''));
- const destAddressEscaped = escapeHtml(destAddress.substring(0, 60) + (destAddress.length > 60 ? '...' : ''));
- 
- const modalContent = `
- <div class="modal-info" style="padding: 10px 0;">
- <!-- Riepilogo percorso -->
- <div style="background: #f0f4ff; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
- <p style="margin: 0 0 8px 0; color: #495057;"><strong>📍 Da:</strong> ${startAddressEscaped}</p>
- <p style="margin: 0; color: #495057;"><strong>🎯 A:</strong> ${destAddressEscaped}</p>
- </div>
- 
- <!-- Stato calcolo coordinate (aria-live) -->
- <div id="moovitStatusLive" role="status" aria-live="polite" aria-atomic="true" style="background: #fff3cd; border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center;">
- <strong>⏳ Calcolo coordinate...</strong>
- </div>
- 
- <!-- Raccomandazione visibile -->
- <div style="background: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
- <p style="margin: 0; color: #2e7d32; font-size: 0.95em;">
- 💡 <strong>Consigliato:</strong> Se hai Moovit installata, usa <strong>"Apri in App"</strong> (non serve configurazione).
- </p>
- </div>
- 
- <!-- Pulsanti principali (inizialmente disabilitati) -->
- <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px;">
- <button id="moovitAppBtn" class="btn btn-green" disabled style="font-size: 1.1em; padding: 15px; opacity: 0.5; cursor: not-allowed;">
- 📱 Apri in App Moovit
- </button>
- <button id="moovitBrowserBtn" class="btn" disabled style="font-size: 1.1em; padding: 15px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; opacity: 0.5; cursor: not-allowed;">
- 🌐 Apri in Browser
- </button>
- </div>
- 
- <!-- Messaggio visibile quando browser è disabilitato -->
- <div id="moovitBrowserWarning" style="display: ${savedMetroId ? 'none' : 'block'}; background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
- <p style="margin: 0; color: #856404; font-size: 0.95em;">
- ⚠ <strong>Pulsante Browser disabilitato:</strong> Inserisci il MetroId qui sotto per abilitarlo.
- </p>
- </div>
- 
- <!-- Sezione MetroId per browser -->
- <div style="background: #f8f9fb; border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #667eea;">
- <h4 style="margin: 0 0 12px 0; color: #667eea; font-size: 1.05em;">⚙ MetroId (solo per Browser)</h4>
- 
- <div style="display: flex; gap: 10px; margin-bottom: 12px;">
- <input type="number" 
- id="moovitMetroIdInput" 
- placeholder="es. 61"
- value="${savedMetroId}"
- style="flex: 1; padding: 10px; border: 2px solid #667eea; border-radius: 6px; font-size: 14px;"
- aria-label="Inserisci MetroId numerico">
- <button class="btn btn-secondary" onclick="saveMoovitMetroId()" style="padding: 10px 20px;">
- 💾 Salva
- </button>
- </div>
- 
- <p style="margin: 12px 0; color: #666; font-size: 0.95em;"><strong>Oppure</strong> estrai MetroId da un link Moovit:</p>
- 
- <div style="display: flex; gap: 10px; margin-bottom: 12px;">
- <input type="text" 
- id="moovitUrlInput" 
- placeholder="Incolla link Moovit..."
- style="flex: 1; padding: 10px; border: 2px solid #667eea; border-radius: 6px; font-size: 14px;"
- aria-label="Incolla link Moovit per estrarre MetroId">
- <button class="btn btn-secondary" onclick="extractAndSaveMetroId()" style="padding: 10px 20px;">
- 🔍 Estrai
- </button>
- </div>
- 
- <small style="color: #888; display: block; line-height: 1.4;">
- Esempio link: https://moovitapp.com/?metroId=61&lang=it<br>
- Il MetroId è necessario solo per aprire in browser, non per l'app.
- </small>
- 
- <div id="moovitMetroIdStatus" style="margin-top: 12px; padding: 10px; border-radius: 6px; display: ${savedMetroId ? 'block' : 'none'}; background: #d4edda; color: #155724;">
- ✓ MetroId salvato: <strong>${savedMetroId}</strong>
- </div>
- </div>
- 
- </div>
- 
- <div class="modal-buttons">
- <button class="btn btn-ghost" onclick="closeModal()">Annulla</button>
- </div>
- `;
- 
- openModal('🚍 Apri in Moovit', modalContent);
- 
- // Avvia calcolo coordinate
- try {
- moovitCoordinatesData = await calculateMoovitCoordinates();
- 
- // Aggiorna stato
- const statusDiv = document.getElementById('moovitStatusLive');
- if (statusDiv) {
- statusDiv.innerHTML = '<strong style="color: #28a745;">✓ Coordinate pronte!</strong>';
- statusDiv.style.background = '#d4edda';
- }
- 
- // Abilita pulsante APP
- const appBtn = document.getElementById('moovitAppBtn');
- if (appBtn) {
- appBtn.disabled = false;
- appBtn.style.opacity = '1';
- appBtn.style.cursor = 'pointer';
- appBtn.onclick = openMoovitApp;
- }
- 
- // Abilita pulsante BROWSER se c'è metroId
- updateBrowserButtonState();
- 
- } catch (err) {
- const statusDiv = document.getElementById('moovitStatusLive');
- if (statusDiv) {
- statusDiv.innerHTML = `<strong style="color: #dc3545;">✗ Errore: ${err.message}</strong>`;
- statusDiv.style.background = '#f8d7da';
- }
- notify('⚠ ' + err.message, 'error');
- }
- }
- 
- // Aggiorna lo stato del pulsante Browser in base a metroId
- function updateBrowserButtonState() {
- const browserBtn = document.getElementById('moovitBrowserBtn');
- const browserWarning = document.getElementById('moovitBrowserWarning');
- const metroId = localStorage.getItem('moovit_metroId');
- 
- if (browserBtn && moovitCoordinatesData) {
- if (metroId) {
- browserBtn.disabled = false;
- browserBtn.style.opacity = '1';
- browserBtn.style.cursor = 'pointer';
- browserBtn.onclick = openMoovitBrowser;
- if (browserWarning) browserWarning.style.display = 'none';
- } else {
- browserBtn.disabled = true;
- browserBtn.style.opacity = '0.5';
- browserBtn.style.cursor = 'not-allowed';
- browserBtn.title = 'Inserisci MetroId per abilitare';
- if (browserWarning) browserWarning.style.display = 'block';
- }
- }
- }
- 
- // Salva MetroId da input numerico
- function saveMoovitMetroId() {
- const input = document.getElementById('moovitMetroIdInput');
- const metroId = input?.value.trim();
- 
- if (!metroId) {
- notify('⚠ Inserisci un MetroId', 'error');
- return;
- }
- 
- if (!/^\d+$/.test(metroId)) {
- notify('⚠ Il MetroId deve essere un numero', 'error');
- return;
- }
- 
- localStorage.setItem('moovit_metroId', metroId);
- notify('✓ MetroId salvato: ' + metroId, 'success');
- 
- // Aggiorna status
- const statusDiv = document.getElementById('moovitMetroIdStatus');
- if (statusDiv) {
- statusDiv.innerHTML = `✓ MetroId salvato: <strong>${metroId}</strong>`;
- statusDiv.style.display = 'block';
- }
- 
- // Aggiorna pulsante browser
- updateBrowserButtonState();
- }
- 
- // Estrae e salva MetroId da URL Moovit
- function extractAndSaveMetroId() {
- const input = document.getElementById('moovitUrlInput');
- const url = input?.value.trim();
- 
- if (!url) {
- notify('⚠ Incolla un link Moovit', 'error');
- return;
- }
- 
- if (!url.includes('moovit')) {
- notify('⚠ Il link deve essere di Moovit', 'error');
- return;
- }
- 
- const metroId = extractMetroIdFromMoovitUrl(url);
- 
- if (!metroId) {
- notify('⚠ Non riesco a estrarre MetroId da questo link', 'error');
- return;
- }
- 
- localStorage.setItem('moovit_metroId', metroId);
- notify('✓ MetroId estratto e salvato: ' + metroId, 'success');
- 
- // Aggiorna input numerico
- const numInput = document.getElementById('moovitMetroIdInput');
- if (numInput) {
- numInput.value = metroId;
- }
- 
- // Aggiorna status
- const statusDiv = document.getElementById('moovitMetroIdStatus');
- if (statusDiv) {
- statusDiv.innerHTML = `✓ MetroId salvato: <strong>${metroId}</strong>`;
- statusDiv.style.display = 'block';
- }
- 
- // Aggiorna pulsante browser
- updateBrowserButtonState();
- }
- 
- // Apre Moovit nell'app con deeplink
- function openMoovitApp() {
- if (!moovitCoordinatesData) {
- notify('⚠ Coordinate non ancora pronte', 'error');
- return;
- }
- 
- let deeplink;
- try {
- deeplink = buildMoovitDeepLink(moovitCoordinatesData);
- } catch (err) {
- notify('⚠ Errore creazione deeplink: ' + err.message, 'error');
- return;
- }
- 
- notify('📱 Apertura Moovit App...', 'success');
- closeModal();
- 
- // Prova ad aprire l'app
- window.location.href = deeplink;
- 
- // Fallback: se dopo 1.2s la pagina è ancora visibile, l'app non è installata
- setTimeout(() => {
- if (document.visibilityState === 'visible') {
- const downloadLink = 'https://moovit.onelink.me/3986059930?pid=Developers&c=mobilita_vercel_app';
- 
- // Chiede se vuole scaricare
- if (confirm('Moovit non sembra installata. Vuoi scaricarla?')) {
- window.open(downloadLink, '_blank');
- }
- }
- }, 1200);
- }
- 
- // Apre Moovit nel browser senza popup block
- function openMoovitBrowser() {
- if (!moovitCoordinatesData) {
- notify('⚠ Coordinate non ancora pronte', 'error');
- return;
- }
- 
- const metroId = localStorage.getItem('moovit_metroId');
- if (!metroId) {
- notify('⚠ MetroId non configurato', 'error');
- return;
- }
- 
- // Apri immediatamente una tab blank per evitare popup block
- const newWindow = window.open('about:blank', '_blank');
- 
- if (!newWindow) {
- notify('⚠ Popup bloccato dal browser. Abilita i popup per questo sito.', 'error');
- return;
- }
- 
- try {
- const webUrl = buildMoovitWebUrl(moovitCoordinatesData, metroId);
- newWindow.location.href = webUrl;
- 
- closeModal();
- notify('🌐 Apertura Moovit in browser...', 'success');
- } catch (err) {
- newWindow.close();
- notify('⚠ Errore apertura browser: ' + err.message, 'error');
- }
- }
  
  // ==========================================
  // FINE FUNZIONI MOOVIT
@@ -8225,7 +7842,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  message = ' Posizione non disponibile';
  break;
  case error.TIMEOUT:
- message = '⏱ Timeout GPS';
+ message = ' Timeout GPS';
  break;
  default:
  message = ' Errore GPS sconosciuto';
@@ -8265,7 +7882,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  // Aggiorna il pulsante
  const btn = document.getElementById('toggleTrackingBtn');
  if (btn) {
- btn.textContent = '▶ Avvia';
+ btn.textContent = ' Avvia';
  btn.className = 'btn btn-success';
  btn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
  btn.setAttribute('aria-label', 'Avvia tracking GPS');
@@ -8359,7 +7976,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  window.saveVibrationSettings = saveVibrationSettings;
  window.toggleAutoVoice = toggleAutoVoice;
  window.openMoovitModal = openMoovitModal;
- window.saveMoovitMetroIdManual = saveMoovitMetroIdManual;
+ window.saveMoovitMetroId = saveMoovitMetroId;
  window.extractAndSaveMetroId = extractAndSaveMetroId;
  window.openMoovitApp = openMoovitApp;
  window.openMoovitBrowser = openMoovitBrowser;
@@ -8392,7 +8009,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  solo quando esegui una ricerca dalla Sezione 3. Non la vedrai subito nella pagina perché 
  è nascosta finché non ci sono risultati da mostrare. È normale!</div><ul><li><strong>Nome</strong>del luogo</li><li><strong>Distanza</strong>dalla tua posizione</li><li><strong>Indirizzo</strong>completo</li><li><strong>Marker sulla mappa</strong>cliccabili</li></ul><div class="guide-tip"><strong>Suggerimento:</strong>I risultati sono ordinati per distanza (più vicini prima). 
  Clicca su un marker per vedere i dettagli del luogo!</div></section><!-- ============ SEZIONE 5 ============ --><section class="guide-section" aria-labelledby="5-sezione-5-percorso-personalizzato-heading"><h2 id="5-sezione-5-percorso-personalizzato-heading">5. Sezione 5: Percorso Personalizzato</h2><h3>Cosa fa:</h3><p>Calcola il percorso dalla tua posizione (Sezione 1) a una destinazione che scegli, 
- con diverse modalità di trasporto.</p><h3>Come usarla:</h3><div class="guide-step"><strong>Passo 1:</strong>Inserisci la destinazione:<ul style="margin-top: 8px;"><li>Scrivi l'indirizzo o il nome del luogo</li><li>L'autocomplete suggerisce indirizzi ordinati per vicinanza</li><li>Puoi inserire anche punti di interesse (es: "Colosseo", "Stazione Termini")</li></ul></div><div class="guide-step"><strong>Passo 2:</strong>Scegli il modo di trasporto:<ul style="margin-top: 8px;"><li><strong>Auto:</strong>Percorso stradale, tempo stimato, traffico</li><li><strong>A piedi:</strong>Percorso pedonale, distanza a piedi</li><li><strong>Bicicletta:</strong>Piste ciclabili quando disponibili</li><li><strong>Trasporto pubblico:</strong>Bus, metro, tram con orari</li></ul></div><div class="guide-step"><strong>Passo 3:</strong>Clicca " Calcola Percorso"</div><h3>Risultati mostrati:</h3><ul><li><strong>Distanza</strong>totale</li><li>⏱<strong>Tempo stimato</strong></li><li><strong>Percorso sulla mappa</strong>(linea blu)</li><li><strong>Istruzioni passo-passo</strong>(svolte, direzioni)</li></ul><h3>Azioni disponibili:</h3><ul><li><strong>Apri in Google Maps:</strong>Apre Google Maps con navigazione attiva</li><li><strong>Leggi Istruzioni:</strong>Sintesi vocale delle istruzioni (accessibilità)</li></ul><h3>Trasporto Pubblico con Moovit:</h3><p style="margin-top: 15px;">Quando selezioni "Trasporto Pubblico" e inserisci una destinazione, appare il pulsante <strong>"Apri in Moovit"</strong> che ti permette di aprire il percorso direttamente nell'app o nel browser:</p><div class="guide-step"><strong>Come funziona:</strong><ol style="margin-top: 8px;"><li>Clicca " Apri in Moovit"</li><li>Si apre un modal con il riepilogo del percorso</li><li>L'app calcola automaticamente le coordinate di partenza e arrivo</li><li>Scegli una delle due opzioni:</li></ol></div><div class="guide-step"><strong>📱 Opzione 1: Apri in App Moovit</strong><ul style="margin-top: 8px;"><li>Apre direttamente l'app Moovit installata sul tuo dispositivo</li><li><strong>Non richiede configurazione</strong> - funziona subito!</li><li>Il percorso viene impostato automaticamente con partenza e destinazione</li><li>Se l'app non è installata, ti viene proposto il link per scaricarla</li><li><strong>Consigliato:</strong> Usa questa opzione se hai Moovit installata</li></ul></div><div class="guide-step"><strong>🌐 Opzione 2: Apri in Browser</strong><ul style="margin-top: 8px;"><li>Apre Moovit nel browser web (utile se non hai l'app)</li><li><strong>Richiede MetroId:</strong> Ogni città ha un MetroId specifico (es. Roma = 61)</li><li>Il MetroId si inserisce una sola volta e viene salvato per le visite successive</li><li>Puoi inserire il MetroId in due modi:</li></ul><ol style="margin-left: 20px; margin-top: 8px;"><li><strong>Manualmente:</strong> Inserisci il numero del MetroId (es. 61) e clicca "Salva"</li><li><strong>Da link Moovit:</strong> Incolla un link di Moovit della tua città e clicca "Estrai" per ricavare automaticamente il MetroId</li></ol></div><div class="guide-tip"><strong>💡 Suggerimento:</strong><ul style="margin-top: 8px;"><li>Se hai Moovit installata → usa sempre <strong>"Apri in App"</strong> (è più veloce e non serve configurazione)</li><li>Se non hai l'app → usa <strong>"Apri in Browser"</strong> dopo aver configurato il MetroId</li><li>Il MetroId viene salvato nel browser, quindi dovrai inserirlo solo la prima volta</li></ul></div><div class="guide-step"><strong>Come trovare il MetroId della tua città:</strong><ol style="margin-top: 8px;"><li>Vai su <a href="https://moovitapp.com" target="_blank" rel="noopener">moovitapp.com</a></li><li>Cerca la tua città (es. "Roma trasporto pubblico")</li><li>Apri la pagina della tua città</li><li>Guarda l'URL: il numero dopo "metroId=" è quello che ti serve<br><span class="guide-kbd">https://moovitapp.com/?metroId=<strong>61</strong>&lang=it</span></li><li>Oppure incolla direttamente quel link nel campo "Incolla link Moovit" e clicca "Estrai"</li></ol></div></section><!-- ============ SEZIONE 6 ============ --><section class="guide-section" aria-labelledby="6-sezione-6-confronto-civici-avanzato-heading"><h2 id="6-sezione-6-confronto-civici-avanzato-heading">6. Sezione 6: Confronto Civici (Avanzato)</h2><h3>Cosa fa:</h3><p>Confronta scientificamente due numeri civici sulla<strong>stessa via</strong>per 
+ con diverse modalità di trasporto.</p><h3>Come usarla:</h3><div class="guide-step"><strong>Passo 1:</strong>Inserisci la destinazione:<ul style="margin-top: 8px;"><li>Scrivi l'indirizzo o il nome del luogo</li><li>L'autocomplete suggerisce indirizzi ordinati per vicinanza</li><li>Puoi inserire anche punti di interesse (es: "Colosseo", "Stazione Termini")</li></ul></div><div class="guide-step"><strong>Passo 2:</strong>Scegli il modo di trasporto:<ul style="margin-top: 8px;"><li><strong>Auto:</strong>Percorso stradale, tempo stimato, traffico</li><li><strong>A piedi:</strong>Percorso pedonale, distanza a piedi</li><li><strong>Bicicletta:</strong>Piste ciclabili quando disponibili</li><li><strong>Trasporto pubblico:</strong>Bus, metro, tram con orari</li></ul></div><div class="guide-step"><strong>Passo 3:</strong>Clicca " Calcola Percorso"</div><h3>Risultati mostrati:</h3><ul><li><strong>Distanza</strong>totale</li><li><strong>Tempo stimato</strong></li><li><strong>Percorso sulla mappa</strong>(linea blu)</li><li><strong>Istruzioni passo-passo</strong>(svolte, direzioni)</li></ul><h3>Azioni disponibili:</h3><ul><li><strong>Apri in Google Maps:</strong>Apre Google Maps con navigazione attiva</li><li><strong>Leggi Istruzioni:</strong>Sintesi vocale delle istruzioni (accessibilità)</li></ul><h3>Trasporto Pubblico con Moovit:</h3><p style="margin-top: 15px;">Quando selezioni "Trasporto Pubblico" e inserisci una destinazione, appare il pulsante <strong>"Apri in Moovit"</strong> che ti permette di aprire il percorso direttamente nell'app o nel browser:</p><div class="guide-step"><strong>Come funziona:</strong><ol style="margin-top: 8px;"><li>Clicca " Apri in Moovit"</li><li>Si apre un modal con il riepilogo del percorso</li><li>L'app calcola automaticamente le coordinate di partenza e arrivo</li><li>Scegli una delle due opzioni:</li></ol></div><div class="guide-step"><strong> Opzione 1: Apri in App Moovit</strong><ul style="margin-top: 8px;"><li>Apre direttamente l'app Moovit installata sul tuo dispositivo</li><li><strong>Non richiede configurazione</strong> - funziona subito!</li><li>Il percorso viene impostato automaticamente con partenza e destinazione</li><li>Se l'app non è installata, ti viene proposto il link per scaricarla</li><li><strong>Consigliato:</strong> Usa questa opzione se hai Moovit installata</li></ul></div><div class="guide-step"><strong> Opzione 2: Apri in Browser</strong><ul style="margin-top: 8px;"><li>Apre Moovit nel browser web (utile se non hai l'app)</li><li><strong>Richiede MetroId:</strong> Ogni città ha un MetroId specifico (es. Roma = 61)</li><li>Il MetroId si inserisce una sola volta e viene salvato per le visite successive</li><li>Puoi inserire il MetroId in due modi:</li></ul><ol style="margin-left: 20px; margin-top: 8px;"><li><strong>Manualmente:</strong> Inserisci il numero del MetroId (es. 61) e clicca "Salva"</li><li><strong>Da link Moovit:</strong> Incolla un link di Moovit della tua città e clicca "Estrai" per ricavare automaticamente il MetroId</li></ol></div><div class="guide-tip"><strong> Suggerimento:</strong><ul style="margin-top: 8px;"><li>Se hai Moovit installata → usa sempre <strong>"Apri in App"</strong> (è più veloce e non serve configurazione)</li><li>Se non hai l'app → usa <strong>"Apri in Browser"</strong> dopo aver configurato il MetroId</li><li>Il MetroId viene salvato nel browser, quindi dovrai inserirlo solo la prima volta</li></ul></div><div class="guide-step"><strong>Come trovare il MetroId della tua città:</strong><ol style="margin-top: 8px;"><li>Vai su <a href="https://moovitapp.com" target="_blank" rel="noopener">moovitapp.com</a></li><li>Cerca la tua città (es. "Roma trasporto pubblico")</li><li>Apri la pagina della tua città</li><li>Guarda l'URL: il numero dopo "metroId=" è quello che ti serve<br><span class="guide-kbd">https://moovitapp.com/?metroId=<strong>61</strong>&lang=it</span></li><li>Oppure incolla direttamente quel link nel campo "Incolla link Moovit" e clicca "Estrai"</li></ol></div></section><!-- ============ SEZIONE 6 ============ --><section class="guide-section" aria-labelledby="6-sezione-6-confronto-civici-avanzato-heading"><h2 id="6-sezione-6-confronto-civici-avanzato-heading">6. Sezione 6: Confronto Civici (Avanzato)</h2><h3>Cosa fa:</h3><p>Confronta scientificamente due numeri civici sulla<strong>stessa via</strong>per 
  determinare se sono sullo stesso marciapiede o su lati opposti della strada.</p><h3>Quando usarla:</h3><ul><li><strong>Scenario A:</strong>Sei al civico 20 (con Street View) e devi andare al 24 
  (senza Street View). Vuoi sapere se devi attraversare.</li><li><strong>Scenario B:</strong>Street View è ambiguo e vuoi una conferma matematica.</li><li><strong>Scenario C:</strong>Pianifichi a tavolino e vuoi capire la conformazione 
  di una via.</li></ul><h3>Come usarla:</h3><div class="guide-step"><strong>Passo 1:</strong>Inserisci Civico A (riferimento):<ul style="margin-top: 8px;"><li>Indirizzo completo: Via, numero, città</li><li>Es: "Via Po 18, Torino"</li><li>Questo sarà il punto di riferimento</li></ul></div><div class="guide-step"><strong>Passo 2:</strong>Inserisci Civico B (destinazione):<ul style="margin-top: 8px;"><li>DEVE essere sulla stessa via di A!</li><li>Es: "Via Po 25, Torino"</li><li>Può essere prima o dopo del civico A</li></ul></div><div class="guide-step"><strong>Passo 3:</strong>Clicca " Calcola Posizione"</div><h3>I 3 metodi scientifici usati:</h3><div class="guide-step"><strong>1. Check Precisione (Google):</strong><ul style="margin-top: 8px;"><li><strong>ROOFTOP:</strong>Google conosce esattamente il civico → Alta affidabilità</li><li><strong>RANGE_INTERPOLATED:</strong>Google ha "indovinato" la posizione → 
@@ -8402,4 +8019,6 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  Utile per orientarsi identificando incroci noti.</p><h3>Esplora POI (OSM):</h3><p>Nella Sezione 5, trova punti di interesse (negozi, monumenti, servizi) usando 
  OpenStreetMap come fonte alternativa a Google Places.</p><div class="guide-tip"><strong>OpenStreetMap vs Google:</strong>OSM è una mappa collaborativa open source. 
  A volte ha dati diversi o più aggiornati di Google Maps, quindi vale la pena provarla!</div></section><!-- ============ ACCESSIBILITÀ ============ --><section class="guide-section" aria-labelledby="8-accessibilità-heading"><h2 id="8-accessibilità-heading">8. Accessibilità</h2><h3>L'app è progettata per essere accessibile:</h3><ul><li><strong>Screen reader:</strong>Tutti i controlli hanno etichette ARIA appropriate</li><li><strong>Navigazione tastiera:</strong>Tutti i pulsanti sono accessibili con Tab</li><li><strong>Sintesi vocale:</strong>Pulsante " Leggi Istruzioni" per le indicazioni percorso</li><li><strong>Contrasti:</strong>Colori scelti per buona leggibilità</li><li><strong>Skip links:</strong>In alto per saltare a sezioni specifiche</li></ul><h3>Scorciatoie tastiera:</h3><ul><li><span class="guide-kbd">Enter</span>nei campi di input: Esegue ricerca</li><li><span class="guide-kbd">Tab</span>: Naviga tra i controlli</li><li><span class="guide-kbd">Esc</span>: Chiude i modal aperti</li></ul></section><!-- ============ RISOLUZIONE PROBLEMI ============ --><section class="guide-section" aria-labelledby="9-risoluzione-problemi-heading"><h2 id="9-risoluzione-problemi-heading">9. Risoluzione Problemi</h2><h3>"Errore caricamento Maps":</h3><ul><li>Verifica che la API Key sia corretta (inizia con AIzaSy)</li><li>Controlla di aver abilitato tutte le API necessarie in Google Cloud</li><li>Verifica di avere connessione internet</li></ul><h3>"Street View non disponibile":</h3><ul><li>Non tutti i luoghi hanno copertura Street View</li><li>Prova ad aumentare il raggio di ricerca (slider Expert Mode)</li><li>L'app cerca automaticamente il punto Street View più vicino</li></ul><h3>"OSM non fornisce geometria strada":</h3><ul><li>OpenStreetMap potrebbe non avere dati per quella specifica strada</li><li>Prova con un indirizzo leggermente diverso o più generico</li><li>Funziona meglio con strade principali</li></ul><h3>Autocomplete non suggerisce indirizzi:</h3><ul><li>Aspetta 1-2 secondi dopo aver iniziato a scrivere</li><li>Assicurati di aver abilitato Places API</li><li>Scrivi almeno 3-4 caratteri</li></ul><h3>"Errore 429" (Troppi richieste):</h3><ul><li>Hai superato le quote gratuite mensili</li><li>Aspetta qualche minuto tra le richieste</li><li>Verifica le quote nel Google Cloud Console</li></ul><div class="guide-tip"><strong>Suggerimento generale:</strong>Se qualcosa non funziona, prova a:<ol style="margin-top: 8px;"><li>Ricaricare la pagina (<span class="guide-kbd">F5</span>)</li><li>Svuotare la cache del browser</li><li>Aprire la console (<span class="guide-kbd">F12</span>) per vedere errori dettagliati</li></ol></div></section><!-- ============ PRIVACY E SICUREZZA ============ --><section class="guide-section" aria-labelledby="10-privacy-e-sicurezza-heading"><h2 id="10-privacy-e-sicurezza-heading">10. Privacy e Sicurezza</h2><h3>Dati salvati localmente (nel tuo browser):</h3><ul><li><strong>API Key Google Maps:</strong>Salvata in localStorage</li><li><strong>Zone Moovit:</strong>Link e nomi zone salvati in localStorage</li></ul><h3>Cosa NON viene mai condiviso:</h3><ul><li>La tua API Key NON viene mai inviata a server esterni (solo a Google)</li><li>Le tue ricerche NON vengono registrate</li><li>I tuoi percorsi NON vengono tracciati</li><li>Nessun dato personale viene raccolto</li></ul><h3>Servizi esterni utilizzati:</h3><ul><li><strong>Google Maps API:</strong>Per mappe, percorsi, luoghi</li><li><strong>OpenStreetMap/Overpass API:</strong>Per geometrie strade e POI</li><li><strong>Moovit:</strong>Solo quando clicchi il pulsante (apre il sito Moovit)</li></ul><div class="guide-warning"><strong>Importante:</strong>L'app è completamente client-side (gira solo nel tuo browser). 
- Non abbiamo server che raccolgono dati. Tutto rimane sul TUO dispositivo!</div></section><!-- ============ CREDITS ============ --><section class="guide-section" aria-labelledby="11-crediti-e-tecnologie-heading"><h2 id="11-crediti-e-tecnologie-heading">11. Crediti e Tecnologie</h2><h3>Servizi utilizzati:</h3><ul><li><strong>Google Maps Platform:</strong>Mappe, Street View, Directions, Places, Geocoding</li><li><strong>OpenStreetMap:</strong>Geometrie strade, POI, incroci</li><li><strong>Overpass API:</strong>Query dati OpenStreetMap</li><li><strong>Moovit:</strong>Trasporto pubblico</li></ul></section><div class="modal-buttons"><button class="btn btn-ghost" onclick="closeGuideModal()">Chiudi Guida</button></div></div></div></div><!-- OVERLAY USA IN MOVIMENTO --><div id="onTheMoveOverlay" role="dialog" aria-labelledby="otmTitle" aria-modal="true"><div class="otm-header"><h2 id="otmTitle">Usa in Movimento</h2><p id="otmSubtitle">Traccia la distanza in linea d'aria verso una destinazione</p></div><div class="otm-content" id="otmContent"><!-- Gli step verranno generati dinamicamente dal JavaScript --></div><!-- Region per annunci screen reader --><div id="statusAnnouncer" role="status" aria-live="polite" aria-atomic="true"></div></div></body></html>
+ Non abbiamo server che raccolgono dati. Tutto rimane sul TUO dispositivo!</div></section><!-- ============ CREDITS ============ --><section class="guide-section" aria-labelledby="11-crediti-e-tecnologie-heading"><h2 id="11-crediti-e-tecnologie-heading">11. Crediti e Tecnologie</h2><h3>Servizi utilizzati:</h3><ul><li><strong>Google Maps Platform:</strong>Mappe, Street View, Directions, Places, Geocoding</li><li><strong>OpenStreetMap:</strong>Geometrie strade, POI, incroci</li><li><strong>Overpass API:</strong>Query dati OpenStreetMap</li><li><strong>Moovit:</strong>Trasporto pubblico</li></ul></section><div class="modal-buttons"><button class="btn btn-ghost" onclick="closeGuideModal()">Chiudi Guida</button></div></div></div></div>
+<!-- OVERLAY USA IN MOVIMENTO --><div id="onTheMoveOverlay" role="dialog" aria-labelledby="otmTitle" aria-modal="true"><div class="otm-header"><h2 id="otmTitle">Usa in Movimento</h2><p id="otmSubtitle">Traccia la distanza in linea d'aria verso una destinazione</p></div><div class="otm-content" id="otmContent"><!-- Gli step verranno generati dinamicamente dal JavaScript --></div><!-- Region per annunci screen reader --><div id="statusAnnouncer" role="status" aria-live="polite" aria-atomic="true"></div></div></body>
+</body></html>
