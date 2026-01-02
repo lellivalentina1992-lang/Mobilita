@@ -2634,6 +2634,23 @@ body.api-setup-active::before {
  // FUNZIONI MOOVIT
  // ==========================================
  
+ // ========================================
+ // LISTA AREE MOOVIT ITALIA (hardcoded)
+ // ========================================
+ const MOOVIT_IT_AREAS = [
+ { id: 61, name: "Roma e Lazio", keywords: ["roma","lazio","rm","latina","frosinone","rieti","viterbo"] },
+ { id: 223, name: "Milano e Lombardia", keywords: ["milano","lombardia","mi","monza","bergamo","brescia","como","varese","lecco","lodi","mantova","pavia","sondrio","cremona"] },
+ { id: 222, name: "Torino e Piemonte", keywords: ["torino","piemonte","to","asti","cuneo","alessandria","novara","biella","verbano","vercelli"] },
+ { id: 1783, name: "Bologna e Romagna", keywords: ["bologna","emilia","romagna","bo","rimini","forlì","cesena","ravenna","ferrara","modena","reggio emilia","parma","piacenza"] },
+ { id: 302, name: "Napoli e Campania", keywords: ["napoli","campania","na","salerno","caserta","avellino","benevento"] },
+ { id: 1041, name: "Firenze e Toscana", keywords: ["firenze","toscana","fi","pisa","livorno","lucca","pistoia","prato","arezzo","siena","grosseto","massa","carrara"] },
+ { id: 2095, name: "Genova e Liguria", keywords: ["genova","liguria","ge","savona","imperia","la spezia"] },
+ { id: 1674, name: "Venezia e Veneto", keywords: ["venezia","veneto","ve","padova","verona","vicenza","treviso","rovigo","belluno"] },
+ { id: 3478, name: "Palermo e Sicilia", keywords: ["palermo","sicilia","pa","catania","messina","siracusa","trapani","agrigento","caltanissetta","enna","ragusa"] },
+ { id: 2584, name: "Bari e Puglia", keywords: ["bari","puglia","ba","lecce","brindisi","taranto","foggia","barletta","andria","trani"] },
+ { id: 4677, name: "Cagliari e Sardegna", keywords: ["cagliari","sardegna","ca","sassari","nuoro","oristano"] }
+ ];
+ 
  // Mostra/nasconde il pulsante Moovit in base alla modalità selezionata
  function toggleMoovitButton() {
  const mode = document.getElementById('customRouteMode').value;
@@ -2648,203 +2665,1113 @@ body.api-setup-active::before {
  }
  }
  
- // Listener per aggiornare visibilità Moovit quando cambia destinazione
+ // Listener per aggiornare visibilità Moovit quando cambia destinazione o modalità
  document.addEventListener('DOMContentLoaded', () =>{
  const destInput = document.getElementById('customDest');
  if (destInput) {
  destInput.addEventListener('input', toggleMoovitButton);
  destInput.addEventListener('change', toggleMoovitButton);
  }
+ 
+ const modeSelect = document.getElementById('customRouteMode');
+ if (modeSelect) {
+ modeSelect.addEventListener('change', toggleMoovitButton);
+ }
  });
  
- // Estrae la città da un indirizzo
- function extractCityFromAddress(address) {
- if (!address) return null;
- // Prova a estrarre la città dall'indirizzo (generalmente dopo la virgola)
- const parts = address.split(',');
- if (parts.length >= 2) {
- // Rimuove il CAP se presente e restituisce la città
- let cityPart = parts[1].trim();
- // Rimuove numeri (CAP) all'inizio
- cityPart = cityPart.replace(/^\d{5}\s*/, '').trim();
- if (cityPart) return cityPart;
- }
- // Fallback: restituisce cityGuess globale
- return cityGuess || null;
- }
+ // Estrae metroId da un URL Moovit
+ function extractMetroIdFromMoovitUrl(url) {
+ if (!url) return null;
  
- // Apre il modal di configurazione Moovit
- function openMoovitModal() {
- const startAddress = document.getElementById('addressInput').value.trim();
- const destAddress = document.getElementById('customDest').value.trim();
- 
- if (!startAddress) {
- notify(' Inserisci prima un indirizzo di partenza nella Sezione 1', 'error');
- return;
- }
- if (!destAddress) {
- notify(' Inserisci prima una destinazione', 'error');
- return;
- }
- 
- // Estrae le città
- const cityA = extractCityFromAddress(startAddress) || cityGuess || 'la tua città';
- const cityB = extractCityFromAddress(destAddress) || cityA;
- 
- // Prepara il messaggio dinamico
- let searchSuggestion = '';
- if (cityA.toLowerCase() === cityB.toLowerCase()) {
- searchSuggestion = `<strong>"Mezzi pubblici ${cityA} Moovit"</strong>`;
- } else {
- searchSuggestion = `<strong>"Mezzi pubblici ${cityA} Moovit"</strong>oppure<strong>"Mezzi pubblici ${cityB} Moovit"</strong>(cerca l'area che include entrambe le città, es. la Provincia o la Regione)`;
- }
- 
- const modalContent = `<div class="modal-info" style="padding: 10px 0;"><p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 15px;">Per calcolare il percorso bus esatto, ho bisogno di sapere in quale zona Moovit ti trovi.</p><p style="font-weight: 600; color: #495057; margin-bottom: 8px;">Fai così:</p><ol style="line-height: 1.8; margin-left: 20px; margin-bottom: 20px; color: #555;"><li>Cerca sul web: ${searchSuggestion}</li><li>Apri il primo risultato che inizia con<strong>moovitapp.com</strong></li><li>Copia l'<strong>intero indirizzo</strong>di quella pagina dalla barra del browser</li><li>Incollalo qui sotto</li></ol><div style="background: #f8f9fb; border-radius: 8px; padding: 15px; margin-bottom: 15px;"><label style="font-weight: 600; color: #667eea; display: block; margin-bottom: 8px;">Incolla qui il link Moovit:</label><input type="text" 
- id="moovitUrlInput" 
- placeholder="https://moovitapp.com/?metroId=61&lang=it..." 
- style="width: 100%; padding: 12px; border: 2px solid #667eea; border-radius: 8px; font-size: 14px;"
- aria-label="Incolla il link di Moovit"><small style="color: #888; display: block; margin-top: 6px;">Esempio: https://moovitapp.com/?metroId=61&lang=it oppure https://moovitapp.com/index/it/mezzi_pubblici-Roma-Roma_e_Lazio-city_81-61</small></div><div style="background: #e8f5e9; border-radius: 8px; padding: 12px; border-left: 4px solid #28a745;"><p style="margin: 0; font-size: 0.95em; color: #2e7d32;"><strong>ℹ Cosa farà l'app:</strong><br>Userà questo link per creare il tuo itinerario da<br><em>"${startAddress.substring(0, 50)}${startAddress.length >50 ? '...' : ''}"</em><br>a<br><em>"${destAddress.substring(0, 50)}${destAddress.length >50 ? '...' : ''}"</em></p></div></div><div class="modal-buttons"><button class="btn btn-ghost" onclick="closeModal()">Annulla</button><button class="btn btn-green" onclick="processMoovitUrl()" style="background: linear-gradient(135deg, #50c878, #32a852);">Apri Moovit</button></div>`;
- 
- openModal(' Configurazione Moovit', modalContent);
- 
- // Focus sull'input
- setTimeout(() =>{
- const input = document.getElementById('moovitUrlInput');
- if (input) input.focus();
- }, 100);
- }
- 
- // Processa l'URL Moovit incollato e apre il link finale
- async function processMoovitUrl() {
- const moovitUrl = document.getElementById('moovitUrlInput').value.trim();
- const startAddress = document.getElementById('addressInput').value.trim();
- const destAddress = document.getElementById('customDest').value.trim();
- 
- if (!moovitUrl) {
- notify(' Incolla il link di Moovit', 'error');
- return;
- }
- 
- // Valida che sia un URL Moovit
- if (!moovitUrl.includes('moovitapp.com')) {
- notify(' Il link deve essere di moovitapp.com', 'error');
- return;
- }
- 
- // 1) ESTRAZIONE metroId
- let metroId = 61; // fallback
- 
- // Cerca metroId nell'URL (metodo primario)
- const metroIdMatch = moovitUrl.match(/[?&]metroId=(\d+)/);
+ // Metodo 1: cerca metroId nei parametri query
+ const metroIdMatch = url.match(/[?&]metroId=(\d+)/);
  if (metroIdMatch && metroIdMatch[1]) {
- metroId = metroIdMatch[1];
- } else {
- // Fallback: estrai slug e cerca il numero finale
+ return metroIdMatch[1];
+ }
+ 
+ // Metodo 2: estrai da slug tipo "Roma_e_Lazio-city_81-61"
  let slug = null;
- const mezziMatch = moovitUrl.match(/mezzi_pubblici-(.+?)(?:\?|$)/);
+ const mezziMatch = url.match(/mezzi_pubblici-(.+?)(?:\?|$)/);
  if (mezziMatch && mezziMatch[1]) {
  slug = mezziMatch[1];
  } else {
- const transitMatch = moovitUrl.match(/public_transit-(.+?)(?:\?|$)/);
+ const transitMatch = url.match(/public_transit-(.+?)(?:\?|$)/);
  if (transitMatch && transitMatch[1]) {
  slug = transitMatch[1];
  }
  }
  
  if (slug) {
- // Rimuove query string e hash
  slug = slug.split('?')[0].split('#')[0];
- // Estrae il numero finale dopo l'ultimo "-"
  const parts = slug.split('-');
  const lastPart = parts[parts.length - 1];
  if (/^\d+$/.test(lastPart)) {
- metroId = lastPart;
+ return lastPart;
+ }
+ }
+ 
+ return null;
+ }
+ 
+ // ========================================
+ // SUGGERIMENTO AUTOMATICO AREA
+ // ========================================
+ // Prova a suggerire un'area in base alla località dell'utente
+ async function suggestMoovitArea(fromLabel, toLabel) {
+ // Combina le due label per aumentare le chance di match
+ const combinedText = `${fromLabel} ${toLabel}`.toLowerCase();
+ 
+ // Cerca match con le keywords
+ for (const area of MOOVIT_IT_AREAS) {
+ for (const keyword of area.keywords) {
+ if (combinedText.includes(keyword)) {
+ return area;
  }
  }
  }
  
- // 2) GEOCODING COORDINATE REALI
- notify('⏳ Geocoding indirizzi...', 'info');
+ return null;
+ }
+ 
+ // Calcola coordinate per partenza e destinazione
+ async function calculateMoovitCoordinates() {
+ const startAddress = document.getElementById('addressInput').value.trim();
+ const destAddress = document.getElementById('customDest').value.trim();
+ 
+ if (!startAddress) {
+ throw new Error('Inserisci prima un indirizzo di partenza nella Sezione 1');
+ }
+ if (!destAddress) {
+ throw new Error('Inserisci prima una destinazione');
+ }
  
  // Coordinate FROM
- let fromLat, fromLng;
+ let fromLat, fromLng, fromLabel;
  if (originalStartPoint) {
- // Usa originalStartPoint se esiste
  fromLat = typeof originalStartPoint.lat === 'function' ? originalStartPoint.lat() : originalStartPoint.lat;
  fromLng = typeof originalStartPoint.lng === 'function' ? originalStartPoint.lng() : originalStartPoint.lng;
+ fromLabel = startAddress;
  } else if (currentLocation) {
- // Altrimenti usa currentLocation
  fromLat = typeof currentLocation.lat === 'function' ? currentLocation.lat() : currentLocation.lat;
  fromLng = typeof currentLocation.lng === 'function' ? currentLocation.lng() : currentLocation.lng;
+ fromLabel = startAddress;
  } else {
- // Verifica che startAddress non sia vuoto
- if (!startAddress) {
- notify(' Inserisci l\'indirizzo di partenza o seleziona un punto sulla mappa', 'error');
- return;
- }
  // Geocode startAddress
- try {
  const fromResult = await new Promise((resolve, reject) =>{
  geocoder.geocode({ address: startAddress }, (results, status) =>{
  if (status === 'OK' && results[0]) {
- resolve(results[0].geometry.location);
+ resolve(results[0]);
  } else {
  reject(new Error('Geocoding partenza fallito: ' + status));
  }
  });
  });
- fromLat = fromResult.lat();
- fromLng = fromResult.lng();
- } catch (err) {
- notify(' ' + err.message, 'error');
- return;
- }
+ fromLat = fromResult.geometry.location.lat();
+ fromLng = fromResult.geometry.location.lng();
+ fromLabel = fromResult.formatted_address || startAddress;
  }
  
- // Coordinate TO
- if (!destAddress) {
- notify(' Inserisci la destinazione', 'error');
- return;
- }
- 
- let toLat, toLng;
- try {
+ // Coordinate TO - sempre geocode
  const toResult = await new Promise((resolve, reject) =>{
  geocoder.geocode({ address: destAddress }, (results, status) =>{
  if (status === 'OK' && results[0]) {
- resolve(results[0].geometry.location);
+ resolve(results[0]);
  } else {
  reject(new Error('Geocoding destinazione fallito: ' + status));
  }
  });
  });
- toLat = toResult.lat();
- toLng = toResult.lng();
- } catch (err) {
- notify(' ' + err.message, 'error');
- return;
+ const toLat = toResult.geometry.location.lat();
+ const toLng = toResult.geometry.location.lng();
+ const toLabel = toResult.formatted_address || destAddress;
+ 
+ return {
+ fromLat,
+ fromLng,
+ fromLabel,
+ toLat,
+ toLng,
+ toLabel
+ };
  }
  
- // 3) FORMATTAZIONE COORDINATE (5-6 decimali)
+ // Costruisce il deeplink Moovit per l'app
+ function buildMoovitDeepLink(data) {
+ const { fromLat, fromLng, fromLabel, toLat, toLng, toLabel } = data;
+ 
+ const destName = encodeURIComponent(toLabel);
+ const origName = encodeURIComponent(fromLabel);
+ 
+ return `moovit://directions?dest_lat=${toLat.toFixed(6)}&dest_lon=${toLng.toFixed(6)}&dest_name=${destName}&orig_lat=${fromLat.toFixed(6)}&orig_lon=${fromLng.toFixed(6)}&orig_name=${origName}&auto_run=true&partner_id=mobilita_vercel_app`;
+ }
+ 
+ // Costruisce l'URL web Moovit per il browser
+ function buildMoovitWebUrl(data, metroId) {
+ const { fromLat, fromLng, fromLabel, toLat, toLng, toLabel } = data;
+ 
+ const fromEncoded = encodeURIComponent(fromLabel);
+ const toEncoded = encodeURIComponent(toLabel);
  const fromLatStr = fromLat.toFixed(6);
  const fromLngStr = fromLng.toFixed(6);
  const toLatStr = toLat.toFixed(6);
  const toLngStr = toLng.toFixed(6);
  
- // 4) COSTRUZIONE URL FINALE
- // Se startAddress è vuoto, usa le coordinate come fallback per il parametro 'from'
- const fromParam = startAddress || `${fromLatStr},${fromLngStr}`;
- const fromEncoded = encodeURIComponent(fromParam);
- const toEncoded = encodeURIComponent(destAddress);
+ return `https://www.moovit.com/?metroId=${metroId}&lang=it&from=${fromEncoded}&to=${toEncoded}&fll=${fromLatStr}_${fromLngStr}&tll=${toLatStr}_${toLngStr}`;
+ }
  
- const finalUrl = `https://moovitapp.com/?metroId=${metroId}&lang=it&from=${fromEncoded}&to=${toEncoded}&fll=${fromLatStr}_${fromLngStr}&tll=${toLatStr}_${toLngStr}`;
+ // Variabili globali per il modal Moovit
+ let moovitCoordinatesData = null;
+ let moovitSuggestedArea = null;
+ let moovitCurrentListIndex = -1; // Per navigazione tastiera
  
- // Chiude il modal e apre Moovit
+ // Helper per escape HTML (prevenzione XSS)
+ function escapeHtml(text) {
+ const div = document.createElement('div');
+ div.textContent = text;
+ return div.innerHTML;
+ }
+ 
+ // ========================================
+ // RENDER LISTA AREE FILTRABILE
+ // ========================================
+ function renderMoovitAreaList(filterText = '') {
+ const listContainer = document.getElementById('moovitAreaList');
+ if (!listContainer) return;
+ 
+ const filter = filterText.toLowerCase();
+ const filtered = MOOVIT_IT_AREAS.filter(area => {
+ const nameMatch = area.name.toLowerCase().includes(filter);
+ const keywordMatch = area.keywords.some(kw => kw.includes(filter));
+ return nameMatch || keywordMatch;
+ });
+ 
+ listContainer.innerHTML = '';
+ moovitCurrentListIndex = -1;
+ 
+ if (filtered.length === 0) {
+ listContainer.innerHTML = '<li style="padding: 12px; color: #666; font-style: italic;">Nessuna area trovata</li>';
+ return;
+ }
+ 
+ filtered.forEach((area, index) => {
+ const btn = document.createElement('button');
+ btn.setAttribute('role', 'option');
+ btn.setAttribute('data-metro-id', area.id);
+ btn.setAttribute('data-area-name', area.name);
+ btn.setAttribute('data-index', index);
+ btn.className = 'moovit-area-option';
+ btn.style.cssText = 'width: 100%; padding: 12px; text-align: left; border: none; background: white; cursor: pointer; border-bottom: 1px solid #eee; transition: background 0.2s;';
+ btn.innerHTML = `<strong>${escapeHtml(area.name)}</strong> <span style="color: #666;">(ID: ${area.id})</span>`;
+ 
+ btn.onmouseover = () => {
+ btn.style.background = '#f0f4ff';
+ };
+ btn.onmouseout = () => {
+ btn.style.background = 'white';
+ };
+ 
+ btn.onclick = () => selectMoovitArea(area.id, area.name);
+ btn.onkeydown = (e) => handleMoovitAreaKeydown(e);
+ 
+ listContainer.appendChild(btn);
+ });
+ }
+ 
+ // ========================================
+ // NAVIGAZIONE TASTIERA LISTBOX (accessibilità)
+ // ========================================
+ function handleMoovitAreaKeydown(event) {
+ const listContainer = document.getElementById('moovitAreaList');
+ if (!listContainer) return;
+ 
+ const options = Array.from(listContainer.querySelectorAll('.moovit-area-option'));
+ if (options.length === 0) return;
+ 
+ if (event.key === 'ArrowDown') {
+ event.preventDefault();
+ // Rimuovi highlight da tutti
+ options.forEach(opt => opt.style.background = 'white');
+ // Naviga
+ moovitCurrentListIndex = Math.min(moovitCurrentListIndex + 1, options.length - 1);
+ options[moovitCurrentListIndex].focus();
+ options[moovitCurrentListIndex].style.background = '#f0f4ff';
+ } else if (event.key === 'ArrowUp') {
+ event.preventDefault();
+ // Rimuovi highlight da tutti
+ options.forEach(opt => opt.style.background = 'white');
+ // Naviga
+ moovitCurrentListIndex = Math.max(moovitCurrentListIndex - 1, 0);
+ options[moovitCurrentListIndex].focus();
+ options[moovitCurrentListIndex].style.background = '#f0f4ff';
+ } else if (event.key === 'Enter' && moovitCurrentListIndex >= 0) {
+ event.preventDefault();
+ options[moovitCurrentListIndex].click();
+ } else if (event.key === 'Escape') {
+ event.preventDefault();
  closeModal();
- notify(' Apertura Moovit...', 'success');
+ }
+ }
  
- // Apre in una nuova scheda
- window.open(finalUrl, '_blank');
+ // ========================================
+ // SALVATAGGIO METRO ID (da selezione area)
+ // ========================================
+ function selectMoovitArea(metroId, areaName) {
+ localStorage.setItem('moovit_metroId', metroId);
+ notify(`✓ Area salvata: ${areaName} (ID: ${metroId})`, 'success');
+ 
+ // Aggiorna UI
+ const statusDiv = document.getElementById('moovitMetroIdStatus');
+ if (statusDiv) {
+ statusDiv.innerHTML = `✓ Area selezionata: <strong>${escapeHtml(areaName)}</strong> (ID: ${metroId})`;
+ statusDiv.style.display = 'block';
+ statusDiv.style.background = '#d4edda';
+ statusDiv.style.color = '#155724';
+ }
+ 
+ // Nascondi warning e abilita browser
+ updateBrowserButtonState();
+ 
+ // Nascondi suggerimento se era visibile
+ const suggestionDiv = document.getElementById('moovitAreaSuggestion');
+ if (suggestionDiv) {
+ suggestionDiv.style.display = 'none';
+ }
+ }
+ 
+ // Apre il modal Moovit con le 2 opzioni (APP e BROWSER)
+ async function openMoovitModal() {
+ const startAddress = document.getElementById('addressInput').value.trim();
+ const destAddress = document.getElementById('customDest').value.trim();
+ 
+ if (!startAddress) {
+ notify('⚠ Inserisci prima un indirizzo di partenza nella Sezione 1', 'error');
+ return;
+ }
+ if (!destAddress) {
+ notify('⚠ Inserisci prima una destinazione', 'error');
+ return;
+ }
+ 
+ // Legge metroId/area salvata
+ const savedMetroId = localStorage.getItem('moovit_metroId') || '';
+ const savedArea = MOOVIT_IT_AREAS.find(a => a.id == savedMetroId);
+ const savedAreaName = savedArea ? savedArea.name : '';
+ 
+ // Escape HTML per sicurezza
+ const startAddressEscaped = escapeHtml(startAddress.substring(0, 60) + (startAddress.length > 60 ? '...' : ''));
+ const destAddressEscaped = escapeHtml(destAddress.substring(0, 60) + (destAddress.length > 60 ? '...' : ''));
+ 
+ const modalContent = `
+ <div class="modal-info" style="padding: 10px 0;">
+ <!-- Riepilogo percorso -->
+ <div style="background: #f0f4ff; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+ <p style="margin: 0 0 8px 0; color: #495057;"><strong>📍 Da:</strong> ${startAddressEscaped}</p>
+ <p style="margin: 0; color: #495057;"><strong>🎯 A:</strong> ${destAddressEscaped}</p>
+ </div>
+ 
+ <!-- Stato calcolo coordinate (aria-live) -->
+ <div id="moovitStatusLive" role="status" aria-live="polite" aria-atomic="true" style="background: #fff3cd; border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center;">
+ <strong>⏳ Calcolo coordinate...</strong>
+ </div>
+ 
+ <!-- Raccomandazione visibile -->
+ <div style="background: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
+ <p style="margin: 0; color: #2e7d32; font-size: 0.95em;">
+ 💡 <strong>Consigliato:</strong> Se hai Moovit installata, usa <strong>"Apri in App"</strong> (non serve configurazione).
+ </p>
+ </div>
+ 
+ <!-- Pulsanti principali (inizialmente disabilitati) -->
+ <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px;">
+ <button id="moovitAppBtn" class="btn btn-green" disabled style="font-size: 1.1em; padding: 15px; opacity: 0.5; cursor: not-allowed;">
+ 📱 Apri in App Moovit
+ </button>
+ <button id="moovitBrowserBtn" class="btn" disabled style="font-size: 1.1em; padding: 15px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; opacity: 0.5; cursor: not-allowed;">
+ 🌐 Apri in Browser
+ </button>
+ </div>
+ 
+ <!-- Messaggio visibile quando browser è disabilitato -->
+ <div id="moovitBrowserWarning" style="display: ${savedMetroId ? 'none' : 'block'}; background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
+ <p style="margin: 0; color: #856404; font-size: 0.95em;">
+ ⚠ <strong>Pulsante Browser disabilitato:</strong> Seleziona un'area Moovit qui sotto per abilitarlo.
+ </p>
+ </div>
+ 
+ <!-- Spiegazione aree (accessibilità) -->
+ <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
+ <p style="margin: 0; color: #1565c0; font-size: 0.9em; line-height: 1.5;">
+ ℹ️ <strong>Nota:</strong> Nel browser, Moovit usa aree di servizio (es. "Roma e Lazio"), non sempre la singola città. 
+ Scegli l'area che include il tuo comune. Se i risultati non tornano, cambiala.
+ </p>
+ </div>
+ 
+ <!-- Suggerimento automatico area (nascosto inizialmente) -->
+ <div id="moovitAreaSuggestion" style="display: none; background: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
+ <p style="margin: 0 0 10px 0; color: #2e7d32; font-size: 0.95em;">
+ <strong>💡 Suggerimento area:</strong> <span id="moovitSuggestedAreaText"></span>
+ </p>
+ <button class="btn btn-secondary" onclick="useSuggestedMoovitArea()" style="padding: 8px 16px; font-size: 0.9em;">
+ ✓ Usa questo suggerimento
+ </button>
+ </div>
+ 
+ <!-- Sezione Selettore Area -->
+ <div style="background: #f8f9fb; border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #667eea;">
+ <h4 style="margin: 0 0 12px 0; color: #667eea; font-size: 1.05em;">🗺️ Selettore Area Moovit (Italia)</h4>
+ 
+ <!-- Ricerca area -->
+ <div style="margin-bottom: 12px;">
+ <label for="moovitAreaSearch" style="display: block; margin-bottom: 6px; font-weight: 600; color: #495057;">
+ Cerca area per nome o città:
+ </label>
+ <input type="text" 
+ id="moovitAreaSearch" 
+ placeholder="es. Roma, Milano, Napoli..."
+ style="width: 100%; padding: 10px; border: 2px solid #667eea; border-radius: 6px; font-size: 14px;"
+ aria-label="Cerca area Moovit per il browser">
+ </div>
+ 
+ <!-- Lista aree filtrabile (accessibilità listbox) -->
+ <div style="border: 2px solid #dee2e6; border-radius: 6px; max-height: 300px; overflow-y: auto; background: white;">
+ <ul id="moovitAreaList" role="listbox" aria-label="Lista aree Moovit Italia" style="list-style: none; margin: 0; padding: 0;">
+ <!-- Popolata dinamicamente da renderMoovitAreaList() -->
+ </ul>
+ </div>
+ 
+ <!-- Stato area selezionata -->
+ <div id="moovitMetroIdStatus" style="margin-top: 12px; padding: 10px; border-radius: 6px; display: ${savedMetroId ? 'block' : 'none'}; background: #d4edda; color: #155724;">
+ ✓ Area selezionata: <strong>${escapeHtml(savedAreaName)}</strong> ${savedMetroId ? `(ID: ${savedMetroId})` : ''}
+ </div>
+ </div>
+ 
+ <!-- Fallback: input manuale MetroId -->
+ <details style="margin-bottom: 15px;">
+ <summary style="cursor: pointer; padding: 10px; background: #f8f9fb; border-radius: 6px; font-weight: 600; color: #667eea;">
+ ⚙️ Opzioni avanzate (MetroId manuale o link)
+ </summary>
+ <div style="padding: 15px; background: #f8f9fb; border-radius: 6px; margin-top: 8px;">
+ <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+ <input type="number" 
+ id="moovitMetroIdInput" 
+ placeholder="es. 61"
+ value="${savedMetroId}"
+ style="flex: 1; padding: 10px; border: 2px solid #667eea; border-radius: 6px; font-size: 14px;"
+ aria-label="Inserisci MetroId numerico manualmente">
+ <button class="btn btn-secondary" onclick="saveMoovitMetroIdManual()" style="padding: 10px 20px;">
+ 💾 Salva
+ </button>
+ </div>
+ 
+ <p style="margin: 12px 0; color: #666; font-size: 0.95em;"><strong>Oppure</strong> estrai MetroId da un link Moovit:</p>
+ 
+ <div style="display: flex; gap: 10px;">
+ <input type="text" 
+ id="moovitUrlInput" 
+ placeholder="Incolla link Moovit..."
+ style="flex: 1; padding: 10px; border: 2px solid #667eea; border-radius: 6px; font-size: 14px;"
+ aria-label="Incolla link Moovit per estrarre MetroId">
+ <button class="btn btn-secondary" onclick="extractAndSaveMetroId()" style="padding: 10px 20px;">
+ 🔍 Estrai
+ </button>
+ </div>
+ 
+ <small style="color: #888; display: block; margin-top: 8px; line-height: 1.4;">
+ Esempio link: https://moovitapp.com/?metroId=61&lang=it
+ </small>
+ </div>
+ </details>
+ 
+ </div>
+ 
+ <div class="modal-buttons">
+ <button class="btn btn-ghost" onclick="closeModal()">Annulla</button>
+ </div>
+ `;
+ 
+ openModal('🚍 Apri in Moovit', modalContent);
+ 
+ // Popola la lista aree
+ renderMoovitAreaList();
+ 
+ // Setup ricerca area con filtro
+ setTimeout(() => {
+ const searchInput = document.getElementById('moovitAreaSearch');
+ if (searchInput) {
+ searchInput.addEventListener('input', (e) => {
+ renderMoovitAreaList(e.target.value);
+ });
+ 
+ // Permetti ArrowDown per entrare nella lista
+ searchInput.addEventListener('keydown', (e) => {
+ if (e.key === 'ArrowDown') {
+ e.preventDefault();
+ const firstOption = document.querySelector('.moovit-area-option');
+ if (firstOption) {
+ moovitCurrentListIndex = 0;
+ firstOption.focus();
+ firstOption.style.background = '#f0f4ff';
+ }
+ }
+ });
+ }
+ }, 100);
+ 
+ // Avvia calcolo coordinate
+ try {
+ moovitCoordinatesData = await calculateMoovitCoordinates();
+ 
+ // ========================================
+ // SUGGERIMENTO AUTOMATICO (dopo geocoding)
+ // ========================================
+ const suggestedArea = await suggestMoovitArea(moovitCoordinatesData.fromLabel, moovitCoordinatesData.toLabel);
+ if (suggestedArea && !savedMetroId) {
+ moovitSuggestedArea = suggestedArea;
+ const suggestionDiv = document.getElementById('moovitAreaSuggestion');
+ const suggestionText = document.getElementById('moovitSuggestedAreaText');
+ if (suggestionDiv && suggestionText) {
+ suggestionText.textContent = `${suggestedArea.name} (ID: ${suggestedArea.id})`;
+ suggestionDiv.style.display = 'block';
+ }
+ }
+ 
+ // Aggiorna stato
+ const statusDiv = document.getElementById('moovitStatusLive');
+ if (statusDiv) {
+ statusDiv.innerHTML = '<strong style="color: #28a745;">✓ Coordinate pronte!</strong>';
+ statusDiv.style.background = '#d4edda';
+ }
+ 
+ // Abilita pulsante APP
+ const appBtn = document.getElementById('moovitAppBtn');
+ if (appBtn) {
+ appBtn.disabled = false;
+ appBtn.style.opacity = '1';
+ appBtn.style.cursor = 'pointer';
+ appBtn.onclick = openMoovitApp;
+ }
+ 
+ // Abilita pulsante BROWSER se c'è metroId
+ updateBrowserButtonState();
+ 
+ } catch (err) {
+ const statusDiv = document.getElementById('moovitStatusLive');
+ if (statusDiv) {
+ statusDiv.innerHTML = `<strong style="color: #dc3545;">✗ Errore: ${escapeHtml(err.message)}</strong>`;
+ statusDiv.style.background = '#f8d7da';
+ }
+ notify('⚠ ' + err.message, 'error');
+ }
+ }
+ 
+ // Usa l'area suggerita automaticamente
+ function useSuggestedMoovitArea() {
+ if (moovitSuggestedArea) {
+ selectMoovitArea(moovitSuggestedArea.id, moovitSuggestedArea.name);
+ }
+ }
+ 
+ // Aggiorna lo stato del pulsante Browser in base a metroId
+ function updateBrowserButtonState() {
+ const browserBtn = document.getElementById('moovitBrowserBtn');
+ const browserWarning = document.getElementById('moovitBrowserWarning');
+ const metroId = localStorage.getItem('moovit_metroId');
+ 
+ if (browserBtn && moovitCoordinatesData) {
+ if (metroId) {
+ browserBtn.disabled = false;
+ browserBtn.style.opacity = '1';
+ browserBtn.style.cursor = 'pointer';
+ browserBtn.onclick = openMoovitBrowser;
+ if (browserWarning) browserWarning.style.display = 'none';
+ } else {
+ browserBtn.disabled = true;
+ browserBtn.style.opacity = '0.5';
+ browserBtn.style.cursor = 'not-allowed';
+ browserBtn.title = 'Seleziona un\'area per abilitare';
+ if (browserWarning) browserWarning.style.display = 'block';
+ }
+ }
+ }
+ 
+ // ========================================
+ // SALVATAGGIO MANUALE METRO ID (fallback)
+ // ========================================
+ function saveMoovitMetroIdManual() {
+ const input = document.getElementById('moovitMetroIdInput');
+ const metroId = input?.value.trim();
+ 
+ if (!metroId) {
+ notify('⚠ Inserisci un MetroId', 'error');
+ return;
+ }
+ 
+ if (!/^\d+$/.test(metroId)) {
+ notify('⚠ Il MetroId deve essere un numero', 'error');
+ return;
+ }
+ 
+ localStorage.setItem('moovit_metroId', metroId);
+ 
+ // Trova il nome dell'area se esiste
+ const area = MOOVIT_IT_AREAS.find(a => a.id == metroId);
+ const areaName = area ? area.name : 'Area personalizzata';
+ 
+ notify(`✓ MetroId salvato: ${metroId}`, 'success');
+ 
+ // Aggiorna status
+ const statusDiv = document.getElementById('moovitMetroIdStatus');
+ if (statusDiv) {
+ statusDiv.innerHTML = `✓ Area: <strong>${escapeHtml(areaName)}</strong> (ID: ${metroId})`;
+ statusDiv.style.display = 'block';
+ statusDiv.style.background = '#d4edda';
+ statusDiv.style.color = '#155724';
+ }
+ 
+ // Aggiorna pulsante browser
+ updateBrowserButtonState();
+ }
+ 
+ // Estrae e salva MetroId da URL Moovit
+ function extractAndSaveMetroId() {
+ const input = document.getElementById('moovitUrlInput');
+ const url = input?.value.trim();
+ 
+ if (!url) {
+ notify('⚠ Incolla un link Moovit', 'error');
+ return;
+ }
+ 
+ if (!url.includes('moovit')) {
+ notify('⚠ Il link deve essere di Moovit', 'error');
+ return;
+ }
+ 
+ const metroId = extractMetroIdFromMoovitUrl(url);
+ 
+ if (!metroId) {
+ notify('⚠ Non riesco a estrarre MetroId da questo link', 'error');
+ return;
+ }
+ 
+ localStorage.setItem('moovit_metroId', metroId);
+ 
+ // Trova il nome dell'area se esiste
+ const area = MOOVIT_IT_AREAS.find(a => a.id == metroId);
+ const areaName = area ? area.name : 'Area estratta';
+ 
+ notify(`✓ MetroId estratto e salvato: ${metroId}`, 'success');
+ 
+ // Aggiorna input numerico
+ const numInput = document.getElementById('moovitMetroIdInput');
+ if (numInput) {
+ numInput.value = metroId;
+ }
+ 
+ // Aggiorna status
+ const statusDiv = document.getElementById('moovitMetroIdStatus');
+ if (statusDiv) {
+ statusDiv.innerHTML = `✓ Area: <strong>${escapeHtml(areaName)}</strong> (ID: ${metroId})`;
+ statusDiv.style.display = 'block';
+ statusDiv.style.background = '#d4edda';
+ statusDiv.style.color = '#155724';
+ }
+ 
+ // Aggiorna pulsante browser
+ updateBrowserButtonState();
+ }
+ 
+ // Apre Moovit nell'app con deeplink
+ function openMoovitApp() {
+ if (!moovitCoordinatesData) {
+ notify('⚠ Coordinate non ancora pronte', 'error');
+ return;
+ }
+ 
+ let deeplink;
+ try {
+ deeplink = buildMoovitDeepLink(moovitCoordinatesData);
+ } catch (err) {
+ notify('⚠ Errore creazione deeplink: ' + err.message, 'error');
+ return;
+ }
+ 
+ notify('📱 Apertura Moovit App...', 'success');
+ closeModal();
+ 
+ // Prova ad aprire l'app
+ window.location.href = deeplink;
+ 
+ // Fallback: se dopo 1.2s la pagina è ancora visibile, l'app non è installata
+ setTimeout(() => {
+ if (document.visibilityState === 'visible') {
+ const downloadLink = 'https://moovit.onelink.me/3986059930?pid=Developers&c=mobilita_vercel_app';
+ 
+ // Chiede se vuole scaricare
+ if (confirm('Moovit non sembra installata. Vuoi scaricarla?')) {
+ window.open(downloadLink, '_blank');
+ }
+ }
+ }, 1200);
+ }
+ 
+ // Apre Moovit nel browser senza popup block
+ function openMoovitBrowser() {
+ if (!moovitCoordinatesData) {
+ notify('⚠ Coordinate non ancora pronte', 'error');
+ return;
+ }
+ 
+ const metroId = localStorage.getItem('moovit_metroId');
+ if (!metroId) {
+ notify('⚠ Seleziona un\'area Moovit prima', 'error');
+ return;
+ }
+ 
+ // Apri immediatamente una tab blank per evitare popup block
+ const newWindow = window.open('about:blank', '_blank');
+ 
+ if (!newWindow) {
+ notify('⚠ Popup bloccato dal browser. Abilita i popup per questo sito.', 'error');
+ return;
+ }
+ 
+ try {
+ const webUrl = buildMoovitWebUrl(moovitCoordinatesData, metroId);
+ newWindow.location.href = webUrl;
+ 
+ closeModal();
+ notify('🌐 Apertura Moovit in browser...', 'success');
+ } catch (err) {
+ newWindow.close();
+ notify('⚠ Errore apertura browser: ' + err.message, 'error');
+ }
+ }
+ 
+ // Metodo 1: cerca metroId nei parametri query
+ const metroIdMatch = url.match(/[?&]metroId=(\d+)/);
+ if (metroIdMatch && metroIdMatch[1]) {
+ return metroIdMatch[1];
+ }
+ 
+ // Metodo 2: estrai da slug tipo "Roma_e_Lazio-city_81-61"
+ let slug = null;
+ const mezziMatch = url.match(/mezzi_pubblici-(.+?)(?:\?|$)/);
+ if (mezziMatch && mezziMatch[1]) {
+ slug = mezziMatch[1];
+ } else {
+ const transitMatch = url.match(/public_transit-(.+?)(?:\?|$)/);
+ if (transitMatch && transitMatch[1]) {
+ slug = transitMatch[1];
+ }
+ }
+ 
+ if (slug) {
+ slug = slug.split('?')[0].split('#')[0];
+ const parts = slug.split('-');
+ const lastPart = parts[parts.length - 1];
+ if (/^\d+$/.test(lastPart)) {
+ return lastPart;
+ }
+ }
+ 
+ return null;
+ }
+ 
+ // Calcola coordinate per partenza e destinazione
+ async function calculateMoovitCoordinates() {
+ const startAddress = document.getElementById('addressInput').value.trim();
+ const destAddress = document.getElementById('customDest').value.trim();
+ 
+ if (!startAddress) {
+ throw new Error('Inserisci prima un indirizzo di partenza nella Sezione 1');
+ }
+ if (!destAddress) {
+ throw new Error('Inserisci prima una destinazione');
+ }
+ 
+ // Coordinate FROM
+ let fromLat, fromLng, fromLabel;
+ if (originalStartPoint) {
+ fromLat = typeof originalStartPoint.lat === 'function' ? originalStartPoint.lat() : originalStartPoint.lat;
+ fromLng = typeof originalStartPoint.lng === 'function' ? originalStartPoint.lng() : originalStartPoint.lng;
+ fromLabel = startAddress;
+ } else if (currentLocation) {
+ fromLat = typeof currentLocation.lat === 'function' ? currentLocation.lat() : currentLocation.lat;
+ fromLng = typeof currentLocation.lng === 'function' ? currentLocation.lng() : currentLocation.lng;
+ fromLabel = startAddress;
+ } else {
+ // Geocode startAddress
+ const fromResult = await new Promise((resolve, reject) =>{
+ geocoder.geocode({ address: startAddress }, (results, status) =>{
+ if (status === 'OK' && results[0]) {
+ resolve(results[0]);
+ } else {
+ reject(new Error('Geocoding partenza fallito: ' + status));
+ }
+ });
+ });
+ fromLat = fromResult.geometry.location.lat();
+ fromLng = fromResult.geometry.location.lng();
+ fromLabel = fromResult.formatted_address || startAddress;
+ }
+ 
+ // Coordinate TO - sempre geocode
+ const toResult = await new Promise((resolve, reject) =>{
+ geocoder.geocode({ address: destAddress }, (results, status) =>{
+ if (status === 'OK' && results[0]) {
+ resolve(results[0]);
+ } else {
+ reject(new Error('Geocoding destinazione fallito: ' + status));
+ }
+ });
+ });
+ const toLat = toResult.geometry.location.lat();
+ const toLng = toResult.geometry.location.lng();
+ const toLabel = toResult.formatted_address || destAddress;
+ 
+ return {
+ fromLat,
+ fromLng,
+ fromLabel,
+ toLat,
+ toLng,
+ toLabel
+ };
+ }
+ 
+ // Costruisce il deeplink Moovit per l'app
+ function buildMoovitDeepLink(data) {
+ const { fromLat, fromLng, fromLabel, toLat, toLng, toLabel } = data;
+ 
+ const destName = encodeURIComponent(toLabel);
+ const origName = encodeURIComponent(fromLabel);
+ 
+ return `moovit://directions?dest_lat=${toLat.toFixed(6)}&dest_lon=${toLng.toFixed(6)}&dest_name=${destName}&orig_lat=${fromLat.toFixed(6)}&orig_lon=${fromLng.toFixed(6)}&orig_name=${origName}&auto_run=true&partner_id=mobilita_vercel_app`;
+ }
+ 
+ // Costruisce l'URL web Moovit per il browser
+ function buildMoovitWebUrl(data, metroId) {
+ const { fromLat, fromLng, fromLabel, toLat, toLng, toLabel } = data;
+ 
+ const fromEncoded = encodeURIComponent(fromLabel);
+ const toEncoded = encodeURIComponent(toLabel);
+ const fromLatStr = fromLat.toFixed(6);
+ const fromLngStr = fromLng.toFixed(6);
+ const toLatStr = toLat.toFixed(6);
+ const toLngStr = toLng.toFixed(6);
+ 
+ return `https://www.moovit.com/?metroId=${metroId}&lang=it&from=${fromEncoded}&to=${toEncoded}&fll=${fromLatStr}_${fromLngStr}&tll=${toLatStr}_${toLngStr}`;
+ }
+ 
+ // Variabili globali per il modal Moovit
+ let moovitCoordinatesData = null;
+ 
+ // Helper per escape HTML (prevenzione XSS)
+ function escapeHtml(text) {
+ const div = document.createElement('div');
+ div.textContent = text;
+ return div.innerHTML;
+ }
+ 
+ // Apre il modal Moovit con le 2 opzioni (APP e BROWSER)
+ async function openMoovitModal() {
+ const startAddress = document.getElementById('addressInput').value.trim();
+ const destAddress = document.getElementById('customDest').value.trim();
+ 
+ if (!startAddress) {
+ notify('⚠ Inserisci prima un indirizzo di partenza nella Sezione 1', 'error');
+ return;
+ }
+ if (!destAddress) {
+ notify('⚠ Inserisci prima una destinazione', 'error');
+ return;
+ }
+ 
+ // Legge metroId salvato
+ const savedMetroId = localStorage.getItem('moovit_metroId') || '';
+ 
+ // Escape HTML per sicurezza
+ const startAddressEscaped = escapeHtml(startAddress.substring(0, 60) + (startAddress.length > 60 ? '...' : ''));
+ const destAddressEscaped = escapeHtml(destAddress.substring(0, 60) + (destAddress.length > 60 ? '...' : ''));
+ 
+ const modalContent = `
+ <div class="modal-info" style="padding: 10px 0;">
+ <!-- Riepilogo percorso -->
+ <div style="background: #f0f4ff; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+ <p style="margin: 0 0 8px 0; color: #495057;"><strong>📍 Da:</strong> ${startAddressEscaped}</p>
+ <p style="margin: 0; color: #495057;"><strong>🎯 A:</strong> ${destAddressEscaped}</p>
+ </div>
+ 
+ <!-- Stato calcolo coordinate (aria-live) -->
+ <div id="moovitStatusLive" role="status" aria-live="polite" aria-atomic="true" style="background: #fff3cd; border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center;">
+ <strong>⏳ Calcolo coordinate...</strong>
+ </div>
+ 
+ <!-- Raccomandazione visibile -->
+ <div style="background: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
+ <p style="margin: 0; color: #2e7d32; font-size: 0.95em;">
+ 💡 <strong>Consigliato:</strong> Se hai Moovit installata, usa <strong>"Apri in App"</strong> (non serve configurazione).
+ </p>
+ </div>
+ 
+ <!-- Pulsanti principali (inizialmente disabilitati) -->
+ <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px;">
+ <button id="moovitAppBtn" class="btn btn-green" disabled style="font-size: 1.1em; padding: 15px; opacity: 0.5; cursor: not-allowed;">
+ 📱 Apri in App Moovit
+ </button>
+ <button id="moovitBrowserBtn" class="btn" disabled style="font-size: 1.1em; padding: 15px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; opacity: 0.5; cursor: not-allowed;">
+ 🌐 Apri in Browser
+ </button>
+ </div>
+ 
+ <!-- Messaggio visibile quando browser è disabilitato -->
+ <div id="moovitBrowserWarning" style="display: ${savedMetroId ? 'none' : 'block'}; background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
+ <p style="margin: 0; color: #856404; font-size: 0.95em;">
+ ⚠ <strong>Pulsante Browser disabilitato:</strong> Inserisci il MetroId qui sotto per abilitarlo.
+ </p>
+ </div>
+ 
+ <!-- Sezione MetroId per browser -->
+ <div style="background: #f8f9fb; border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #667eea;">
+ <h4 style="margin: 0 0 12px 0; color: #667eea; font-size: 1.05em;">⚙ MetroId (solo per Browser)</h4>
+ 
+ <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+ <input type="number" 
+ id="moovitMetroIdInput" 
+ placeholder="es. 61"
+ value="${savedMetroId}"
+ style="flex: 1; padding: 10px; border: 2px solid #667eea; border-radius: 6px; font-size: 14px;"
+ aria-label="Inserisci MetroId numerico">
+ <button class="btn btn-secondary" onclick="saveMoovitMetroId()" style="padding: 10px 20px;">
+ 💾 Salva
+ </button>
+ </div>
+ 
+ <p style="margin: 12px 0; color: #666; font-size: 0.95em;"><strong>Oppure</strong> estrai MetroId da un link Moovit:</p>
+ 
+ <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+ <input type="text" 
+ id="moovitUrlInput" 
+ placeholder="Incolla link Moovit..."
+ style="flex: 1; padding: 10px; border: 2px solid #667eea; border-radius: 6px; font-size: 14px;"
+ aria-label="Incolla link Moovit per estrarre MetroId">
+ <button class="btn btn-secondary" onclick="extractAndSaveMetroId()" style="padding: 10px 20px;">
+ 🔍 Estrai
+ </button>
+ </div>
+ 
+ <small style="color: #888; display: block; line-height: 1.4;">
+ Esempio link: https://moovitapp.com/?metroId=61&lang=it<br>
+ Il MetroId è necessario solo per aprire in browser, non per l'app.
+ </small>
+ 
+ <div id="moovitMetroIdStatus" style="margin-top: 12px; padding: 10px; border-radius: 6px; display: ${savedMetroId ? 'block' : 'none'}; background: #d4edda; color: #155724;">
+ ✓ MetroId salvato: <strong>${savedMetroId}</strong>
+ </div>
+ </div>
+ 
+ </div>
+ 
+ <div class="modal-buttons">
+ <button class="btn btn-ghost" onclick="closeModal()">Annulla</button>
+ </div>
+ `;
+ 
+ openModal('🚍 Apri in Moovit', modalContent);
+ 
+ // Avvia calcolo coordinate
+ try {
+ moovitCoordinatesData = await calculateMoovitCoordinates();
+ 
+ // Aggiorna stato
+ const statusDiv = document.getElementById('moovitStatusLive');
+ if (statusDiv) {
+ statusDiv.innerHTML = '<strong style="color: #28a745;">✓ Coordinate pronte!</strong>';
+ statusDiv.style.background = '#d4edda';
+ }
+ 
+ // Abilita pulsante APP
+ const appBtn = document.getElementById('moovitAppBtn');
+ if (appBtn) {
+ appBtn.disabled = false;
+ appBtn.style.opacity = '1';
+ appBtn.style.cursor = 'pointer';
+ appBtn.onclick = openMoovitApp;
+ }
+ 
+ // Abilita pulsante BROWSER se c'è metroId
+ updateBrowserButtonState();
+ 
+ } catch (err) {
+ const statusDiv = document.getElementById('moovitStatusLive');
+ if (statusDiv) {
+ statusDiv.innerHTML = `<strong style="color: #dc3545;">✗ Errore: ${err.message}</strong>`;
+ statusDiv.style.background = '#f8d7da';
+ }
+ notify('⚠ ' + err.message, 'error');
+ }
+ }
+ 
+ // Aggiorna lo stato del pulsante Browser in base a metroId
+ function updateBrowserButtonState() {
+ const browserBtn = document.getElementById('moovitBrowserBtn');
+ const browserWarning = document.getElementById('moovitBrowserWarning');
+ const metroId = localStorage.getItem('moovit_metroId');
+ 
+ if (browserBtn && moovitCoordinatesData) {
+ if (metroId) {
+ browserBtn.disabled = false;
+ browserBtn.style.opacity = '1';
+ browserBtn.style.cursor = 'pointer';
+ browserBtn.onclick = openMoovitBrowser;
+ if (browserWarning) browserWarning.style.display = 'none';
+ } else {
+ browserBtn.disabled = true;
+ browserBtn.style.opacity = '0.5';
+ browserBtn.style.cursor = 'not-allowed';
+ browserBtn.title = 'Inserisci MetroId per abilitare';
+ if (browserWarning) browserWarning.style.display = 'block';
+ }
+ }
+ }
+ 
+ // Salva MetroId da input numerico
+ function saveMoovitMetroId() {
+ const input = document.getElementById('moovitMetroIdInput');
+ const metroId = input?.value.trim();
+ 
+ if (!metroId) {
+ notify('⚠ Inserisci un MetroId', 'error');
+ return;
+ }
+ 
+ if (!/^\d+$/.test(metroId)) {
+ notify('⚠ Il MetroId deve essere un numero', 'error');
+ return;
+ }
+ 
+ localStorage.setItem('moovit_metroId', metroId);
+ notify('✓ MetroId salvato: ' + metroId, 'success');
+ 
+ // Aggiorna status
+ const statusDiv = document.getElementById('moovitMetroIdStatus');
+ if (statusDiv) {
+ statusDiv.innerHTML = `✓ MetroId salvato: <strong>${metroId}</strong>`;
+ statusDiv.style.display = 'block';
+ }
+ 
+ // Aggiorna pulsante browser
+ updateBrowserButtonState();
+ }
+ 
+ // Estrae e salva MetroId da URL Moovit
+ function extractAndSaveMetroId() {
+ const input = document.getElementById('moovitUrlInput');
+ const url = input?.value.trim();
+ 
+ if (!url) {
+ notify('⚠ Incolla un link Moovit', 'error');
+ return;
+ }
+ 
+ if (!url.includes('moovit')) {
+ notify('⚠ Il link deve essere di Moovit', 'error');
+ return;
+ }
+ 
+ const metroId = extractMetroIdFromMoovitUrl(url);
+ 
+ if (!metroId) {
+ notify('⚠ Non riesco a estrarre MetroId da questo link', 'error');
+ return;
+ }
+ 
+ localStorage.setItem('moovit_metroId', metroId);
+ notify('✓ MetroId estratto e salvato: ' + metroId, 'success');
+ 
+ // Aggiorna input numerico
+ const numInput = document.getElementById('moovitMetroIdInput');
+ if (numInput) {
+ numInput.value = metroId;
+ }
+ 
+ // Aggiorna status
+ const statusDiv = document.getElementById('moovitMetroIdStatus');
+ if (statusDiv) {
+ statusDiv.innerHTML = `✓ MetroId salvato: <strong>${metroId}</strong>`;
+ statusDiv.style.display = 'block';
+ }
+ 
+ // Aggiorna pulsante browser
+ updateBrowserButtonState();
+ }
+ 
+ // Apre Moovit nell'app con deeplink
+ function openMoovitApp() {
+ if (!moovitCoordinatesData) {
+ notify('⚠ Coordinate non ancora pronte', 'error');
+ return;
+ }
+ 
+ let deeplink;
+ try {
+ deeplink = buildMoovitDeepLink(moovitCoordinatesData);
+ } catch (err) {
+ notify('⚠ Errore creazione deeplink: ' + err.message, 'error');
+ return;
+ }
+ 
+ notify('📱 Apertura Moovit App...', 'success');
+ closeModal();
+ 
+ // Prova ad aprire l'app
+ window.location.href = deeplink;
+ 
+ // Fallback: se dopo 1.2s la pagina è ancora visibile, l'app non è installata
+ setTimeout(() => {
+ if (document.visibilityState === 'visible') {
+ const downloadLink = 'https://moovit.onelink.me/3986059930?pid=Developers&c=mobilita_vercel_app';
+ 
+ // Chiede se vuole scaricare
+ if (confirm('Moovit non sembra installata. Vuoi scaricarla?')) {
+ window.open(downloadLink, '_blank');
+ }
+ }
+ }, 1200);
+ }
+ 
+ // Apre Moovit nel browser senza popup block
+ function openMoovitBrowser() {
+ if (!moovitCoordinatesData) {
+ notify('⚠ Coordinate non ancora pronte', 'error');
+ return;
+ }
+ 
+ const metroId = localStorage.getItem('moovit_metroId');
+ if (!metroId) {
+ notify('⚠ MetroId non configurato', 'error');
+ return;
+ }
+ 
+ // Apri immediatamente una tab blank per evitare popup block
+ const newWindow = window.open('about:blank', '_blank');
+ 
+ if (!newWindow) {
+ notify('⚠ Popup bloccato dal browser. Abilita i popup per questo sito.', 'error');
+ return;
+ }
+ 
+ try {
+ const webUrl = buildMoovitWebUrl(moovitCoordinatesData, metroId);
+ newWindow.location.href = webUrl;
+ 
+ closeModal();
+ notify('🌐 Apertura Moovit in browser...', 'success');
+ } catch (err) {
+ newWindow.close();
+ notify('⚠ Errore apertura browser: ' + err.message, 'error');
+ }
  }
  
  // ==========================================
@@ -7681,11 +8608,21 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  window.toggleOtmCategory = toggleOtmCategory;
  window.searchPOIs = searchPOIs;
  window.selectPOI = selectPOI;
+ window.startTrackingScreen = startTrackingScreen;
  window.resumeTracking = resumeTracking;
  window.stopAndReturn = stopAndReturn;
  window.openVibrationSettings = openVibrationSettings;
  window.saveVibrationSettings = saveVibrationSettings;
  window.toggleAutoVoice = toggleAutoVoice;
+ window.openMoovitModal = openMoovitModal;
+ window.saveMoovitMetroIdManual = saveMoovitMetroIdManual;
+ window.extractAndSaveMetroId = extractAndSaveMetroId;
+ window.openMoovitApp = openMoovitApp;
+ window.openMoovitBrowser = openMoovitBrowser;
+ window.updateBrowserButtonState = updateBrowserButtonState;
+ window.useSuggestedMoovitArea = useSuggestedMoovitArea;
+ window.selectMoovitArea = selectMoovitArea;
+ window.handleMoovitAreaKeydown = handleMoovitAreaKeydown;
 
  window.addEventListener('DOMContentLoaded', () =>{
  console.log(' App Mobilità');
@@ -7711,10 +8648,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  solo quando esegui una ricerca dalla Sezione 3. Non la vedrai subito nella pagina perché 
  è nascosta finché non ci sono risultati da mostrare. È normale!</div><ul><li><strong>Nome</strong>del luogo</li><li><strong>Distanza</strong>dalla tua posizione</li><li><strong>Indirizzo</strong>completo</li><li><strong>Marker sulla mappa</strong>cliccabili</li></ul><div class="guide-tip"><strong>Suggerimento:</strong>I risultati sono ordinati per distanza (più vicini prima). 
  Clicca su un marker per vedere i dettagli del luogo!</div></section><!-- ============ SEZIONE 5 ============ --><section class="guide-section" aria-labelledby="5-sezione-5-percorso-personalizzato-heading"><h2 id="5-sezione-5-percorso-personalizzato-heading">5. Sezione 5: Percorso Personalizzato</h2><h3>Cosa fa:</h3><p>Calcola il percorso dalla tua posizione (Sezione 1) a una destinazione che scegli, 
- con diverse modalità di trasporto.</p><h3>Come usarla:</h3><div class="guide-step"><strong>Passo 1:</strong>Inserisci la destinazione:<ul style="margin-top: 8px;"><li>Scrivi l'indirizzo o il nome del luogo</li><li>L'autocomplete suggerisce indirizzi ordinati per vicinanza</li><li>Puoi inserire anche punti di interesse (es: "Colosseo", "Stazione Termini")</li></ul></div><div class="guide-step"><strong>Passo 2:</strong>Scegli il modo di trasporto:<ul style="margin-top: 8px;"><li><strong>Auto:</strong>Percorso stradale, tempo stimato, traffico</li><li><strong>A piedi:</strong>Percorso pedonale, distanza a piedi</li><li><strong>Bicicletta:</strong>Piste ciclabili quando disponibili</li><li><strong>Trasporto pubblico:</strong>Bus, metro, tram con orari</li></ul></div><div class="guide-step"><strong>Passo 3:</strong>Clicca " Calcola Percorso"</div><h3>Risultati mostrati:</h3><ul><li><strong>Distanza</strong>totale</li><li>⏱<strong>Tempo stimato</strong></li><li><strong>Percorso sulla mappa</strong>(linea blu)</li><li><strong>Istruzioni passo-passo</strong>(svolte, direzioni)</li></ul><h3>Azioni disponibili:</h3><ul><li><strong>Apri in Google Maps:</strong>Apre Google Maps con navigazione attiva</li><li><strong>Leggi Istruzioni:</strong>Sintesi vocale delle istruzioni (accessibilità)</li></ul><h3>Trasporto Pubblico con Moovit:</h3><p style="margin-top: 15px;">Quando selezioni "Trasporto Pubblico", appare un'opzione aggiuntiva per usare Moovit:</p><div class="guide-step"><strong>Prima volta - Configura zona Moovit:</strong><ul style="margin-top: 8px;"><li>Appare un box azzurro con menu a tendina</li><li>Clicca " Aggiungi Nuova Zona"</li><li>Inserisci nome zona (es: "Roma e Lazio")</li><li>Inserisci link base Moovit della tua zona</li><li>Il link lo trovi su moovitapp.com per la tua città</li><li>Clicca " Salva Zona"</li></ul></div><div class="guide-step"><strong>Visite successive:</strong><ul style="margin-top: 8px;"><li>Seleziona la zona dal menu a tendina</li><li>Clicca " Usa Questa Zona"</li><li>Il pulsante " Apri in Moovit" diventa attivo</li></ul></div><div class="guide-step"><strong>Generazione link Moovit:</strong><ul style="margin-top: 8px;"><li>L'app genera automaticamente il link completo</li><li>Usa coordinate esatte di partenza e arrivo</li><li>Si apre Moovit con il percorso già impostato!</li></ul></div><div class="guide-tip"><strong>Gestione zone:</strong>Puoi salvare più zone (Roma, Milano, Torino, ecc.) 
- e passare da una all'altra. Clicca " Gestisci Zone" per vedere, selezionare o 
- rimuovere zone salvate.</div><div class="guide-warning"><strong>Link base Moovit:</strong>Ogni città ha il suo link specifico. 
- Non usare lo stesso link per città diverse! Esempio Roma:<span class="guide-kbd">https://moovitapp.com/index/it-it/trasporto_pubblico-roma_e_lazio-61</span></div></section><!-- ============ SEZIONE 6 ============ --><section class="guide-section" aria-labelledby="6-sezione-6-confronto-civici-avanzato-heading"><h2 id="6-sezione-6-confronto-civici-avanzato-heading">6. Sezione 6: Confronto Civici (Avanzato)</h2><h3>Cosa fa:</h3><p>Confronta scientificamente due numeri civici sulla<strong>stessa via</strong>per 
+ con diverse modalità di trasporto.</p><h3>Come usarla:</h3><div class="guide-step"><strong>Passo 1:</strong>Inserisci la destinazione:<ul style="margin-top: 8px;"><li>Scrivi l'indirizzo o il nome del luogo</li><li>L'autocomplete suggerisce indirizzi ordinati per vicinanza</li><li>Puoi inserire anche punti di interesse (es: "Colosseo", "Stazione Termini")</li></ul></div><div class="guide-step"><strong>Passo 2:</strong>Scegli il modo di trasporto:<ul style="margin-top: 8px;"><li><strong>Auto:</strong>Percorso stradale, tempo stimato, traffico</li><li><strong>A piedi:</strong>Percorso pedonale, distanza a piedi</li><li><strong>Bicicletta:</strong>Piste ciclabili quando disponibili</li><li><strong>Trasporto pubblico:</strong>Bus, metro, tram con orari</li></ul></div><div class="guide-step"><strong>Passo 3:</strong>Clicca " Calcola Percorso"</div><h3>Risultati mostrati:</h3><ul><li><strong>Distanza</strong>totale</li><li>⏱<strong>Tempo stimato</strong></li><li><strong>Percorso sulla mappa</strong>(linea blu)</li><li><strong>Istruzioni passo-passo</strong>(svolte, direzioni)</li></ul><h3>Azioni disponibili:</h3><ul><li><strong>Apri in Google Maps:</strong>Apre Google Maps con navigazione attiva</li><li><strong>Leggi Istruzioni:</strong>Sintesi vocale delle istruzioni (accessibilità)</li></ul><h3>Trasporto Pubblico con Moovit:</h3><p style="margin-top: 15px;">Quando selezioni "Trasporto Pubblico" e inserisci una destinazione, appare il pulsante <strong>"Apri in Moovit"</strong> che ti permette di aprire il percorso direttamente nell'app o nel browser:</p><div class="guide-step"><strong>Come funziona:</strong><ol style="margin-top: 8px;"><li>Clicca " Apri in Moovit"</li><li>Si apre un modal con il riepilogo del percorso</li><li>L'app calcola automaticamente le coordinate di partenza e arrivo</li><li>Scegli una delle due opzioni:</li></ol></div><div class="guide-step"><strong>📱 Opzione 1: Apri in App Moovit</strong><ul style="margin-top: 8px;"><li>Apre direttamente l'app Moovit installata sul tuo dispositivo</li><li><strong>Non richiede configurazione</strong> - funziona subito!</li><li>Il percorso viene impostato automaticamente con partenza e destinazione</li><li>Se l'app non è installata, ti viene proposto il link per scaricarla</li><li><strong>Consigliato:</strong> Usa questa opzione se hai Moovit installata</li></ul></div><div class="guide-step"><strong>🌐 Opzione 2: Apri in Browser</strong><ul style="margin-top: 8px;"><li>Apre Moovit nel browser web (utile se non hai l'app)</li><li><strong>Richiede MetroId:</strong> Ogni città ha un MetroId specifico (es. Roma = 61)</li><li>Il MetroId si inserisce una sola volta e viene salvato per le visite successive</li><li>Puoi inserire il MetroId in due modi:</li></ul><ol style="margin-left: 20px; margin-top: 8px;"><li><strong>Manualmente:</strong> Inserisci il numero del MetroId (es. 61) e clicca "Salva"</li><li><strong>Da link Moovit:</strong> Incolla un link di Moovit della tua città e clicca "Estrai" per ricavare automaticamente il MetroId</li></ol></div><div class="guide-tip"><strong>💡 Suggerimento:</strong><ul style="margin-top: 8px;"><li>Se hai Moovit installata → usa sempre <strong>"Apri in App"</strong> (è più veloce e non serve configurazione)</li><li>Se non hai l'app → usa <strong>"Apri in Browser"</strong> dopo aver configurato il MetroId</li><li>Il MetroId viene salvato nel browser, quindi dovrai inserirlo solo la prima volta</li></ul></div><div class="guide-step"><strong>Come trovare il MetroId della tua città:</strong><ol style="margin-top: 8px;"><li>Vai su <a href="https://moovitapp.com" target="_blank" rel="noopener">moovitapp.com</a></li><li>Cerca la tua città (es. "Roma trasporto pubblico")</li><li>Apri la pagina della tua città</li><li>Guarda l'URL: il numero dopo "metroId=" è quello che ti serve<br><span class="guide-kbd">https://moovitapp.com/?metroId=<strong>61</strong>&lang=it</span></li><li>Oppure incolla direttamente quel link nel campo "Incolla link Moovit" e clicca "Estrai"</li></ol></div></section><!-- ============ SEZIONE 6 ============ --><section class="guide-section" aria-labelledby="6-sezione-6-confronto-civici-avanzato-heading"><h2 id="6-sezione-6-confronto-civici-avanzato-heading">6. Sezione 6: Confronto Civici (Avanzato)</h2><h3>Cosa fa:</h3><p>Confronta scientificamente due numeri civici sulla<strong>stessa via</strong>per 
  determinare se sono sullo stesso marciapiede o su lati opposti della strada.</p><h3>Quando usarla:</h3><ul><li><strong>Scenario A:</strong>Sei al civico 20 (con Street View) e devi andare al 24 
  (senza Street View). Vuoi sapere se devi attraversare.</li><li><strong>Scenario B:</strong>Street View è ambiguo e vuoi una conferma matematica.</li><li><strong>Scenario C:</strong>Pianifichi a tavolino e vuoi capire la conformazione 
  di una via.</li></ul><h3>Come usarla:</h3><div class="guide-step"><strong>Passo 1:</strong>Inserisci Civico A (riferimento):<ul style="margin-top: 8px;"><li>Indirizzo completo: Via, numero, città</li><li>Es: "Via Po 18, Torino"</li><li>Questo sarà il punto di riferimento</li></ul></div><div class="guide-step"><strong>Passo 2:</strong>Inserisci Civico B (destinazione):<ul style="margin-top: 8px;"><li>DEVE essere sulla stessa via di A!</li><li>Es: "Via Po 25, Torino"</li><li>Può essere prima o dopo del civico A</li></ul></div><div class="guide-step"><strong>Passo 3:</strong>Clicca " Calcola Posizione"</div><h3>I 3 metodi scientifici usati:</h3><div class="guide-step"><strong>1. Check Precisione (Google):</strong><ul style="margin-top: 8px;"><li><strong>ROOFTOP:</strong>Google conosce esattamente il civico → Alta affidabilità</li><li><strong>RANGE_INTERPOLATED:</strong>Google ha "indovinato" la posizione → 
