@@ -694,7 +694,7 @@ body.api-setup-active::before {
  aria-label="Seleziona raggio di ricerca in metri"><div class="range-value"><span id="radiusValue">60</span>metri</div><small style="color: #6c757d; display: block; margin-top: 5px;">Più alto = trova più punti ma potrebbe essere meno preciso. Consigliato: 50-70m</small></div></div></section><section aria-labelledby="section2-heading" id="mapSection" style="display:none;"><div class="section-divider"><h2 id="section2-heading">Sezione 2: Mappa e Street View</h2><p>Esplora l'area con la mappa 2D o con la visuale a livello della strada.</p></div><div class="map-grid" id="mapGrid" style="display:none;"><div class="map-box"><div class="map-label" aria-hidden="true" tabindex="-1">MAPPA</div><div id="map"></div></div><div class="map-box"><div class="map-label" aria-hidden="true" tabindex="-1">STREET VIEW</div><div id="streetview" tabindex="0" role="application" aria-label="Google Street View"></div><div class="sv-controls" aria-label="Controlli Street View"><div class="control-row"><button class="control-btn" onclick="movePov('up')" title="Guarda in alto">SU</button></div><div class="control-row"><button class="control-btn" onclick="movePov('left')" title="Guarda a sinistra">SINISTRA</button><button class="control-btn" onclick="moveForward()" title="Vai avanti">AVANTI</button><button class="control-btn" onclick="movePov('right')" title="Guarda a destra">DESTRA</button></div><div class="control-row"><button class="control-btn" onclick="movePov('down')" title="Guarda in basso">GIÙ</button></div><div class="control-row" style="margin-top: 10px;"><button class="control-btn" onclick="moveBackward()" title="Vai indietro">INDIETRO</button></div><div class="control-row" style="margin-top: 10px;"><button class="control-btn" onclick="resetStreetView()" title="Resetta alla posizione iniziale" style="background: #ffc107; border-color: #ffc107; color: #000;">RESET</button></div></div><div id="svInfo" class="sv-live" role="status" aria-live="polite" aria-atomic="true" style="display:none"><div><strong>Indirizzo:</strong><span id="svAddress">-</span></div><div><strong>Direzione:</strong><span id="svDirection">-</span></div></div></div></div><div class="card" id="staticLinkCard" style="display:none; margin-top: -10px; text-align: center;"><p style="margin-bottom: 10px; color: #6c757d;">Usa questo link per aprire l'immagine statica di Street View (per screenshot):</p><a id="staticStreetViewLink" href="#" target="_blank" class="btn btn-secondary">Apri Immagine Street View Statica</a></div><div class="card" id="orientationResultCard" style="display:none; margin-top: 10px; background: linear-gradient(135deg, #e3f2fd, #f3e5f5); border-left: 5px solid #667eea;"><h3 style="margin: 0 0 15px 0; color: #667eea;">Orientamento Edificio</h3><div style="margin-bottom: 15px;"><button class="btn" onclick="runCivicAnalysisCascade()" aria-label=" Ricalcola Orientamento" style="font-size: 1.05em; padding: 14px 20px;">Analizza Orientamento</button><p style="margin: 8px 0 0 0; font-size: 0.9em; color: #666;">Sistema intelligente a 4 tentativi: Street View diretto, vicini stesso lato, vicini lato opposto, calcolo geometrico</p></div><!-- RAPPORTO DI TRASPARENZA EXPERT MODE --><div id="transparencyReport" class="transparency-report" style="display:none"><strong>Rapporto di Trasparenza (Expert Mode)</strong><div id="transparencyContent" style="margin-top:10px"></div></div><div id="orientation-status" class="orientation-results-box" style="background: white; margin: 0;" aria-live="polite">Premi il pulsante qui sopra per analizzare l'orientamento dell'edificio.</div><div id="turn-instruction-wrapper" style="margin-top: 15px; display: none;"><label for="desired-direction" class="option-label">Per andare verso:</label><select id="desired-direction" style="padding: 10px; border-radius: 6px; border: 2px solid #dee2e6; font-size: 15px; margin-bottom: 10px; width: 100%; max-width: 250px;"><option value="">-- Seleziona direzione --</option><option value="N">Nord</option><option value="NE">Nord-Est</option><option value="E">Est</option><option value="SE">Sud-Est</option><option value="S">Sud</option><option value="SW">Sud-Ovest</option><option value="W">Ovest</option><option value="NW">Nord-Ovest</option></select><div id="turn-instruction-status" class="orientation-results-box" style="background: white; margin-top: 10px;" aria-live="polite">Seleziona una direzione qui sopra per vedere come girare quando esci dall'edificio.</div></div></div></section><section aria-labelledby="section3-heading" role="region" id="searchSection" style="display:none;"><div class="section-divider"><h2 id="section3-heading">Sezione 3: Cerca nelle Vicinanze</h2><p>Usa i pulsanti per ottenere informazioni sull'area intorno al punto di partenza.</p></div><div class="card" id="searchCard" style="display:none;"><div class="options-grid"><div><label class="option-label" for="radiusInput">Raggio (metri):</label><input type="number" id="radiusInput" value="500" min="100" max="5000" step="100"></div><div><label class="option-label" for="categorySearch">Cerca Categorie:</label><input type="search" id="categorySearch" oninput="filterCategories()" placeholder="Cerca es. farmacia, bar..." 
  style="width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 15px;"><label class="option-label">Categorie Google Places:</label><div class="cats-wrapper"><div id="catsGrid" class="cats-grid"></div></div><div id="catsSummary" class="summary">Nessuna categoria selezionata (userò le quotidiane).</div></div><div class="tools-sticky"><div id="tools-group" style="display:flex;flex-direction:column;gap:8px"><button class="btn" onclick="searchPlaces()">Cerca Luoghi (Google)</button><button class="btn btn-secondary" onclick="fetchWeather()">Meteo Ora</button><button class="btn btn-secondary" onclick="listOSMIntersections()">Incroci (Proxy)</button><button class="btn btn-secondary" onclick="listOSMPlacesAll()">POI OSM (Proxy)</button><button class="btn btn-ghost" onclick="prepareSocialPrompt()">Ricerca Social (Prompt)</button><button class="btn btn-ghost" onclick="prepareTransitPrompt()">Ricerca Trasporti (Prompt)</button></div></div></div><div id="weatherResults" class="osm-results" style="display:none"></div></div><div class="section-divider" id="resultsSection" style="display:none;"><h2>Sezione 4: Risultati della Ricerca</h2><p>Scegli un'azione dal menu a tendina per ogni luogo.</p></div><div class="card" id="resultsCard" style="display:none;"><div class="places-container" id="placesList"></div></div></section><section aria-labelledby="section5-heading" id="customRouteSection" style="display:none;"><div class="section-divider"><h2 id="section5-heading">Sezione 5: Percorso Personalizzato</h2><p>Inserisci una destinazione qualsiasi per avere le istruzioni di percorso.</p></div><div class="card" id="customRouteCard" style="display:none;"><div class="search-box"><input type="text" id="customDest" placeholder="Es: Piazza del Duomo, Roma"><select id="customRouteMode" 
  aria-label="Modalità di trasporto. Usa le frecce per navigare le opzioni, premi INVIO per confermare, ESC per chiudere"
- onkeydown="handleCustomRouteModeKeydown(event)"><option value="WALKING">A piedi</option><option value="TRANSIT">Mezzi Pubblici</option><option value="BICYCLING">In Bici</option><option value="DRIVING">In Auto</option><option value="ANNULLA">Annulla</option></select><button class="btn btn-green" onclick="calculateCustomRoute()">Calcola Percorso</button><!-- Pulsante Moovit - visibile solo con Mezzi Pubblici --><button id="moovitButton" class="btn" onclick="openMoovitSection()" style="display:none; background: linear-gradient(135deg, #50c878, #32a852);" title="Apri percorso in Moovit">🚍 Apri in Moovit</button></div></div>
+ onkeydown="handleCustomRouteModeKeydown(event)"><option value="WALKING">A piedi</option><option value="TRANSIT">Mezzi Pubblici</option><option value="BICYCLING">In Bici</option><option value="DRIVING">In Auto</option><option value="ANNULLA">Annulla</option></select><button class="btn btn-green" onclick="calculateCustomRoute()">Calcola Percorso</button><!-- Pulsanti Trasporto Pubblico - visibili solo con Mezzi Pubblici --><button id="moovitButton" class="btn" onclick="openMoovitSection()" style="display:none; background: linear-gradient(135deg, #50c878, #32a852);" title="Apri percorso in Moovit">🚍 Apri in Moovit</button><button id="gmapsTransitButton" class="btn" onclick="openGoogleMapsTransit()" style="display:none; background: linear-gradient(135deg, #4285f4, #34a853);" title="Apri percorso in Google Maps">🗺️ Apri in Google Maps</button></div></div>
 
 <!-- SEZIONE MOOVIT - nascosta inizialmente, appare quando si clicca il pulsante -->
 <div id="moovitSection" style="display: none; margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #e8f5e9, #f1f8e9); border-left: 5px solid #4caf50; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,.1);">
@@ -2452,17 +2452,20 @@ body.api-setup-active::before {
  { id: 4022, name: "Valle d'Aosta", keywords: ["aosta","valle d'aosta","ao","courmayeur","cervinia"] }
  ];
  
- // Mostra/nasconde il pulsante Moovit in base alla modalità selezionata
+ // Mostra/nasconde i pulsanti per trasporto pubblico (Moovit e Google Maps)
  function toggleMoovitButton() {
  const mode = document.getElementById('customRouteMode').value;
  const moovitBtn = document.getElementById('moovitButton');
+ const gmapsBtn = document.getElementById('gmapsTransitButton');
  const destInput = document.getElementById('customDest').value.trim();
  
  // Mostra solo se: TRANSIT selezionato E c'è una destinazione inserita
  if (mode === 'TRANSIT' && destInput) {
  moovitBtn.style.display = 'inline-block';
+ gmapsBtn.style.display = 'inline-block';
  } else {
  moovitBtn.style.display = 'none';
+ gmapsBtn.style.display = 'none';
  }
  }
  
@@ -2988,6 +2991,32 @@ body.api-setup-active::before {
  function closeMoovitSection() {
  const moovitSection = document.getElementById('moovitSection');
  moovitSection.style.display = 'none';
+ }
+ 
+ // Apre Google Maps con percorso in trasporto pubblico
+ function openGoogleMapsTransit() {
+ const startAddress = document.getElementById('addressInput')?.value.trim() || userPosition.address;
+ const destAddress = document.getElementById('customDest')?.value.trim();
+ 
+ if (!startAddress) {
+ notify('📍 Inserisci prima un indirizzo di partenza nella Sezione 1', 'error');
+ return;
+ }
+ if (!destAddress) {
+ notify('📍 Inserisci prima una destinazione', 'error');
+ return;
+ }
+ 
+ // Crea URL per Google Maps con trasporto pubblico
+ // Formato: https://www.google.com/maps/dir/?api=1&origin=...&destination=...&travelmode=transit
+ const origin = encodeURIComponent(startAddress);
+ const destination = encodeURIComponent(destAddress);
+ const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=transit`;
+ 
+ // Apre in una nuova scheda
+ window.open(url, '_blank', 'noopener,noreferrer');
+ 
+ notify('🗺️ Google Maps aperto con percorso mezzi pubblici', 'success');
  }
  
  // Usa l'area suggerita automaticamente
@@ -8054,6 +8083,7 @@ Chiudi sempre chiedendo: "Vuoi estendere la ricerca (indica i metri) o vuoi info
  window.toggleAutoVoice = toggleAutoVoice;
  window.openMoovitSection = openMoovitSection;
  window.closeMoovitSection = closeMoovitSection;
+ window.openGoogleMapsTransit = openGoogleMapsTransit;
  window.saveMoovitMetroId = saveMoovitMetroId;
  window.extractAndSaveMetroId = extractAndSaveMetroId;
  window.openMoovitApp = openMoovitApp;
